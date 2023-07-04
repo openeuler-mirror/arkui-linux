@@ -1,0 +1,1 @@
+SyntaxError: Primary expression expected [test-throw-statement-without-expression.js:17:7]

@@ -1,0 +1,4 @@
+test262/data/
+test262/eshost/
+test262/harness/
+out/

@@ -1,0 +1,1 @@
+SyntaxError: Unexpected token, expected '(' [test-object-expression2.js:18:8]

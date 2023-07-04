@@ -1,0 +1,13 @@
+let a = false;
+let b = true;
+let c = null;
+let d = undefined;
+let e = 123;
+a ||= e;
+b &&= e;
+c ??= e;
+d ??= e;
+print(a);
+print(b);
+print(c);
+print(d);

@@ -1,0 +1,1 @@
+SyntaxError: Unexpected super keyword [test-class-definition1.js:20:10]

@@ -1,0 +1,67 @@
+# Copyright (c) 2021 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//arkcompiler/ets_runtime/js_runtime_config.gni")
+import("//arkcompiler/ets_runtime/test/test_helper.gni")
+
+module_output_path = "arkcompiler/ets_runtime"
+
+host_unittest_action("BaseTest") {
+  module_out_path = module_output_path
+
+  sources = [
+    # test file
+    "array_helper_test.cpp",
+    "atomic_helper_test.cpp",
+    "bit_helper_test.cpp",
+    "builtins_base_test.cpp",
+    "error_helper_test.cpp",
+    "file_path_helper_test.cpp",
+    "gc_ring_buffer_test.cpp",
+    "json_parser_test.cpp",
+    "json_stringifier_test.cpp",
+    "math_helper_test.cpp",
+    "number_helper_test.cpp",
+    "string_helper_test.cpp",
+    "typed_array_helper_test.cpp",
+    "utf_helper_test.cpp",
+  ]
+
+  configs = [
+    "//arkcompiler/ets_runtime:ecma_test_config",
+    "//arkcompiler/ets_runtime:icu_path_test_config",
+  ]
+
+  deps = [
+    "$ark_third_party_root/icu/icu4c:shared_icui18n",
+    "$ark_third_party_root/icu/icu4c:shared_icuuc",
+    "//arkcompiler/ets_runtime:libark_jsruntime_test",
+    sdk_libc_secshared_dep,
+  ]
+
+  ldflags = [ "-Wl,--lto-O0" ]
+}
+
+group("unittest") {
+  testonly = true
+
+  # deps file
+  deps = [ ":BaseTest" ]
+}
+
+group("host_unittest") {
+  testonly = true
+
+  # deps file
+  deps = [ ":BaseTestAction" ]
+}

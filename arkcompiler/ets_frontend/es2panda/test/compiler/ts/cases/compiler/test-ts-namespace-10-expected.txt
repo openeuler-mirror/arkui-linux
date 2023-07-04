@@ -1,0 +1,4 @@
+test-ts-namespace-9 flag1
+test-ts-namespace-9 flag2
+test-ts-namespace-9 flag3
+test-ts-namespace-9 flag4

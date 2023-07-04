@@ -1,0 +1,1 @@
+SyntaxError: Unexpected modifier on private identifier [test-class-definiton7.ts:18:12]

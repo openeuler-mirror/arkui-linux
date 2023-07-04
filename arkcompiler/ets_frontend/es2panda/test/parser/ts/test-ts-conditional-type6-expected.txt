@@ -1,0 +1,1 @@
+SyntaxError: 'infer' declarations are only permitted in the 'extends' clause of a conditional type. [test-ts-conditional-type6.ts:17:36]

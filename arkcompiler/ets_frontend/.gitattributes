@@ -1,0 +1,5 @@
+as2panda/bin/* text eol=lf
+as2panda/dist/* binary
+as2panda/scripts/*.sh eol=lf
+as2panda/lib/binaryen.js binary
+as2panda/tests/compiler/std/string-encoding.ts eol=lf

@@ -1,0 +1,1 @@
+SyntaxError: 'declare' modifier cannot appear on a parameter. [test-ts-parameter-property6.ts:18:25]

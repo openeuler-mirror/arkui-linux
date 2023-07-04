@@ -1,0 +1,1 @@
+SyntaxError: Missing left parenthesis in an 'IfStatement' [test-if-1.js:17:4]

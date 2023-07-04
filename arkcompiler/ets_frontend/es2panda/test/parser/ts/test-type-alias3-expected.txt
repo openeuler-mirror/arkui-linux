@@ -1,0 +1,1 @@
+SyntaxError: Type expected [test-type-alias3.ts:17:12]

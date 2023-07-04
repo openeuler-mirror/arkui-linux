@@ -1,0 +1,3 @@
+check exit loop, len == 6:  true
+1
+2

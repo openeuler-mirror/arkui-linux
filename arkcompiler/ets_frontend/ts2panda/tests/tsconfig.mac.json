@@ -1,0 +1,12 @@
+{
+    "extends": "../tsconfig.json",
+    "compilerOptions": {
+      "outDir": "../build-mac",
+      "incremental": true,
+      "tsBuildInfoFile": "../build-mac/tests/tsconfig.tsbuildinfo",
+    },
+    "references": [
+      { "path": "../src" }
+    ]
+  }
+  

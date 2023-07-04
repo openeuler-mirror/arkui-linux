@@ -1,0 +1,1 @@
+SyntaxError: Nullish coalescing operator ?? requires parens when mixing with logical operators. [test-nullish-coalescing2.js:17:22]

@@ -1,0 +1,1 @@
+SyntaxError: '=' expected [test-type-alias2.ts:17:10]
