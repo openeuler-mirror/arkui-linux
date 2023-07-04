@@ -1,0 +1,56 @@
+[
+    {
+        "reason": "Not support eval",
+        "files": [
+            "intl402/RelativeTimeFormat/constructor/constructor/proto-from-ctor-realm.js",
+            "intl402/Collator/proto-from-ctor-realm.js",
+            "intl402/DisplayNames/proto-from-ctor-realm.js",
+            "intl402/DateTimeFormat/proto-from-ctor-realm.js",
+            "intl402/ListFormat/constructor/constructor/proto-from-ctor-realm.js",
+            "intl402/Segmenter/constructor/constructor/proto-from-ctor-realm.js",
+            "intl402/Segmenter/proto-from-ctor-realm.js",
+            "intl402/NumberFormat/proto-from-ctor-realm.js",
+            "intl402/Locale/proto-from-ctor-realm.js",
+            "intl402/PluralRules/proto-from-ctor-realm.js",
+            "intl402/DisplayNames/ctor-custom-get-prototype-poison-throws.js",
+            "intl402/DisplayNames/ctor-custom-prototype.js",
+            "intl402/Segmenter/ctor-custom-prototype.js"
+        ]
+    },
+    {
+        "reason": "Current ICU version not support yet",
+        "files": [
+            "intl402/language-tags-canonicalized.js",
+            "intl402/constructors-string-and-single-element-array.js",
+            "intl402/language-tags-valid.js",
+            "intl402/fallback-locales-are-supported.js",
+            "intl402/supportedLocalesOf-consistent-with-resolvedOptions.js",
+            "intl402/supportedLocalesOf-unicode-extensions-ignored.js",
+            "intl402/String/prototype/localeCompare/returns-same-results-as-Collator.js",
+            "intl402/String/prototype/localeCompare/throws-same-exceptions-as-Collator.js",
+            "intl402/String/prototype/localeCompare/default-options-object-prototype.js",
+            "intl402/DateTimeFormat/prototype/resolvedOptions/hourCycle-timeStyle.js",
+            "intl402/DateTimeFormat/prototype/format/timedatestyle-en.js",
+            "intl402/RelativeTimeFormat/prototype/format/pl-pl-style-long.js",
+            "intl402/RelativeTimeFormat/prototype/format/pl-pl-style-short.js",
+            "intl402/RelativeTimeFormat/prototype/format/pl-pl-style-narrow.js",
+            "intl402/RelativeTimeFormat/prototype/formatToParts/pl-pl-style-long.js",
+            "intl402/RelativeTimeFormat/prototype/formatToParts/pl-pl-style-short.js",
+            "intl402/RelativeTimeFormat/prototype/formatToParts/pl-pl-style-narrow.js",
+            "intl402/NumberFormat/prototype/formatToParts/main.js",
+            "intl402/NumberFormat/currency-digits.js",
+            "intl402/Locale/constructor-non-iana-canon.js",
+            "intl402/Locale/extensions-grandfathered.js",
+            "intl402/Locale/likely-subtags-grandfathered.js",
+            "intl402/Locale/prototype/minimize/removing-likely-subtags-first-adds-likely-subtags.js",
+            "intl402/Intl/getCanonicalLocales/non-iana-canon.js",
+            "intl402/Intl/getCanonicalLocales/transformed-ext-canonical.js",
+            "intl402/Intl/getCanonicalLocales/unicode-ext-canonicalize-yes-to-true.js",
+            "intl402/Intl/getCanonicalLocales/unicode-ext-canonicalize-region.js",
+            "intl402/Intl/getCanonicalLocales/preferred-grandfathered.js",
+            "intl402/Intl/getCanonicalLocales/unicode-ext-canonicalize-subdivision.js",
+            "intl402/Intl/getCanonicalLocales/canonicalized-tags.js",
+            "intl402/Intl/getCanonicalLocales/transformed-ext-invalid.js"
+        ]
+    }
+]

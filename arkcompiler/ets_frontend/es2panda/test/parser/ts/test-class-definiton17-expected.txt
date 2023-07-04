@@ -1,0 +1,1 @@
+SyntaxError: Abstract methods can only appear within an abstract class. [test-class-definiton17.ts:18:14]

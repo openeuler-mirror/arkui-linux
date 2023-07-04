@@ -1,0 +1,117 @@
+# Copyright (c) 2021 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/ohos.gni")
+import("//foundation/arkui/ace_engine/ace_config.gni")
+
+config("ace_napi_quickjs_config") {
+  include_dirs = [
+    "//foundation/arkui/napi",
+    "//foundation/arkui/napi/native_engine",
+    "//third_party/libuv/include",
+    "//third_party/quickjs",
+    "//third_party/bounds_checking_function/include",
+  ]
+}
+
+template("ace_napi_impl") {
+  ohos_source_set(target_name) {
+    public_configs = [ ":ace_napi_quickjs_config" ]
+    defines = invoker.engine_defines
+    defines += invoker.defines
+
+    include_dirs = [ "//foundation/arkui/napi/native_engine/impl/quickjs" ]
+
+    sources = [
+      "native_value/quickjs_native_array.cpp",
+      "native_value/quickjs_native_array_buffer.cpp",
+      "native_value/quickjs_native_big_int.cpp",
+      "native_value/quickjs_native_boolean.cpp",
+      "native_value/quickjs_native_buffer.cpp",
+      "native_value/quickjs_native_data_view.cpp",
+      "native_value/quickjs_native_date.cpp",
+      "native_value/quickjs_native_external.cpp",
+      "native_value/quickjs_native_function.cpp",
+      "native_value/quickjs_native_number.cpp",
+      "native_value/quickjs_native_object.cpp",
+      "native_value/quickjs_native_string.cpp",
+      "native_value/quickjs_native_typed_array.cpp",
+      "native_value/quickjs_native_value.cpp",
+      "quickjs_ext.cpp",
+      "quickjs_native_deferred.cpp",
+      "quickjs_native_engine.cpp",
+      "quickjs_native_engine_impl.cpp",
+      "quickjs_native_reference.cpp",
+    ]
+
+    deps = [
+      "//foundation/arkui/napi:ace_napi",
+      "//third_party/bounds_checking_function:libsec_static",
+    ]
+    if (use_mingw_win || use_mac || use_linux) {
+      defines += [ "PREVIEW" ]
+    }
+    if (use_mingw_win) {
+      defines += [ "WINDOWS_PLATFORM" ]
+    } else if (use_mac) {
+      defines += [ "MAC_PLATFORM" ]
+    } else if (use_linux) {
+      defines += [ "LINUX_PLATFORM" ]
+    } else if (is_cross_platform_build && target_os == "ios") {
+      defines += [ "IOS_PLATFORM" ]
+    } else if (is_cross_platform_build && target_os == "android") {
+      defines += [ "ANDROID_PLATFORM" ]
+    } else {
+      external_deps = hilog_deps
+    }
+
+    if (invoker.use_js_debug) {
+      deps += [ "//third_party/quickjs:qjs_debugger" ]
+    } else {
+      deps += [ "//third_party/quickjs:qjs" ]
+    }
+
+    cflags_cc = [ "-Wno-missing-braces" ]
+    part_name = "napi"
+    subsystem_name = "arkui"
+  }
+}
+
+foreach(item, ace_platforms) {
+  if (item.name == "ohos" || is_cross_platform_build) {
+    engine_config = {
+    }
+    support_engines = {
+    }
+    engine_config = item.config
+    support_engines = engine_config.js_engines
+    foreach(engine, support_engines) {
+      if (engine.engine_name == "qjs") {
+        ace_napi_impl("ace_napi_impl_quickjs") {
+          defines = []
+          engine_defines = engine.engine_defines
+          use_js_debug = false
+          defines = engine_config.defines
+        }
+        if (defined(engine.have_debug) && engine.have_debug) {
+          ace_napi_impl("ace_napi_impl_quickjs_debug") {
+            defines = []
+            engine_defines = engine.engine_defines
+            use_js_debug = true
+            defines = engine_config.defines
+          }
+        }
+      }
+    }
+  }
+}

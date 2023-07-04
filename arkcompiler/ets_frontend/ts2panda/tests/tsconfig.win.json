@@ -1,0 +1,12 @@
+{
+    "extends": "../tsconfig.json",
+    "compilerOptions": {
+      "outDir": "../build-win",
+      "incremental": true,
+      "tsBuildInfoFile": "../build-win/tests/tsconfig.tsbuildinfo",
+    },
+    "references": [
+      { "path": "../src" }
+    ]
+  }
+  

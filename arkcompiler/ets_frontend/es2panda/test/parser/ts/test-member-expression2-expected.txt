@@ -1,0 +1,1 @@
+SyntaxError: Invalid left-hand side in assignment expression [test-member-expression2.ts:18:8]

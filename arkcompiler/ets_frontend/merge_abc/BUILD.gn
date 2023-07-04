@@ -1,0 +1,271 @@
+# Copyright (c) 2022 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//arkcompiler/ets_frontend/ets_frontend_config.gni")
+import("//arkcompiler/runtime_core/ark_config.gni")
+import("//developtools/profiler/build/config.gni")
+
+proto_base_dir = "protos"
+proto_out_dir = "$target_gen_dir" + "/protos_generated"
+
+protobuf_snapshot_generator_sources = [
+  "src/annotationProto.cpp",
+  "src/assemblyDebugProto.cpp",
+  "src/assemblyFieldProto.cpp",
+  "src/assemblyFileLocationProto.cpp",
+  "src/assemblyFunctionProto.cpp",
+  "src/assemblyInsProto.cpp",
+  "src/assemblyLabelProto.cpp",
+  "src/assemblyLiteralsProto.cpp",
+  "src/assemblyProgramProto.cpp",
+  "src/assemblyRecordProto.cpp",
+  "src/assemblyTypeProto.cpp",
+  "src/ideHelpersProto.cpp",
+  "src/mergeProgram.cpp",
+  "src/metaProto.cpp",
+  "src/protobufSnapshotGenerator.cpp",
+]
+
+config("panda_assembly_proto_public_config") {
+  include_dirs = [
+    "$ark_root/assembler",
+    "$ark_root/libpandabase",
+    "$ark_root/libpandabase/mem",
+    "$ark_root",
+    "src",
+    "$proto_out_dir",
+    "//third_party/protobuf/src",
+    "//third_party/protobuf/src/google",
+    "//third_party/protobuf/src/google/protobuf",
+    "../es2panda",
+    "../es2panda/util",
+  ]
+}
+
+assembly_proto_configs = [
+  sdk_libc_secshared_config,
+  "$ark_root:ark_config",
+  ":panda_assembly_proto_public_config",
+  "$ark_root/assembler:arkassembler_public_config",
+  "$ark_root/libpandabase:arkbase_public_config",
+  "$ark_root/libpandafile:arkfile_public_config",
+]
+
+proto_file_defines = [
+  # add your proto file here
+  "annotation",
+  "assemblyDebug",
+  "assemblyField",
+  "assemblyFileLocation",
+  "assemblyFunction",
+  "assemblyIns",
+  "assemblyLabel",
+  "assemblyLiterals",
+  "assemblyProgram",
+  "assemblyRecord",
+  "assemblyType",
+  "compositeProgram",
+  "ideHelpers",
+  "meta",
+]
+
+proto_file_sources = []
+proto_generated_header = []
+proto_generated_source = []
+
+foreach(proto_file, proto_file_defines) {
+  proto_generated_header += [ "$proto_out_dir" + "/" + "$proto_file.pb.h" ]
+  proto_generated_source += [ "$proto_out_dir" + "/" + "$proto_file.pb.cc" ]
+  proto_file_sources += [ "$proto_base_dir" + "/" + "$proto_file.proto" ]
+}
+
+protoc_binary_out_path =
+    "${OHOS_PROFILER_SUBSYS_NAME}/${OHOS_PROFILER_PART_NAME}"
+
+if (default_toolchain == current_toolchain) {
+  #if target build
+  host_out_path = "/" + get_label_info(host_toolchain, "name")
+} else {
+  #if host build (for some linke mingw)
+  host_out_path = "/../" + get_label_info(host_toolchain, "name")
+}
+
+host_protoc_path =
+    root_out_dir + host_out_path + "/" + protoc_binary_out_path + "/protoc"
+
+action("arkcompiler_generate_proto") {
+  deps = [ "$ark_third_party_root/protobuf:protoc($host_toolchain)" ]
+  args = []
+  sources = []
+  outputs = proto_generated_header + proto_generated_source
+  script = "./script/build_proto.sh"
+
+  args += [ rebase_path(host_protoc_path) ]
+  args += [
+    "--proto_path",
+    rebase_path(proto_base_dir),
+    "--cpp_out",
+    rebase_path(proto_out_dir),
+    "--experimental_allow_proto3_optional",
+  ]
+
+  foreach(proto_file_source, proto_file_sources) {
+    #tell gn to check which files as source time
+    sources += [ rebase_path(proto_file_source) ]
+    args += [ rebase_path(proto_file_source) ]
+  }
+}
+
+config("proto_file_cpp_config") {
+  include_dirs = [ proto_out_dir ]
+}
+
+ohos_source_set("assembly_proto_static") {
+  cflags = [ "-Wno-error=zero-length-array" ]
+
+  deps = [
+    ":arkcompiler_generate_proto",
+    "$ark_root/assembler:libarkassembler_frontend_static",
+    "$ark_root/libpandabase:libarkbase_frontend_static",
+    "$ark_root/libpandafile:libarkfile_frontend_static",
+    "$ark_third_party_root/protobuf:protobuf_lite_static",
+    "$ark_third_party_root/protobuf:protobuf_static",
+  ]
+
+  sources = proto_generated_header + proto_generated_source +
+            protobuf_snapshot_generator_sources
+  public_configs = assembly_proto_configs
+  public_configs += [ ":proto_file_cpp_config" ]
+}
+
+ohos_static_library("panda_assembly_proto_static") {
+  deps = [ ":assembly_proto_static" ]
+}
+
+ohos_executable("merge_abc") {
+  use_exceptions = true
+  sources = [
+    "src/main.cpp",
+    "src/options.cpp",
+  ]
+
+  include_dirs = [ "./src" ]
+
+  configs = [
+    sdk_libc_secshared_config,
+    "$ark_root:ark_config",
+    ":panda_assembly_proto_public_config",
+    "$ark_root/assembler:arkassembler_public_config",
+    "$ark_root/libpandabase:arkbase_public_config",
+    "$ark_root/libpandafile:arkfile_public_config",
+    ":proto_file_cpp_config",
+  ]
+
+  deps = [
+    ":panda_assembly_proto_static",
+    "$ark_root/libziparchive:libarkziparchive_frontend_static",
+    "$ark_third_party_root/icu/icu4c:static_icuuc",
+  ]
+
+  ldflags = []
+  if (is_linux) {
+    if (build_public_version) {
+      ldflags += [ "-static-libstdc++" ]
+    } else {
+      libs = [ libcpp_static_lib ]
+    }
+
+    defines = [ "PANDA_TARGET_LINUX" ]
+  } else if (is_mac) {
+    defines = [ "PANDA_TARGET_MACOS" ]
+  } else if (is_mingw) {
+    defines = [ "PANDA_TARGET_WINDOWS" ]
+  }
+
+  if (!use_musl) {
+    ldflags += [ "-lc++" ]
+  }
+
+  output_name = "merge_abc"
+  install_enable = false
+  part_name = "ets_frontend"
+  subsystem_name = "arkcompiler"
+}
+
+if (is_linux) {
+  ohos_copy("merge_abc_build") {
+    deps = [ ":merge_abc" ]
+    sources = [ "${root_out_dir}/arkcompiler/ets_frontend/merge_abc" ]
+    outputs = [ "${target_out_dir}/merge_abc-tmp" ]
+    module_source_dir = "${root_out_dir}/arkcompiler/ets_frontend"
+    module_install_name = "merge_abc"
+  }
+
+  ohos_copy("merge_abc_build_ets") {
+    deps = [ ":merge_abc" ]
+    sources = [ "${root_out_dir}/arkcompiler/ets_frontend/merge_abc" ]
+    outputs = [ "${root_out_dir}/arkcompiler/ets_frontend/merge_abc-ets" ]
+    module_source_dir = "${root_out_dir}/arkcompiler/ets_frontend"
+    module_install_name = "merge_abc"
+  }
+}
+
+if (is_mingw) {
+  ohos_copy("merge_abc_build_win") {
+    deps = [ ":merge_abc" ]
+    sources = [ "${root_out_dir}/arkcompiler/ets_frontend/merge_abc.exe" ]
+    outputs = [ "${target_out_dir}/merge_abc-tmp" ]
+    module_source_dir = "${root_out_dir}/arkcompiler/ets_frontend"
+    module_install_name = "merge_abc.exe"
+  }
+
+  ohos_copy("merge_abc_build_win_ets") {
+    deps = [ ":merge_abc" ]
+    sources = [ "${root_out_dir}/arkcompiler/ets_frontend/merge_abc.exe" ]
+    outputs = [ "${root_out_dir}/arkcompiler/ets_frontend/merge_abc-win-ets" ]
+    module_source_dir = "${root_out_dir}/arkcompiler/ets_frontend"
+    module_install_name = "merge_abc.exe"
+  }
+}
+
+if (is_mac) {
+  ohos_copy("merge_abc_build_mac") {
+    deps = [ ":merge_abc" ]
+    sources = [ "${root_out_dir}/arkcompiler/ets_frontend/merge_abc" ]
+    outputs = [ "${target_out_dir}/merge_abc-tmp" ]
+    module_source_dir = "${root_out_dir}/arkcompiler/ets_frontend"
+    module_install_name = "merge_abc"
+  }
+
+  ohos_copy("merge_abc_build_mac_ets") {
+    deps = [ ":merge_abc" ]
+    sources = [ "${root_out_dir}/arkcompiler/ets_frontend/merge_abc" ]
+    outputs = [ "${root_out_dir}/arkcompiler/ets_frontend/merge_abc-mac-ets" ]
+    module_source_dir = "${root_out_dir}/arkcompiler/ets_frontend"
+    module_install_name = "merge_abc"
+  }
+}
+
+group("merge_proto_abc_build") {
+  if (host_os == "linux") {
+    deps = [ ":merge_abc(${toolchain_linux})" ]
+  }
+
+  if (host_os == "mac") {
+    deps = [ ":merge_abc(${toolchain_mac})" ]
+  }
+}
+
+group("merge_proto_abc_build_win") {
+  deps = [ ":merge_abc(${toolchain_win})" ]
+}

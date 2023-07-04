@@ -1,0 +1,1 @@
+SyntaxError: '?' expected. [test-ts-conditional-type1.ts:17:34]

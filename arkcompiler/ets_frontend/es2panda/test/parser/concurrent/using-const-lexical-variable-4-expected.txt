@@ -1,0 +1,2 @@
+Error: Concurrent function should only use import variable or local variable [using-const-lexical-variable-4.js:20:11]
+the size of programs is expected to be 1, but is 0

@@ -1,0 +1,1 @@
+SyntaxError: Class method can not be declare nor readonly [test-class-definiton2.ts:18:25]

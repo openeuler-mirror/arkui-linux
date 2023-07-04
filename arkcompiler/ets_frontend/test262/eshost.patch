@@ -1,0 +1,233 @@
+From ed6584a8304882dc14a25cbd1f27f70961658147 Mon Sep 17 00:00:00 2001
+Date: Thu, 15 Jul 2021 09:34:47 +0800
+Subject: [PATCH] fix test
+
+---
+ lib/Agent.js        |  1 +
+ lib/ConsoleAgent.js | 29 ++++++++++-----
+ lib/agents/panda.js | 88 +++++++++++++++++++++++++++++++++++++++++++++
+ runtimes/panda.js   | 44 +++++++++++++++++++++++
+ 4 files changed, 154 insertions(+), 8 deletions(-)
+ create mode 100644 lib/agents/panda.js
+ create mode 100644 runtimes/panda.js
+
+diff --git a/lib/Agent.js b/lib/Agent.js
+index edcdf0e..7e655c5 100644
+--- a/lib/Agent.js
++++ b/lib/Agent.js
+@@ -7,6 +7,7 @@ class Agent {
+     this.args = options.hostArguments || [];
+     this.transform = options.transform || (x => x);
+     this.out = options.out || '';
++    this.test262Dir = options.test262Dir;
+
+     if (typeof this.args === 'string') {
+       this.args = this.args.includes(' ') ?
+diff --git a/lib/ConsoleAgent.js b/lib/ConsoleAgent.js
+index 947c1db..dc14ded 100644
+--- a/lib/ConsoleAgent.js
++++ b/lib/ConsoleAgent.js
+@@ -19,7 +19,7 @@ const {
+ const cpSym = Symbol.for('cp');
+ const tpSym = Symbol.for('tp');
+
+-function generateTempFileName() {
++function generateTempFileName(file) {
+   const now = Date.now();
+   return `f-${now}-${process.pid}-${(Math.random() * 0x100000000 + 1).toString(36)}.js`;
+ }
+@@ -47,9 +47,23 @@ class ConsoleAgent extends Agent {
+     }
+   }
+
++  genTempFileName(code){
++    let file = code.file;
++    let scenario = code.scenario === 'strict mode' ? 'strict' : code.scenario;
++    let tmps = file.split(this.test262Dir);
++    let tempfile = path.join(this.out,tmps[1]);
++    tempfile = tempfile.substring(0,tempfile.indexOf('.js'));
++    tempfile = path.normalize(
++      `${tempfile}-${scenario}.js`
++    );
++    return tempfile;
++  }
++
+   evalScript(code, options = {}) {
+-    let tempfile = path.join(this[tpSym], generateTempFileName());
+-    let temppath = this[tpSym];
++
++    let tempfile = this.genTempFileName(code);
++    //let tempfile = path.join(this.out, generateTempFileName(code.file));
++    let temppath = this.out;
+
+     let isExpectingRawSource = false;
+     let hasDependencies = false;
+@@ -57,10 +71,10 @@ class ConsoleAgent extends Agent {
+     const sources = [];
+     const dependencies = [];
+
+-    if (this.out) {
+-      tempfile = tempfile.replace(temppath, this.out);
+-      temppath = this.out;
+-    }
++    // if (this.out) {
++    //   tempfile = tempfile.replace(temppath, this.out);
++    //   temppath = this.out;
++    // }
+
+     // When evalScript is called with a test262-stream test record:
+     if (typeof code === 'object' && code.contents) {
+@@ -161,7 +175,6 @@ class ConsoleAgent extends Agent {
+       sources.forEach(({0: file}) => fs.unlink(file, () => { /* ignore */ }));
+
+       const result = this.normalizeResult({ stderr, stdout });
+-
+       result.error = this.parseError(result.stderr);
+
+       return result;
+diff --git a/lib/agents/panda.js b/lib/agents/panda.js
+new file mode 100644
+index 0000000..ab22b47
+--- /dev/null
++++ b/lib/agents/panda.js
+@@ -0,0 +1,88 @@
++'use strict';
++
++const fs = require('fs');
++const runtimePath = require('../runtime-path');
++const ConsoleAgent = require('../ConsoleAgent');
++
++const errorRe = /[(](\d+),(\d+)[)]: (.*)/;
++const errorRe1 = /^(\w+): (.*)$/m;
++// const errorRe2 = /^(?:(\w+): (.*))|(?:(\w+))$/m;
++const errorRe2 = /(\w+): (\w+): (.*)$/m;
++
++function parseSyntaxError(syntaxErrorMessage) {
++  const matches = syntaxErrorMessage.match();
++  if (matches && matches.length) {
++    return {
++      message: matches[3],
++      lineNumber: Number(matches[1]),
++      columnNumber: Number(matches[2])
++    };
++  }
++  return null;
++}
++
++class PandaAgent extends ConsoleAgent{
++    constructor(options) {
++        super(options);
++    }
++
++    createChildProcess(args) {
++      let js_file = args[0]
++      args = []
++      args.unshift(`--js-file=${js_file}`)
++      return super.createChildProcess(args);
++    }
++
++    evalScript(code, options = {}) {
++        return super.evalScript(code, options);
++    }
++
++    parseError(str) {
++        let match = str.match(errorRe1);
++        if (match) {
++          return {
++            name: match[1],
++            message: match[2],
++            stack: [],
++          };
++        } else {
++          // Syntax errors don't have nice error messages...
++          let error = null;
++          let errors = str.match(/[(](\d+),(\d+)[)]: (.*)/gm);
++
++          if (errors && errors.length) {
++            error = {
++              name: 'SyntaxError',
++              message: errors[0],
++              stack: []
++            };
++
++            const stack = parseSyntaxError(errors[0]);
++
++            if (stack) {
++              error.stack.push(stack);
++              error.message = stack.message;
++            }
++          }
++
++          if (error) {
++            return error;
++          }
++
++          // Last chance...
++          errors = str.match(errorRe2);
++          if (errors && errors.length >3) {
++            return {
++              name: errors[2],
++              message: errors[0],
++              stack: [],
++            };
++          }
++        }
++
++        return null;
++      }
++}
++
++PandaAgent.runtime = fs.readFileSync(runtimePath.for('panda'), 'utf8');
++module.exports = PandaAgent;
+\ No newline at end of file
+diff --git a/runtimes/panda.js b/runtimes/panda.js
+new file mode 100644
+index 0000000..0acbd09
+--- /dev/null
++++ b/runtimes/panda.js
+@@ -0,0 +1,44 @@
++if (!globalThis.$262) {
++  globalThis.$262 = {
++    global: globalThis,
++    evalScript(code) {
++      try {
++        global.evalScript(code);
++        return { type: 'normal', value: undefined };
++      } catch (e) {
++        return { type: 'throw', value: e };
++      }
++    },
++    gc() {
++      throw new Test262Error('gc() not yet supported.');
++    },
++    getGlobal(name) {
++      return global[name];
++    },
++    setGlobal(name, value) {
++      global[name] = value;
++    },
++    agent: (function() {
++      function thrower() {
++        throw new Test262Error('agent.* not yet supported.');
++      };
++      return {
++        start: thrower,
++        broadcast: thrower,
++        getReport: thrower,
++        sleep: thrower,
++        monotonicNow: thrower,
++      };
++    })(),
++  };
++}
++
++$262.IsHTMLDDA = function() {};
++$262.destroy = function() {};
++$262.getGlobal = function(name) {
++  return this.global[name];
++};
++$262.setGlobal = function(name, value) {
++  this.global[name] = value;
++};
++$262.source = $SOURCE;
+--

@@ -1,0 +1,38 @@
+{
+    "name": "@ohos/arkcompiler_runtime_core",
+    "version": "",
+    "description": "方舟运行时的公共组件",
+    "homePage": "https://gitee.com/openharmony",
+    "license": "Apache License 2.0",
+    "publishAs": "code-segment",
+    "scripts": {},
+    "dirs": [],
+    "segment": {
+        "destPath": "arkcompiler/runtime_core"
+    },
+    "component": {
+        "name": "runtime_core",
+        "subsystem": "arkcompiler",
+        "syscap": [],
+        "features": [],
+        "adapted_system_type": [
+            "standard"
+        ],
+        "rom": "",
+        "ram": "",
+        "deps": {
+            "components": [],
+            "third_party": []
+        },
+        "build": {
+            "sub_component": [
+                "//arkcompiler/runtime_core:arkcompiler_params"
+            ],
+            "inner_kits": [],
+            "test": [
+                "//arkcompiler/runtime_core/tests/fuzztest:fuzztest",
+                "//arkcompiler/runtime_core:runtime_core_unittest"
+            ]
+        }
+    }
+}

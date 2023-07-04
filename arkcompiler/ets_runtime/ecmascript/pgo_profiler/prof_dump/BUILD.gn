@@ -1,0 +1,79 @@
+# Copyright (c) 2023 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//arkcompiler/ets_runtime/js_runtime_config.gni")
+
+ohos_executable("profdump") {
+  sources = [ "main.cpp" ]
+
+  deps = [
+    "$ark_root/libpandabase:libarkbase_static",
+    "$ark_root/libpandafile:libarkfile_static",
+    "$js_root:libark_js_intl_set",
+    "$js_root:libark_jsruntime_set",
+    "$js_root/ecmascript/compiler:libark_mock_stub_set",
+  ]
+
+  public_configs = [
+    "$js_root:ark_jsruntime_common_config",
+    "$js_root:ark_jsruntime_public_config",
+  ]
+
+  if (is_mingw && !ark_standalone_build) {
+    deps += [
+      "//base/hiviewdfx/hilog/interfaces/native/innerkits:libhilog_windows",
+    ]
+  }
+
+  if (is_mac && !ark_standalone_build) {
+    deps +=
+        [ "//base/hiviewdfx/hilog/interfaces/native/innerkits:libhilog_mac" ]
+  }
+
+  if (target_os == "ios") {
+    deps += [
+      "$ark_third_party_root/icu/icu4c:static_icui18n",
+      "$ark_third_party_root/icu/icu4c:static_icuuc",
+    ]
+  } else {
+    deps += [
+      "$ark_third_party_root/icu/icu4c:shared_icui18n",
+      "$ark_third_party_root/icu/icu4c:shared_icuuc",
+    ]
+  }
+
+  # hiviewdfx libraries
+  if (is_ohos && is_standard_system) {
+    if (enable_dump_in_faultlog || enable_bytrace || enable_hitrace ||
+        enable_hilog) {
+      external_deps = []
+    }
+    if (enable_dump_in_faultlog) {
+      external_deps += [ "faultloggerd:libfaultloggerd" ]
+    }
+    if (enable_bytrace) {
+      external_deps += [ "hitrace_native:hitrace_meter" ]
+    }
+    if (enable_hitrace) {
+      external_deps += [ "hitrace_native:libhitracechain" ]
+    }
+    if (enable_hilog) {
+      external_deps += [ "hiviewdfx_hilog_native:libhilog" ]
+    }
+  }
+
+  install_enable = true
+
+  part_name = "ets_runtime"
+  subsystem_name = "arkcompiler"
+}

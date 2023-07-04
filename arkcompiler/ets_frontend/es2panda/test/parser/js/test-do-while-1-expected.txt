@@ -1,0 +1,1 @@
+SyntaxError: Unexpected token [test-do-while-1.js:17:10]

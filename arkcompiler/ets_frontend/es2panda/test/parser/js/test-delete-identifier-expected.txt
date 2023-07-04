@@ -1,0 +1,1 @@
+SyntaxError: Deleting local variable in strict mode [test-delete-identifier.js:18:9]

@@ -1,0 +1,1 @@
+SyntaxError: Multiple constructor implementations are not allowed. [test-class-definition2.js:21:5]

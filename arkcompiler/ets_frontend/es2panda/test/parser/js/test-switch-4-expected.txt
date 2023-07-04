@@ -1,0 +1,1 @@
+SyntaxError: Unexpected token, expected 'case' or 'default'. [test-switch-4.js:18:3]

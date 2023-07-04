@@ -1,0 +1,12 @@
+Handle types for function: hello
+(instruction order, type): (-1, 101), 
+Handle types for function: #1#Calculator
+(instruction order, type): (-2, 105), 
+Handle types for function: add
+(instruction order, type): (-1, 103), 
+Handle types for function: minus
+(instruction order, type): (-1, 104), 
+Handle types for function: func_main_0
+(instruction order, type): (8, 101), (10, 1), (12, 103), (14, 104), (16, 1), (18, 1), (20, 1), (22, 4), (27, 102), (59, 105), 
+Handle types for function: func_main_0
+(instruction order, type): (5, 101), (8, 105), (19, 107), (22, 102), (25, 103), (31, 104), (37, 106), (41, 106), 

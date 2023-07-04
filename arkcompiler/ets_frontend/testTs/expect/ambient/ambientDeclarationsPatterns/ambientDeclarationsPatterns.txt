@@ -1,0 +1,4 @@
+{'lb': [{'t': 2, 'v': 7}, {'t': 5, 'v': '#foo#foobarbaz'}], 'k': '_1'}
+{'lb': [{'t': 2, 'v': 7}, {'t': 5, 'v': '#baz#foobarbaz'}], 'k': '_2'}
+{'lb': [{'t': 2, 'v': 7}, {'t': 5, 'v': '#foos#foosball'}], 'k': '_3'}
+{'lb': [{'t': 2, 'v': 7}, {'t': 5, 'v': '#fileText#./file!text'}], 'k': '_4'}

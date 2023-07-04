@@ -1,0 +1,1 @@
+SyntaxError: Decorators cannot be applied to multiple get/set accessors of the same name. [test_decorator3.ts:20:5]

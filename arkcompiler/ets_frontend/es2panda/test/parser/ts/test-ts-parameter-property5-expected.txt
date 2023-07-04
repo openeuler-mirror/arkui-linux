@@ -1,0 +1,1 @@
+SyntaxError: 'async' modifier cannot appear on a parameter. [test-ts-parameter-property5.ts:18:25]

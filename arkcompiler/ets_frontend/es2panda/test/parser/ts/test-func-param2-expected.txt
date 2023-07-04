@@ -1,0 +1,1 @@
+SyntaxError: A 'this' parameter must be the first parameter [test-func-param2.ts:17:21]

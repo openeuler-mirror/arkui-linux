@@ -1,0 +1,6 @@
+{'literalBuffer': [{'tag': 2, 'value': 3}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}, {'tag': 5, 'value': 'foo1'}, {'tag': 2, 'value': 1}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}]}
+{'literalBuffer': [{'tag': 2, 'value': 3}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}, {'tag': 5, 'value': 'foo2'}, {'tag': 2, 'value': 1}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}]}
+{'literalBuffer': [{'tag': 2, 'value': 3}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}, {'tag': 5, 'value': 'foo3'}, {'tag': 2, 'value': 1}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}]}
+{'literalBuffer': [{'tag': 2, 'value': 3}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}, {'tag': 5, 'value': 'bar1'}, {'tag': 2, 'value': 1}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}]}
+{'literalBuffer': [{'tag': 2, 'value': 3}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}, {'tag': 5, 'value': 'bar2'}, {'tag': 2, 'value': 1}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}]}
+{'literalBuffer': [{'tag': 2, 'value': 3}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}, {'tag': 5, 'value': 'bar3'}, {'tag': 2, 'value': 1}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}]}

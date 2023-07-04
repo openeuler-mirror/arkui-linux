@@ -1,0 +1,173 @@
+# Copyright (c) 2021 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+group("ark_aot_js_test") {
+  testonly = true
+  deps = [
+    "asyncfunctionenter:asyncfunctionenterAotAction",
+    "bigint_typed_array_constructors:bigint_typed_array_constructorsAotAction",
+    "call_default_args:call_default_argsAotAction",
+    "constructor_returns_non_object:constructor_returns_non_objectAotAction",
+
+    #"dynamicimport:dynamicimportAotAction",
+    "emptyif:emptyifAotAction",
+    "formatrangetoparts:formatrangetopartsAotAction",
+
+    #"module:moduleAotAction",
+    "undefined:undefinedAotAction",
+  ]
+}
+
+group("ark_aot_test") {
+  testonly = true
+  deps = [
+    "add:addAotAction",
+    "and:andAotAction",
+    "aot_compatibility_test:aot_compatibility_test",
+    "aot_type_test:aot_type_test",
+    "ashr:ashrAotAction",
+    "asyncgenerator:asyncgeneratorAotAction",
+    "await:awaitAotAction",
+    "bind:bindAotAction",
+    "builtinmath:builtinmathAotAction",
+    "call_same_bytecode_func:call_same_bytecode_funcAotAction",
+    "callithisrange:callithisrangeAotAction",
+    "calls:callsAotAction",
+    "class_method_signature:class_method_signatureAotAction",
+    "closeiterator:closeiteratorAotAction",
+
+    # "continue_from_finally:continue_from_finallyAotAction",
+    "copyrestargs:copyrestargsAotAction",
+    "createarraywithbuffer:createarraywithbufferAotAction",
+    "createemptyarray:createemptyarrayAotAction",
+    "createemptyobject:createemptyobjectAotAction",
+    "creategeneratorobj:creategeneratorobjAotAction",
+    "createiterresultobj:createiterresultobjAotAction",
+    "createobjecthavingmethod:createobjecthavingmethodAotAction",
+    "createobjectwithbuffer:createobjectwithbufferAotAction",
+    "createregexpwithliteral:createregexpwithliteralAotAction",
+    "dec:decAotAction",
+    "defineasyncfunc:defineasyncfuncAotAction",
+    "defineclasswithbuffer:defineclasswithbufferAotAction",
+    "definefunc:definefuncAotAction",
+    "definefunc_variable_args:definefunc_variable_argsAotAction",
+    "definegeneratorfunc:definegeneratorfuncAotAction",
+    "definegettersetterbyvalue:definegettersetterbyvalueAotAction",
+    "definemethod:definemethodAotAction",
+    "definencfunc:definencfuncAotAction",
+    "delobjprop:delobjpropAotAction",
+    "deopt:deoptAotAction",
+    "destructuring:destructuringAotAction",
+    "div:divAotAction",
+    "duplicatefunctions:duplicatefunctionsAotAction",
+    "duplicatekey:duplicatekeyAotAction",
+    "exceptionhandler:exceptionhandlerAotAction",
+    "exp:expAotAction",
+    "forloop:forloopAotAction",
+    "framestatesasync:framestatesasyncAotAction",
+    "framestatesphi:framestatesphiAotAction",
+    "generatorcontinuefinally:generatorcontinuefinallyAotAction",
+    "getiterator:getiteratorAotAction",
+    "getiteratornext:getiteratornextAotAction",
+    "getnextpropname:getnextpropnameAotAction",
+    "getpropiterator:getpropiteratorAotAction",
+    "getresumemode:getresumemodeAotAction",
+    "gettemplateobject:gettemplateobjectAotAction",
+    "getunmappedargs:getunmappedargsAotAction",
+    "global_this_ts:global_this_tsAotAction",
+    "helloaot:helloaotAotAction",
+    "helloconcurrent:helloconcurrentAotAction",
+    "ic:icAotAction",
+    "inc:incAotAction",
+    "inline:inlineAotAction",
+    "instanceof:instanceofAotAction",
+    "isfalse:isfalseAotAction",
+    "isin:isinAotAction",
+    "istrue:istrueAotAction",
+    "large_func:large_funcAotAction",
+    "large_func_acc:large_func_accAotAction",
+    "ldbigint:ldbigintAotAction",
+    "ldconst:ldconstAotAction",
+    "ldfunctionpref:ldfunctionprefAotAction",
+    "ldglobalvar:ldglobalvarAotAction",
+    "ldobjbyname:ldobjbynameAotAction",
+    "ldstlexvar:ldstlexvarAotAction",
+    "ldsuperbyname:ldsuperbynameAotAction",
+    "logic_op:logic_opAotAction",
+    "loop_with_variable_exchange:loop_with_variable_exchangeAotAction",
+    "loops:loopsAotAction",
+    "mod:modAotAction",
+    "mul:mulAotAction",
+    "neg:negAotAction",
+    "new:newAotAction",
+    "newlexenv:newlexenvAotAction",
+    "newobjspread:newobjspreadAotAction",
+    "not:notAotAction",
+    "optimization:optimizationAotAction",
+    "or:orAotAction",
+    "poplexenv:poplexenvAotAction",
+    "proxy:proxyAotAction",
+    "resumegenerator:resumegeneratorAotAction",
+    "setobjectwithproto:setobjectwithprotoAotAction",
+    "shl:shlAotAction",
+    "shr:shrAotAction",
+    "specialloops:specialloopsAotAction",
+    "starrayspread:starrayspreadAotAction",
+    "stclasstoglobalrecord:stclasstoglobalrecordAotAction",
+    "stconsttoglobalrecord:stconsttoglobalrecordAotAction",
+    "stglobalvar:stglobalvarAotAction",
+    "stlettoglobalrecord:stlettoglobalrecordAotAction",
+    "stobjbyindex:stobjbyindexAotAction",
+    "stobjbyname:stobjbynameAotAction",
+    "stobjbyvalue:stobjbyvalueAotAction",
+    "stownbyindex:stownbyindexAotAction",
+    "stownbyname:stownbynameAotAction",
+    "stownbynamewithnameset:stownbynamewithnamesetAotAction",
+    "stownbyvalue:stownbyvalueAotAction",
+    "stownbyvaluewithnameset:stownbyvaluewithnamesetAotAction",
+    "strictequal:strictequalAotAction",
+    "strictnotequal:strictnotequalAotAction",
+    "stsuperbyname:stsuperbynameAotAction",
+    "sub:subAotAction",
+    "supercall:supercallAotAction",
+    "supercallspread:supercallspreadAotAction",
+    "suspendgenerator:suspendgeneratorAotAction",
+    "suspendgeneratorbranch:suspendgeneratorbranchAotAction",
+
+    # "suspendgeneratorfor:suspendgeneratorforAotAction",
+    "suspendgeneratorphi:suspendgeneratorphiAotAction",
+    "suspendgeneratorreturn:suspendgeneratorreturnAotAction",
+    "suspendgeneratorthrow:suspendgeneratorthrowAotAction",
+    "throw:throwAotAction",
+    "throwifsupernotcorrectcall:throwifsupernotcorrectcallAotAction",
+    "throwundefindeifhole:throwundefindeifholeAotAction",
+    "tonumber:tonumberAotAction",
+    "tonumeric:tonumericAotAction",
+    "try_catch_finally:try_catch_finallyAotAction",
+    "trystglobalbynameprefid32:trystglobalbynameprefid32AotAction",
+    "typeof:typeofAotAction",
+    "xor:xorAotAction",
+  ]
+
+  if (is_debug) {
+    deps += [
+      # builtins_stub test only print log in debug mode
+      "builtins_array:builtins_arrayAotAction",
+      # "builtins_stub:builtins_stubAotAction",
+    ]
+  }
+
+  if (!is_debug) {
+    deps += [ "aot_multi_constantpool_test:aot_multi_constantpool_test" ]
+  }
+}

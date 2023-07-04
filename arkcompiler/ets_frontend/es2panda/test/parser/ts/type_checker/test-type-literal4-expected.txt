@@ -1,0 +1,1 @@
+SyntaxError: ';' expected [test-type-literal4.ts:17:21]

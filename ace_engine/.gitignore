@@ -1,0 +1,17 @@
+.vs/
+.vscode/
+*.iml
+.idea/
+CMakeLists.txt
+adapter/*
+!adapter/ohos/
+!adapter/preview/
+cmake-build-debug/
+lite/appfwk/
+lite/base/
+lite/interfaces/
+lite/jsfwk/
+lite/maplejs/
+lite/tools/
+lite/ui/
+

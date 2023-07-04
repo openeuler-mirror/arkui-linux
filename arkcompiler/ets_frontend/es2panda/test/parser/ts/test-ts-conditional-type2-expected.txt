@@ -1,0 +1,1 @@
+SyntaxError: Type expected [test-ts-conditional-type2.ts:17:51]

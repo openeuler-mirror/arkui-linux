@@ -1,0 +1,1 @@
+SyntaxError: Invalid numeric separator [test-numeric-separator1.js:16:608]

@@ -1,0 +1,168 @@
+# Copyright (c) 2022 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//arkcompiler/ets_runtime/js_runtime_config.gni")
+import("//arkcompiler/ets_runtime/test/test_helper.gni")
+
+test_js_path = "//arkcompiler/ets_runtime/ecmascript/jspandafile/tests/quickfix/single_file/"
+
+test_js_files = [
+  "base/index",
+  "patch/index",
+]
+
+foreach(file, test_js_files) {
+  es2abc_gen_abc("gen_${file}_abc") {
+    test_js = "${test_js_path}${file}.js"
+    test_abc = "$target_out_dir/single_file/${file}.abc"
+
+    # Only targets in this file can depend on this.
+    extra_visibility = [ ":*" ]
+    src_js = rebase_path(test_js)
+    dst_file = rebase_path(test_abc)
+    extra_args = [ "--module" ]
+    extra_args += [ "--merge-abc" ]
+
+    in_puts = [ test_js ]
+    out_puts = [ test_abc ]
+  }
+}
+
+test_multi_files = [
+  "quickfix/multi_file/base/index.js",
+  "quickfix/multi_file/base/module.js",
+  "quickfix/multi_file/patch/index.js",
+  "quickfix/multi_file/patch/module.js",
+]
+
+_merge_file_raw_ = "//arkcompiler/ets_runtime/ecmascript/jspandafile/tests/quickfix/multi_file/merge.txt"
+_base_merge_file_ = "$target_out_dir/multi_file/base/merge.txt"
+_patch_merge_file_ = "$target_out_dir/multi_file/patch/merge.txt"
+
+_base_abc_path_ = "$target_out_dir/multi_file/base/merge.abc"
+_patch_abc_path_ = "$target_out_dir/multi_file/patch/merge.abc"
+
+action("gen_base_merge_file") {
+  script = "//arkcompiler/ets_runtime/test/quickfix/generate_merge_file.py"
+  args = [
+    "--input",
+    rebase_path(_merge_file_raw_),
+    "--output",
+    rebase_path(_base_merge_file_),
+    "--prefix",
+    rebase_path(
+        "//arkcompiler/ets_runtime/ecmascript/jspandafile/tests/quickfix/multi_file/base/"),
+  ]
+
+  inputs = [ _merge_file_raw_ ]
+  outputs = [ _base_merge_file_ ]
+}
+
+action("gen_patch_merge_file") {
+  script = "//arkcompiler/ets_runtime/test/quickfix/generate_merge_file.py"
+  args = [
+    "--input",
+    rebase_path(_merge_file_raw_),
+    "--output",
+    rebase_path(_patch_merge_file_),
+    "--prefix",
+    rebase_path(
+        "//arkcompiler/ets_runtime/ecmascript/jspandafile/tests/quickfix/multi_file/patch/"),
+  ]
+
+  inputs = [ _merge_file_raw_ ]
+  outputs = [ _patch_merge_file_ ]
+}
+
+es2abc_gen_abc("gen_base_abc") {
+  extra_visibility = [ ":*" ]  # Only targets in this file can depend on this.
+  extra_dependencies = [ ":gen_base_merge_file" ]
+  src_js = "@" + rebase_path(_base_merge_file_)
+  dst_file = rebase_path(_base_abc_path_)
+  extra_args = []
+  extra_args += [ "--module" ]
+  extra_args += [ "--merge-abc" ]
+
+  in_puts = test_multi_files
+  out_puts = [ _base_abc_path_ ]
+}
+
+es2abc_gen_abc("gen_patch_abc") {
+  extra_visibility = [ ":*" ]  # Only targets in this file can depend on this.
+  extra_dependencies = [ ":gen_patch_merge_file" ]
+  src_js = "@" + rebase_path(_patch_merge_file_)
+  dst_file = rebase_path(_patch_abc_path_)
+  extra_args = []
+  extra_args += [ "--module" ]
+  extra_args += [ "--merge-abc" ]
+
+  in_puts = test_multi_files
+  out_puts = [ _patch_abc_path_ ]
+}
+
+module_output_path = "arkcompiler/ets_runtime"
+
+host_unittest_action("JSPandaFileTest") {
+  module_out_path = module_output_path
+
+  sources = [
+    # test file
+    "js_pandafile_executor_test.cpp",
+    "js_pandafile_manager_test.cpp",
+    "js_pandafile_test.cpp",
+    "panda_file_translator_test.cpp",
+    "quick_fix_test.cpp",
+  ]
+
+  configs = [
+    "//arkcompiler/ets_runtime:ecma_test_config",
+    "$ark_root/assembler:arkassembler_public_config",
+    "$ark_root/libpandafile:arkfile_public_config",
+  ]
+
+  deps = [
+    "//arkcompiler/ets_runtime:libark_jsruntime_test",
+    "//arkcompiler/runtime_core/assembler:libarkassembler_static",
+    sdk_libc_secshared_dep,
+  ]
+
+  foreach(file, test_js_files) {
+    deps += [ ":gen_${file}_abc" ]
+  }
+
+  deps += [
+    ":gen_base_abc",
+    ":gen_patch_abc",
+  ]
+
+  if (is_ohos && is_standard_system) {
+    test_abc_dir = "/data/test"
+  } else {
+    test_abc_dir = rebase_path(target_out_dir)
+  }
+  defines = [ "QUICKFIX_ABC_PATH=\"${test_abc_dir}/\"" ]
+}
+
+group("unittest") {
+  testonly = true
+
+  # deps file
+  deps = [ ":JSPandaFileTest" ]
+}
+
+group("host_unittest") {
+  testonly = true
+
+  # deps file
+  deps = [ ":JSPandaFileTestAction" ]
+}

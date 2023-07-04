@@ -1,0 +1,3 @@
+test-ts-function-2
+1
+true

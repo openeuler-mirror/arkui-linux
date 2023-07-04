@@ -1,0 +1,1 @@
+SyntaxError: Label already declared [test-labelled-statement1.js:18:1]

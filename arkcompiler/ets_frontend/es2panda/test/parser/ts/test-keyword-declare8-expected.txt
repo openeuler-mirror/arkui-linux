@@ -1,0 +1,1 @@
+SyntaxError: An implementation cannot be declared in ambient contexts. [test-keyword-declare8.ts:18:28]

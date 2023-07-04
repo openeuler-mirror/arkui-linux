@@ -1,0 +1,1 @@
+SyntaxError: A constructor cannot have a 'this' parameter [test-func-param3.ts:18:21]

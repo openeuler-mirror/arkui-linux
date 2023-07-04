@@ -1,0 +1,1 @@
+SyntaxError: Unexpected token, expected ':' [test-object-expression3.js:18:4]

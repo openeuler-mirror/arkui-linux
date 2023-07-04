@@ -1,0 +1,157 @@
+{
+    "type": 0,
+    "func_body": {
+        "name": "Add",
+        "signature": {
+            "params": 5
+        },
+        "ins": [
+            {
+                "op": "mov.dyn",
+                "regs": [
+                    4,
+                    12
+                ],
+                "debug_pos_info": {
+                    "lineNum": 1,
+                    "columnNum": 4
+                }
+            },
+            {
+                "op": "mov.dyn",
+                "regs": [
+                    3,
+                    11
+                ],
+                "debug_pos_info": {
+                    "lineNum": 1,
+                    "columnNum": 4
+                }
+            },
+            {
+                "op": "mov.dyn",
+                "regs": [
+                    2,
+                    10
+                ],
+                "debug_pos_info": {
+                    "lineNum": 1,
+                    "columnNum": 4
+                }
+            },
+            {
+                "op": "mov.dyn",
+                "regs": [
+                    1,
+                    9
+                ],
+                "debug_pos_info": {
+                    "lineNum": 1,
+                    "columnNum": 4
+                }
+            },
+            {
+                "op": "mov.dyn",
+                "regs": [
+                    0,
+                    8
+                ],
+                "debug_pos_info": {
+                    "lineNum": 1,
+                    "columnNum": 4
+                }
+            },
+            {
+                "op": "ecma.ldlexenvdyn",
+                "debug_pos_info": {
+                    "lineNum": 1,
+                    "columnNum": 4
+                }
+            },
+            {
+                "op": "sta.dyn",
+                "regs": [
+                    7
+                ],
+                "debug_pos_info": {
+                    "lineNum": 1,
+                    "columnNum": 4
+                }
+            },
+            {
+                "op": "lda.dyn",
+                "regs": [
+                    3
+                ],
+                "debug_pos_info": {
+                    "lineNum": 1,
+                    "columnNum": 11
+                }
+            },
+            {
+                "op": "sta.dyn",
+                "regs": [
+                    6
+                ],
+                "debug_pos_info": {
+                    "lineNum": 1,
+                    "columnNum": 11
+                }
+            },
+            {
+                "op": "lda.dyn",
+                "regs": [
+                    4
+                ],
+                "debug_pos_info": {
+                    "lineNum": 1,
+                    "columnNum": 13
+                }
+            },
+            {
+                "op": "ecma.add2dyn",
+                "regs": [
+                    6
+                ],
+                "debug_pos_info": {
+                    "lineNum": 1,
+                    "columnNum": 11
+                }
+            },
+            {
+                "op": "sta.dyn",
+                "regs": [
+                    5
+                ],
+                "debug_pos_info": {
+                    "lineNum": 1,
+                    "columnNum": 4
+                }
+            },
+            {
+                "op": "lda.dyn",
+                "regs": [
+                    5
+                ],
+                "debug_pos_info": {
+                    "lineNum": 1,
+                    "columnNum": 4
+                }
+            },
+            {
+                "op": "return.dyn",
+                "debug_pos_info": {
+                    "lineNum": 1,
+                    "columnNum": 4
+                }
+            }
+        ],
+        "labels": [],
+        "regs_num": 8,
+        "metadata": {
+            "attribute": ""
+        },
+        "catchTables": [],
+        "sourceFile": "test.js"
+    }
+}

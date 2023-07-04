@@ -1,0 +1,1 @@
+SyntaxError: '(' expected [test-ts-constructor-type3.ts:17:16]

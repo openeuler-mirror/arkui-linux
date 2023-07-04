@@ -1,0 +1,1 @@
+SyntaxError: 'readonly' modifier can only appear on a property declaration or index signature. [test-type-literal6.ts:17:10]

@@ -1,0 +1,1 @@
+SyntaxError: Newline is not allowed in strings [test-multi-line-string.js:16:610]

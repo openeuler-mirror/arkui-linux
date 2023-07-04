@@ -1,0 +1,513 @@
+# Copyright (c) 2021 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//arkcompiler/ets_runtime/js_runtime_config.gni")
+
+if (ark_standalone_build) {
+  import("$build_root/ark.gni")
+} else {
+  import("//build/ohos.gni")
+}
+
+action("build_llvm_libs") {
+  script = "compile_llvm_lib.sh"
+  sources = [ "$js_root/ecmascript/compiler/compile_llvm_lib.sh" ]
+  outputs = [ "${root_out_dir}/llvm" ]
+}
+
+config("include_llvm") {
+  if (compile_llvm_online) {
+    include_dirs = [
+      "//third_party/third_party_llvm-project/build/include",
+      "//third_party/third_party_llvm-project/llvm/include/",
+    ]
+  } else {
+    if (is_mingw) {
+      include_dirs = [
+        "//prebuilts/ark_tools/ark_js_prebuilts/llvm_prebuilts_windows/llvm/include",
+        "//prebuilts/ark_tools/ark_js_prebuilts/llvm_prebuilts_windows/build/include",
+      ]
+    } else if (is_mac) {
+      if (host_cpu == "arm64") {
+        include_dirs = [
+          "//prebuilts/ark_tools/ark_js_prebuilts/llvm_prebuilts_darwin_arm64/llvm/include",
+          "//prebuilts/ark_tools/ark_js_prebuilts/llvm_prebuilts_darwin_arm64/build/include",
+        ]
+      } else {
+        include_dirs = [
+          "//prebuilts/ark_tools/ark_js_prebuilts/llvm_prebuilts_darwin_x64/llvm/include",
+          "//prebuilts/ark_tools/ark_js_prebuilts/llvm_prebuilts_darwin_x64/build/include",
+        ]
+      }
+    } else {
+      if (current_cpu == "arm64") {
+        include_dirs = [
+          "//prebuilts/ark_tools/ark_js_prebuilts/llvm_prebuilts_aarch64/llvm/include",
+          "//prebuilts/ark_tools/ark_js_prebuilts/llvm_prebuilts_aarch64/build/include",
+        ]
+      } else {
+        include_dirs = [
+          "//prebuilts/ark_tools/ark_js_prebuilts/llvm_prebuilts/llvm/include",
+          "//prebuilts/ark_tools/ark_js_prebuilts/llvm_prebuilts/build/include",
+        ]
+      }
+    }
+    cflags_cc = [ "-DARK_GC_SUPPORT" ]
+  }
+}
+
+source_set("libark_jsoptimizer_set") {
+  sources = [
+    "access_object_stub_builder.cpp",
+    "argument_accessor.cpp",
+    "assembler/aarch64/assembler_aarch64.cpp",
+    "assembler/aarch64/extend_assembler.cpp",
+    "assembler/x64/assembler_x64.cpp",
+    "assembler/x64/extended_assembler_x64.cpp",
+    "assembler_module.cpp",
+    "async_function_lowering.cpp",
+    "bc_call_signature.cpp",
+    "builtins/builtins_call_signature.cpp",
+    "builtins/builtins_string_stub_builder.cpp",
+    "builtins/builtins_stubs.cpp",
+    "builtins/containers_stub_builder.cpp",
+    "builtins_lowering.cpp",
+    "bytecode_circuit_builder.cpp",
+    "bytecode_info_collector.cpp",
+    "bytecodes.cpp",
+    "call_signature.cpp",
+    "circuit.cpp",
+    "circuit_builder.cpp",
+    "circuit_optimizer.cpp",
+    "common_stubs.cpp",
+    "compilation_driver.cpp",
+    "compiler_log.cpp",
+    "early_elimination.cpp",
+    "file_generators.cpp",
+    "frame_states.cpp",
+    "gate.cpp",
+    "gate_accessor.cpp",
+    "gate_meta_data.cpp",
+    "ic_stub_builder.cpp",
+    "interpreter_stub.cpp",
+    "llvm_codegen.cpp",
+    "llvm_ir_builder.cpp",
+    "new_object_stub_builder.cpp",
+    "operations_stub_builder.cpp",
+    "pass_manager.cpp",
+    "rt_call_signature.cpp",
+    "scheduler.cpp",
+    "slowpath_lowering.cpp",
+    "stub.cpp",
+    "stub_builder.cpp",
+    "test_stubs.cpp",
+    "test_stubs_signature.cpp",
+    "trampoline/aarch64/asm_interpreter_call.cpp",
+    "trampoline/aarch64/common_call.cpp",
+    "trampoline/aarch64/optimized_call.cpp",
+    "trampoline/x64/asm_interpreter_call.cpp",
+    "trampoline/x64/common_call.cpp",
+    "trampoline/x64/optimized_call.cpp",
+    "ts_inline_lowering.cpp",
+    "ts_type_lowering.cpp",
+    "type.cpp",
+    "type_inference/type_infer.cpp",
+    "type_lowering.cpp",
+    "type_recorder.cpp",
+    "verifier.cpp",
+  ]
+
+  public_configs = [
+    ":include_llvm",
+    "$js_root:ark_jsruntime_compiler_config",
+    "$js_root:ark_jsruntime_public_config",
+  ]
+
+  if (compile_llvm_online) {
+    lib_dirs = [ "//third_party/third_party_llvm-project/build/lib" ]
+  } else {
+    if (is_mingw) {
+      lib_dirs = [
+        "//prebuilts/ark_tools/ark_js_prebuilts/llvm_prebuilts_windows/build/lib",
+        "//prebuilts/mingw-w64/ohos/linux-x86_64/clang-mingw/x86_64-w64-mingw32",
+      ]
+    } else if (is_mac) {
+      if (host_cpu == "arm64") {
+        lib_dirs = [ "//prebuilts/ark_tools/ark_js_prebuilts/llvm_prebuilts_darwin_arm64/build/lib" ]
+      } else {
+        lib_dirs = [ "//prebuilts/ark_tools/ark_js_prebuilts/llvm_prebuilts_darwin_x64/build/lib" ]
+      }
+    } else {
+      if (current_cpu == "arm64") {
+        lib_dirs = [ "//prebuilts/ark_tools/ark_js_prebuilts/llvm_prebuilts_aarch64/build/lib" ]
+      } else {
+        lib_dirs = [
+          "//prebuilts/ark_tools/ark_js_prebuilts/llvm_prebuilts/build/lib",
+        ]
+      }
+    }
+  }
+
+  libs = [
+    "LLVMTarget",
+    "LLVMObject",
+    "LLVMMC",
+    "LLVMSupport",
+    "LLVMCore",
+    "LLVMExecutionEngine",
+    "LLVMInterpreter",
+    "LLVMMCJIT",
+    "LLVMExegesis",
+    "LLVMRuntimeDyld",
+    "LLVMInstCombine",
+    "LLVMAnalysis",
+    "LLVMScalarOpts",
+    "LLVMBinaryFormat",
+    "LLVMDebugInfoDWARF",
+    "LLVMRemarks",
+    "LLVMTextAPI",
+    "LLVMScalarOpts",
+    "LLVMTransformUtils",
+    "LLVMBitReader",
+    "LLVMAsmPrinter",
+    "LLVMProfileData",
+    "LLVMBitstreamReader",
+    "LLVMSelectionDAG",
+    "LLVMGlobalISel",
+    "LLVMLTO",
+    "LLVMCFGuard",
+    "LLVMVectorize",
+    "LLVMDemangle",
+    "LLVMipo",
+    "LLVMInstrumentation",
+    "LLVMDebugInfoCodeView",
+    "LLVMAggressiveInstCombine",
+    "LLVMAsmParser",
+    "LLVMMCParser",
+    "LLVMMIRParser",
+    "LLVMMCDisassembler",
+    "LLVMCodeGen",
+    "LLVMTransformUtils",
+    "LLVMIRReader",
+    "LLVMAArch64Utils",
+    "LLVMAArch64CodeGen",
+    "LLVMAArch64Info",
+    "LLVMAArch64Desc",
+    "LLVMAArch64Disassembler",
+    "LLVMAArch64AsmParser",
+    "LLVMFrontendOpenMP",
+    "LLVMBitWriter",
+  ]
+
+  # Only support compiling aarch64 target at device-side(arm64 platform).
+  # So these os-related libs of arm and x86 are not needed on arm64 platform.
+  if (is_mac || current_cpu != "arm64") {
+    libs += [
+      "LLVMARMUtils",
+      "LLVMARMCodeGen",
+      "LLVMARMDisassembler",
+      "LLVMARMDesc",
+      "LLVMARMInfo",
+      "LLVMARMAsmParser",
+      "LLVMX86AsmParser",
+      "LLVMX86CodeGen",
+      "LLVMX86Desc",
+      "LLVMX86Disassembler",
+      "LLVMX86Info",
+    ]
+  }
+
+  if (is_mingw) {
+    libs += [
+      "kernel32",
+      "shell32",
+      "uuid",
+      "advapi32",
+      "msvcrt",
+      "msvcrt-os",
+      "windowsapp",
+    ]
+  }
+
+  deps = [ "$ark_root/libpandafile:arkfile_header_deps" ]
+
+  if (compile_llvm_online) {
+    deps += [ ":build_llvm_libs" ]
+  }
+}
+
+source_set("ark_stub_compiler_set") {
+  sources = [ "stub_compiler.cpp" ]
+  include_dirs = [ "$target_gen_dir" ]
+
+  public_configs = [
+    ":include_llvm",
+    "$js_root:ark_jsruntime_compiler_config",
+    "$js_root:ark_jsruntime_public_config",
+  ]
+
+  deps = [
+    ":libark_jsoptimizer_set",
+    ":libark_mock_stub_set",
+    "$js_root:libark_js_intl_set",
+    "$js_root:libark_jsruntime_set",
+  ]
+}
+
+source_set("ark_aot_compiler_set") {
+  sources = [ "aot_compiler.cpp" ]
+
+  public_configs = [
+    ":include_llvm",
+    "$js_root:ark_jsruntime_compiler_config",
+    "$js_root:ark_jsruntime_public_config",
+  ]
+
+  deps = [
+    "$js_root:libark_jsruntime_set",
+  ]
+}
+
+source_set("libark_stub_set") {
+  deps = [ ":build_stub_to_cpp" ]
+
+  sources = [ "$root_gen_dir/arkcompiler/ets_runtime/stub_an.cpp" ]
+
+  public_configs = [
+    "$js_root:ark_jsruntime_common_config",
+    "$js_root:ark_jsruntime_public_config",
+  ]
+}
+
+source_set("libark_mock_stub_set") {
+  sources = [ "mock/mock_stub_an.cpp" ]
+
+  public_configs = [
+    "$js_root:ark_jsruntime_common_config",
+    "$js_root:ark_jsruntime_public_config",
+  ]
+}
+
+ohos_shared_library("libark_jsoptimizer") {
+  deps = [
+    ":libark_jsoptimizer_set",
+    ":libark_mock_stub_set",
+    "$ark_root/libpandabase:libarkbase_static",
+    "$ark_root/libpandafile:libarkfile_static",
+    "$js_root:libark_js_intl_set",
+    "$js_root:libark_jsruntime_set",
+  ]
+
+  if (is_mingw && !ark_standalone_build) {
+    deps += [
+      "//base/hiviewdfx/hilog/interfaces/native/innerkits:libhilog_windows",
+    ]
+  }
+
+  if (target_os == "ios") {
+    deps += [
+      "$ark_third_party_root/icu/icu4c:static_icui18n",
+      "$ark_third_party_root/icu/icu4c:static_icuuc",
+    ]
+  } else {
+    deps += [
+      "$ark_third_party_root/icu/icu4c:shared_icui18n",
+      "$ark_third_party_root/icu/icu4c:shared_icuuc",
+    ]
+  }
+
+  if (run_with_asan) {
+    defines = [ "RUN_WITH_ASAN" ]
+  }
+
+  install_enable = false
+
+  if (!is_mingw && !is_mac) {
+    output_extension = "so"
+  }
+  part_name = "ets_runtime"
+  subsystem_name = "arkcompiler"
+}
+
+ohos_shared_library("libark_jsoptimizer_test") {
+  deps = [
+    ":libark_jsoptimizer_set",
+    "$ark_root/libpandafile:libarkfile_static",
+    "$js_root:libark_jsruntime_test_set",
+  ]
+
+  ldflags = []
+  if (enable_coverage) {
+    ldflags += [ "--coverage" ]
+    cflags_cc = [ "--coverage" ]
+  }
+
+  if (!ark_standalone_build) {
+    ldflags += [ "-Wl,--lto-O0" ]
+  }
+  install_enable = false
+
+  output_extension = "so"
+  subsystem_name = "test"
+}
+
+ohos_executable("ark_stub_compiler") {
+  deps = [
+    ":ark_stub_compiler_set",
+    "$ark_root/libpandafile:libarkfile_static",
+  ]
+
+  if (!ark_standalone_build) {
+    ldflags = [ "-Wl,--lto-O0" ]
+  }
+  install_enable = false
+
+  if (run_with_asan) {
+    defines = [ "RUN_WITH_ASAN" ]
+  }
+
+  if (target_os == "ios") {
+    deps += [
+      "$ark_third_party_root/icu/icu4c:static_icui18n",
+      "$ark_third_party_root/icu/icu4c:static_icuuc",
+    ]
+  } else {
+    deps += [
+      "$ark_third_party_root/icu/icu4c:shared_icui18n",
+      "$ark_third_party_root/icu/icu4c:shared_icuuc",
+    ]
+  }
+
+  part_name = "ets_runtime"
+  subsystem_name = "arkcompiler"
+}
+
+ohos_executable("ark_aot_compiler") {
+  deps = [ ":ark_aot_compiler_set" ]
+
+  if (ark_standalone_build) {
+    ldflags = [ "-shared" ]
+  }
+
+  deps += [
+    ":libark_mock_stub_set",
+    "$ark_root/libpandabase:libarkbase_static",
+    "$ark_root/libpandafile:libarkfile_static",
+    "$js_root:libark_js_intl_set",
+    "$js_root:libark_jsruntime_set",
+    "$js_root/ecmascript/compiler:libark_jsoptimizer_set",
+  ]
+
+  if (is_mingw && !ark_standalone_build) {
+    deps += [
+      "//base/hiviewdfx/hilog/interfaces/native/innerkits:libhilog_windows",
+    ]
+  }
+
+  if (is_mac && !ark_standalone_build) {
+    deps += [
+      "//base/hiviewdfx/hilog/interfaces/native/innerkits:libhilog_mac",
+    ]
+  }
+
+  if (target_os == "ios") {
+    deps += [
+      "$ark_third_party_root/icu/icu4c:static_icui18n",
+      "$ark_third_party_root/icu/icu4c:static_icuuc",
+    ]
+  } else {
+    deps += [
+      "$ark_third_party_root/icu/icu4c:shared_icui18n",
+      "$ark_third_party_root/icu/icu4c:shared_icuuc",
+    ]
+  }
+
+  if (is_ohos && is_standard_system) {
+    if (enable_dump_in_faultlog || enable_bytrace || enable_hitrace ||
+        enable_hilog) {
+      external_deps = []
+    }
+    if (enable_dump_in_faultlog) {
+      external_deps += [ "faultloggerd:libfaultloggerd" ]
+    }
+    if (enable_bytrace) {
+      external_deps += [ "hitrace_native:hitrace_meter" ]
+    }
+    if (enable_hitrace) {
+      external_deps += [ "hitrace_native:libhitracechain" ]
+    }
+    if (enable_hilog) {
+      external_deps += [ "hiviewdfx_hilog_native:libhilog" ]
+    }
+  }
+
+  install_enable = false
+
+  part_name = "ets_runtime"
+  subsystem_name = "arkcompiler"
+}
+
+action("gen_stub_file") {
+  script = "$js_root/script/run_ark_executable.py"
+
+  deps = [ "$js_root/ecmascript/compiler:ark_stub_compiler(${host_toolchain})" ]
+
+  stub_file_gen_dir = "$root_gen_dir/arkcompiler/ets_runtime"
+  root_out_dir_with_host_toolchain =
+      get_label_info(":ark_stub_compiler(${host_toolchain})", "root_out_dir")
+
+  if (current_toolchain == host_toolchain || ark_standalone_build) {
+    stub_option = " --stub-file=" + rebase_path(stub_file_gen_dir) + "/stub.an"
+  } else {
+    stub_option = " --stub-file=" + rebase_path(stub_file_gen_dir) +
+                  "/stub.an" + " --target-triple=aarch64-unknown-linux-gnu"
+  }
+
+  args = [
+    "--script-file",
+    rebase_path(root_out_dir_with_host_toolchain) +
+        "/arkcompiler/ets_runtime/ark_stub_compiler",
+    "--script-options",
+    stub_option,
+    "--expect-output",
+    "0",
+    "--timeout-limit",
+    "300",
+    "--env-path",
+    rebase_path(root_out_dir_with_host_toolchain) +
+        "/arkcompiler/ets_runtime:" +
+        rebase_path(root_out_dir_with_host_toolchain) +
+        "/${icu_subsystem_name}/${icu_part_name}:" +
+        rebase_path(root_out_dir_with_host_toolchain) + "/thirdparty/zlib:" +
+        rebase_path("//prebuilts/clang/ohos/linux-x86_64/llvm/lib/"),
+  ]
+
+  outputs = [ "$stub_file_gen_dir/stub.an" ]
+}
+
+action("build_stub_to_cpp") {
+  sources = [ "$root_gen_dir/arkcompiler/ets_runtime/stub.an" ]
+
+  script = "$js_root/script/build_resource_to_cpp.py"
+
+  deps = [ ":gen_stub_file" ]
+
+  args = [
+    "--input",
+    rebase_path("$root_gen_dir/arkcompiler/ets_runtime/stub.an"),
+    "--output",
+    rebase_path("$root_gen_dir/arkcompiler/ets_runtime/stub_an.cpp"),
+  ]
+
+  outputs = [ "$root_gen_dir/arkcompiler/ets_runtime/stub_an.cpp" ]
+}

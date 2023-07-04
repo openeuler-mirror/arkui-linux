@@ -1,0 +1,1 @@
+SyntaxError: Variable 'e' has already been declared. [test-try-catch-lexical-declaration.js:23:7]
