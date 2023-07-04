@@ -1,0 +1,1 @@
+SyntaxError: Generators are not allowed in an ambient context. [test-keyword-declare10.ts:18:14]

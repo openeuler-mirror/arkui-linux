@@ -1,0 +1,191 @@
+{
+  "type": "Program",
+  "statements": [
+    {
+      "type": "ExpressionStatement",
+      "expression": {
+        "type": "CallExpression",
+        "callee": {
+          "type": "MemberExpression",
+          "object": {
+            "type": "RegExpLiteral",
+            "source": "\xa",
+            "flags": "",
+            "loc": {
+              "start": {
+                "line": 16,
+                "column": 2
+              },
+              "end": {
+                "line": 16,
+                "column": 6
+              }
+            }
+          },
+          "property": {
+            "type": "Identifier",
+            "name": "test",
+            "decorators": [],
+            "loc": {
+              "start": {
+                "line": 16,
+                "column": 7
+              },
+              "end": {
+                "line": 16,
+                "column": 11
+              }
+            }
+          },
+          "computed": false,
+          "optional": false,
+          "loc": {
+            "start": {
+              "line": 16,
+              "column": 2
+            },
+            "end": {
+              "line": 16,
+              "column": 11
+            }
+          }
+        },
+        "arguments": [
+          {
+            "type": "StringLiteral",
+            "value": "xa",
+            "loc": {
+              "start": {
+                "line": 16,
+                "column": 12
+              },
+              "end": {
+                "line": 16,
+                "column": 16
+              }
+            }
+          }
+        ],
+        "optional": false,
+        "loc": {
+          "start": {
+            "line": 16,
+            "column": 2
+          },
+          "end": {
+            "line": 16,
+            "column": 17
+          }
+        }
+      },
+      "loc": {
+        "start": {
+          "line": 16,
+          "column": 1
+        },
+        "end": {
+          "line": 16,
+          "column": 18
+        }
+      }
+    },
+    {
+      "type": "ExpressionStatement",
+      "expression": {
+        "type": "CallExpression",
+        "callee": {
+          "type": "MemberExpression",
+          "object": {
+            "type": "RegExpLiteral",
+            "source": "\x",
+            "flags": "",
+            "loc": {
+              "start": {
+                "line": 17,
+                "column": 2
+              },
+              "end": {
+                "line": 17,
+                "column": 5
+              }
+            }
+          },
+          "property": {
+            "type": "Identifier",
+            "name": "test",
+            "decorators": [],
+            "loc": {
+              "start": {
+                "line": 17,
+                "column": 6
+              },
+              "end": {
+                "line": 17,
+                "column": 10
+              }
+            }
+          },
+          "computed": false,
+          "optional": false,
+          "loc": {
+            "start": {
+              "line": 17,
+              "column": 2
+            },
+            "end": {
+              "line": 17,
+              "column": 10
+            }
+          }
+        },
+        "arguments": [
+          {
+            "type": "StringLiteral",
+            "value": "x",
+            "loc": {
+              "start": {
+                "line": 17,
+                "column": 11
+              },
+              "end": {
+                "line": 17,
+                "column": 14
+              }
+            }
+          }
+        ],
+        "optional": false,
+        "loc": {
+          "start": {
+            "line": 17,
+            "column": 2
+          },
+          "end": {
+            "line": 17,
+            "column": 15
+          }
+        }
+      },
+      "loc": {
+        "start": {
+          "line": 17,
+          "column": 1
+        },
+        "end": {
+          "line": 17,
+          "column": 16
+        }
+      }
+    }
+  ],
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 1
+    },
+    "end": {
+      "line": 18,
+      "column": 1
+    }
+  }
+}

@@ -1,0 +1,1 @@
+SyntaxError: Illegal continue statement [test-continue-in-switch.js:23:5]

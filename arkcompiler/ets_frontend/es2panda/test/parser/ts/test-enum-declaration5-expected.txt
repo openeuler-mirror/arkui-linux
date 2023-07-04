@@ -1,0 +1,1 @@
+SyntaxError: Variable 'Foo' has already been declared. [test-enum-declaration5.ts:19:16]

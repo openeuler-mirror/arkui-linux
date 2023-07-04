@@ -1,0 +1,2 @@
+index.js;index;esm;index.js;entry
+module.js;module;esm;module.js;entry

@@ -1,0 +1,1 @@
+SyntaxError: ',' expected [test-type-literal3.ts:17:12]

@@ -1,0 +1,1 @@
+SyntaxError: Invalid destructuring assignment target: arguments [Invalid-destructuring-target-arguments-7.js:18:16]

@@ -1,0 +1,228 @@
+{
+  "type": "Program",
+  "statements": [
+    {
+      "type": "VariableDeclaration",
+      "declarations": [
+        {
+          "type": "VariableDeclarator",
+          "id": {
+            "type": "ArrayPattern",
+            "elements": [
+              {
+                "type": "AssignmentPattern",
+                "left": {
+                  "type": "Identifier",
+                  "name": "a",
+                  "decorators": [],
+                  "loc": {
+                    "start": {
+                      "line": 17,
+                      "column": 6
+                    },
+                    "end": {
+                      "line": 17,
+                      "column": 7
+                    }
+                  }
+                },
+                "right": {
+                  "type": "NumberLiteral",
+                  "value": 1,
+                  "loc": {
+                    "start": {
+                      "line": 17,
+                      "column": 10
+                    },
+                    "end": {
+                      "line": 17,
+                      "column": 11
+                    }
+                  }
+                },
+                "loc": {
+                  "start": {
+                    "line": 17,
+                    "column": 6
+                  },
+                  "end": {
+                    "line": 17,
+                    "column": 11
+                  }
+                }
+              },
+              {
+                "type": "AssignmentPattern",
+                "left": {
+                  "type": "Identifier",
+                  "name": "b",
+                  "decorators": [],
+                  "loc": {
+                    "start": {
+                      "line": 17,
+                      "column": 13
+                    },
+                    "end": {
+                      "line": 17,
+                      "column": 14
+                    }
+                  }
+                },
+                "right": {
+                  "type": "StringLiteral",
+                  "value": "foo",
+                  "loc": {
+                    "start": {
+                      "line": 17,
+                      "column": 17
+                    },
+                    "end": {
+                      "line": 17,
+                      "column": 22
+                    }
+                  }
+                },
+                "loc": {
+                  "start": {
+                    "line": 17,
+                    "column": 13
+                  },
+                  "end": {
+                    "line": 17,
+                    "column": 22
+                  }
+                }
+              }
+            ],
+            "typeAnnotation": {
+              "type": "TSTupleType",
+              "elementTypes": [
+                {
+                  "type": "TSNumberKeyword",
+                  "loc": {
+                    "start": {
+                      "line": 17,
+                      "column": 26
+                    },
+                    "end": {
+                      "line": 17,
+                      "column": 32
+                    }
+                  }
+                },
+                {
+                  "type": "TSNumberKeyword",
+                  "loc": {
+                    "start": {
+                      "line": 17,
+                      "column": 34
+                    },
+                    "end": {
+                      "line": 17,
+                      "column": 40
+                    }
+                  }
+                }
+              ],
+              "loc": {
+                "start": {
+                  "line": 17,
+                  "column": 25
+                },
+                "end": {
+                  "line": 17,
+                  "column": 41
+                }
+              }
+            },
+            "loc": {
+              "start": {
+                "line": 17,
+                "column": 5
+              },
+              "end": {
+                "line": 17,
+                "column": 23
+              }
+            }
+          },
+          "init": {
+            "type": "ArrayExpression",
+            "elements": [
+              {
+                "type": "NumberLiteral",
+                "value": 1,
+                "loc": {
+                  "start": {
+                    "line": 17,
+                    "column": 45
+                  },
+                  "end": {
+                    "line": 17,
+                    "column": 46
+                  }
+                }
+              },
+              {
+                "type": "NumberLiteral",
+                "value": 1,
+                "loc": {
+                  "start": {
+                    "line": 17,
+                    "column": 48
+                  },
+                  "end": {
+                    "line": 17,
+                    "column": 49
+                  }
+                }
+              }
+            ],
+            "loc": {
+              "start": {
+                "line": 17,
+                "column": 44
+              },
+              "end": {
+                "line": 17,
+                "column": 50
+              }
+            }
+          },
+          "loc": {
+            "start": {
+              "line": 17,
+              "column": 5
+            },
+            "end": {
+              "line": 17,
+              "column": 50
+            }
+          }
+        }
+      ],
+      "kind": "var",
+      "loc": {
+        "start": {
+          "line": 17,
+          "column": 1
+        },
+        "end": {
+          "line": 17,
+          "column": 51
+        }
+      }
+    }
+  ],
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 1
+    },
+    "end": {
+      "line": 17,
+      "column": 51
+    }
+  }
+}
+TypeError: Type 'string' is not assignable to type 'number'. [arrayDestructuring5.ts:17:13]

@@ -1,0 +1,1 @@
+SyntaxError: Duplicate __proto__ fields are not allowed in object literals [test-object-proto.js:25:3]

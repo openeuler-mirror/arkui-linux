@@ -1,0 +1,1 @@
+SyntaxError: Variable 'c' has already been declared. [test-function-scope-violation-2.js:20:9]

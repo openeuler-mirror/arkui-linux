@@ -1,0 +1,1 @@
+SyntaxError: Setter must have exactly one formal parameter [test-object-expression1.js:19:1]

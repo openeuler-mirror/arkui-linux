@@ -1,0 +1,387 @@
+{
+  "type": "Program",
+  "statements": [
+    {
+      "type": "VariableDeclaration",
+      "declarations": [
+        {
+          "type": "VariableDeclarator",
+          "id": {
+            "type": "Identifier",
+            "name": "a",
+            "decorators": [],
+            "loc": {
+              "start": {
+                "line": 16,
+                "column": 5
+              },
+              "end": {
+                "line": 16,
+                "column": 6
+              }
+            }
+          },
+          "init": {
+            "type": "ObjectExpression",
+            "properties": [],
+            "loc": {
+              "start": {
+                "line": 16,
+                "column": 9
+              },
+              "end": {
+                "line": 16,
+                "column": 11
+              }
+            }
+          },
+          "loc": {
+            "start": {
+              "line": 16,
+              "column": 5
+            },
+            "end": {
+              "line": 16,
+              "column": 11
+            }
+          }
+        }
+      ],
+      "kind": "var",
+      "loc": {
+        "start": {
+          "line": 16,
+          "column": 1
+        },
+        "end": {
+          "line": 16,
+          "column": 12
+        }
+      }
+    },
+    {
+      "type": "VariableDeclaration",
+      "declarations": [
+        {
+          "type": "VariableDeclarator",
+          "id": {
+            "type": "Identifier",
+            "name": "b",
+            "typeAnnotation": {
+              "type": "TSNumberKeyword",
+              "loc": {
+                "start": {
+                  "line": 17,
+                  "column": 8
+                },
+                "end": {
+                  "line": 17,
+                  "column": 14
+                }
+              }
+            },
+            "decorators": [],
+            "loc": {
+              "start": {
+                "line": 17,
+                "column": 5
+              },
+              "end": {
+                "line": 17,
+                "column": 6
+              }
+            }
+          },
+          "init": null,
+          "loc": {
+            "start": {
+              "line": 17,
+              "column": 5
+            },
+            "end": {
+              "line": 17,
+              "column": 6
+            }
+          }
+        }
+      ],
+      "kind": "var",
+      "loc": {
+        "start": {
+          "line": 17,
+          "column": 1
+        },
+        "end": {
+          "line": 17,
+          "column": 15
+        }
+      }
+    },
+    {
+      "type": "VariableDeclaration",
+      "declarations": [
+        {
+          "type": "VariableDeclarator",
+          "id": {
+            "type": "Identifier",
+            "name": "c",
+            "typeAnnotation": {
+              "type": "TSStringKeyword",
+              "loc": {
+                "start": {
+                  "line": 18,
+                  "column": 8
+                },
+                "end": {
+                  "line": 18,
+                  "column": 14
+                }
+              }
+            },
+            "decorators": [],
+            "loc": {
+              "start": {
+                "line": 18,
+                "column": 5
+              },
+              "end": {
+                "line": 18,
+                "column": 6
+              }
+            }
+          },
+          "init": null,
+          "loc": {
+            "start": {
+              "line": 18,
+              "column": 5
+            },
+            "end": {
+              "line": 18,
+              "column": 6
+            }
+          }
+        }
+      ],
+      "kind": "var",
+      "loc": {
+        "start": {
+          "line": 18,
+          "column": 1
+        },
+        "end": {
+          "line": 18,
+          "column": 15
+        }
+      }
+    },
+    {
+      "type": "ExpressionStatement",
+      "expression": {
+        "type": "AssignmentExpression",
+        "operator": "=",
+        "left": {
+          "type": "ObjectPattern",
+          "properties": [
+            {
+              "type": "Property",
+              "method": false,
+              "shorthand": false,
+              "computed": false,
+              "key": {
+                "type": "Identifier",
+                "name": "a",
+                "decorators": [],
+                "loc": {
+                  "start": {
+                    "line": 19,
+                    "column": 3
+                  },
+                  "end": {
+                    "line": 19,
+                    "column": 4
+                  }
+                }
+              },
+              "value": {
+                "type": "ObjectPattern",
+                "properties": [
+                  {
+                    "type": "Property",
+                    "method": false,
+                    "shorthand": true,
+                    "computed": false,
+                    "key": {
+                      "type": "Identifier",
+                      "name": "c",
+                      "decorators": [],
+                      "loc": {
+                        "start": {
+                          "line": 19,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 19,
+                          "column": 9
+                        }
+                      }
+                    },
+                    "value": {
+                      "type": "Identifier",
+                      "name": "c",
+                      "decorators": [],
+                      "loc": {
+                        "start": {
+                          "line": 19,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 19,
+                          "column": 9
+                        }
+                      }
+                    },
+                    "kind": "init",
+                    "loc": {
+                      "start": {
+                        "line": 19,
+                        "column": 8
+                      },
+                      "end": {
+                        "line": 19,
+                        "column": 9
+                      }
+                    }
+                  }
+                ],
+                "loc": {
+                  "start": {
+                    "line": 19,
+                    "column": 7
+                  },
+                  "end": {
+                    "line": 19,
+                    "column": 10
+                  }
+                }
+              },
+              "kind": "init",
+              "loc": {
+                "start": {
+                  "line": 19,
+                  "column": 3
+                },
+                "end": {
+                  "line": 19,
+                  "column": 10
+                }
+              }
+            }
+          ],
+          "loc": {
+            "start": {
+              "line": 19,
+              "column": 2
+            },
+            "end": {
+              "line": 19,
+              "column": 11
+            }
+          }
+        },
+        "right": {
+          "type": "ObjectExpression",
+          "properties": [
+            {
+              "type": "Property",
+              "method": false,
+              "shorthand": false,
+              "computed": false,
+              "key": {
+                "type": "Identifier",
+                "name": "a",
+                "decorators": [],
+                "loc": {
+                  "start": {
+                    "line": 19,
+                    "column": 15
+                  },
+                  "end": {
+                    "line": 19,
+                    "column": 16
+                  }
+                }
+              },
+              "value": {
+                "type": "StringLiteral",
+                "value": "foo",
+                "loc": {
+                  "start": {
+                    "line": 19,
+                    "column": 19
+                  },
+                  "end": {
+                    "line": 19,
+                    "column": 24
+                  }
+                }
+              },
+              "kind": "init",
+              "loc": {
+                "start": {
+                  "line": 19,
+                  "column": 15
+                },
+                "end": {
+                  "line": 19,
+                  "column": 24
+                }
+              }
+            }
+          ],
+          "loc": {
+            "start": {
+              "line": 19,
+              "column": 14
+            },
+            "end": {
+              "line": 19,
+              "column": 25
+            }
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 19,
+            "column": 1
+          },
+          "end": {
+            "line": 19,
+            "column": 26
+          }
+        }
+      },
+      "loc": {
+        "start": {
+          "line": 19,
+          "column": 1
+        },
+        "end": {
+          "line": 19,
+          "column": 26
+        }
+      }
+    }
+  ],
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 1
+    },
+    "end": {
+      "line": 21,
+      "column": 1
+    }
+  }
+}
+TypeError: Property c does not exist on type string. [objectDestructuring36.ts:19:7]

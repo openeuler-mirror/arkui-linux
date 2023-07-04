@@ -1,0 +1,1 @@
+SyntaxError: A rest parameter cannot be optional [test-func-param7.ts:17:18]

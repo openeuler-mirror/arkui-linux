@@ -1,0 +1,1 @@
+SyntaxError: Undefined label [test-labelled-statement2.js:20:9]

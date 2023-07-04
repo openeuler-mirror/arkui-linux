@@ -1,0 +1,1 @@
+SyntaxError: Unexpected token in catch parameter [test-missing-catch-argument.js:21:7]

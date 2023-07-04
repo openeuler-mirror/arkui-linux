@@ -1,0 +1,35 @@
+/**
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+syntax = "proto3";
+package protoPanda;
+
+import "assemblyField.proto";
+import "assemblyFileLocation.proto";
+import "ideHelpers.proto";
+import "meta.proto";
+
+message Record {
+    bytes name = 1;
+    bool conflict = 2;
+    uint32 language = 3;
+    RecordMetadata metadata = 4;
+    repeated Field fieldList = 5;
+    uint64 paramsNum = 6;
+    bool bodyPresence = 7;
+    SourceLocation bodyLocation = 8;
+    bytes sourceFile = 9;
+    optional FileLocation fileLocation = 10;
+}

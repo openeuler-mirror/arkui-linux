@@ -1,0 +1,130 @@
+{
+  "type": "Program",
+  "statements": [
+    {
+      "type": "ExpressionStatement",
+      "expression": {
+        "type": "BinaryExpression",
+        "operator": "+",
+        "left": {
+          "type": "Identifier",
+          "name": "a",
+          "decorators": [],
+          "loc": {
+            "start": {
+              "line": 17,
+              "column": 1
+            },
+            "end": {
+              "line": 17,
+              "column": 2
+            }
+          }
+        },
+        "right": {
+          "type": "NumberLiteral",
+          "value": 2,
+          "loc": {
+            "start": {
+              "line": 17,
+              "column": 5
+            },
+            "end": {
+              "line": 17,
+              "column": 6
+            }
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 17,
+            "column": 1
+          },
+          "end": {
+            "line": 17,
+            "column": 6
+          }
+        }
+      },
+      "loc": {
+        "start": {
+          "line": 17,
+          "column": 1
+        },
+        "end": {
+          "line": 17,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "VariableDeclaration",
+      "declarations": [
+        {
+          "type": "VariableDeclarator",
+          "id": {
+            "type": "Identifier",
+            "name": "a",
+            "decorators": [],
+            "loc": {
+              "start": {
+                "line": 18,
+                "column": 7
+              },
+              "end": {
+                "line": 18,
+                "column": 8
+              }
+            }
+          },
+          "init": {
+            "type": "NumberLiteral",
+            "value": 6,
+            "loc": {
+              "start": {
+                "line": 18,
+                "column": 11
+              },
+              "end": {
+                "line": 18,
+                "column": 12
+              }
+            }
+          },
+          "loc": {
+            "start": {
+              "line": 18,
+              "column": 7
+            },
+            "end": {
+              "line": 18,
+              "column": 12
+            }
+          }
+        }
+      ],
+      "kind": "const",
+      "loc": {
+        "start": {
+          "line": 18,
+          "column": 1
+        },
+        "end": {
+          "line": 18,
+          "column": 13
+        }
+      }
+    }
+  ],
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 1
+    },
+    "end": {
+      "line": 18,
+      "column": 13
+    }
+  }
+}
+TypeError: Block-scoped variable 'a' used before its declaration [constUsedBeforeDeclaration.ts:18:7]

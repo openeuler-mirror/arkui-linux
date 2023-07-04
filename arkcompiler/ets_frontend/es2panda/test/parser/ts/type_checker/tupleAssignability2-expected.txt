@@ -1,0 +1,158 @@
+{
+  "type": "Program",
+  "statements": [
+    {
+      "type": "VariableDeclaration",
+      "declarations": [
+        {
+          "type": "VariableDeclarator",
+          "id": {
+            "type": "Identifier",
+            "name": "a",
+            "typeAnnotation": {
+              "type": "TSTupleType",
+              "elementTypes": [
+                {
+                  "type": "TSNumberKeyword",
+                  "loc": {
+                    "start": {
+                      "line": 17,
+                      "column": 9
+                    },
+                    "end": {
+                      "line": 17,
+                      "column": 15
+                    }
+                  }
+                },
+                {
+                  "type": "TSStringKeyword",
+                  "loc": {
+                    "start": {
+                      "line": 17,
+                      "column": 17
+                    },
+                    "end": {
+                      "line": 17,
+                      "column": 23
+                    }
+                  }
+                }
+              ],
+              "loc": {
+                "start": {
+                  "line": 17,
+                  "column": 8
+                },
+                "end": {
+                  "line": 17,
+                  "column": 24
+                }
+              }
+            },
+            "decorators": [],
+            "loc": {
+              "start": {
+                "line": 17,
+                "column": 5
+              },
+              "end": {
+                "line": 17,
+                "column": 6
+              }
+            }
+          },
+          "init": {
+            "type": "ArrayExpression",
+            "elements": [
+              {
+                "type": "NumberLiteral",
+                "value": 5,
+                "loc": {
+                  "start": {
+                    "line": 17,
+                    "column": 28
+                  },
+                  "end": {
+                    "line": 17,
+                    "column": 29
+                  }
+                }
+              },
+              {
+                "type": "StringLiteral",
+                "value": "foo",
+                "loc": {
+                  "start": {
+                    "line": 17,
+                    "column": 31
+                  },
+                  "end": {
+                    "line": 17,
+                    "column": 36
+                  }
+                }
+              },
+              {
+                "type": "NumberLiteral",
+                "value": 6,
+                "loc": {
+                  "start": {
+                    "line": 17,
+                    "column": 38
+                  },
+                  "end": {
+                    "line": 17,
+                    "column": 39
+                  }
+                }
+              }
+            ],
+            "loc": {
+              "start": {
+                "line": 17,
+                "column": 27
+              },
+              "end": {
+                "line": 17,
+                "column": 40
+              }
+            }
+          },
+          "loc": {
+            "start": {
+              "line": 17,
+              "column": 5
+            },
+            "end": {
+              "line": 17,
+              "column": 40
+            }
+          }
+        }
+      ],
+      "kind": "var",
+      "loc": {
+        "start": {
+          "line": 17,
+          "column": 1
+        },
+        "end": {
+          "line": 17,
+          "column": 41
+        }
+      }
+    }
+  ],
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 1
+    },
+    "end": {
+      "line": 17,
+      "column": 41
+    }
+  }
+}
+TypeError: Type '[5, "foo", 6]' is not assignable to type '[number, string]'. [tupleAssignability2.ts:17:5]

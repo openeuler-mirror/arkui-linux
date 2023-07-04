@@ -1,0 +1,10 @@
+let a = false;
+let b = true;
+let c = "not null";
+let e = 123;
+b ||= e;
+a &&= e;
+c ??= e;
+print(a);
+print(b);
+print(c);

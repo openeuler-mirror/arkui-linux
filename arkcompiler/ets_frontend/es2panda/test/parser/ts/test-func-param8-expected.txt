@@ -1,0 +1,1 @@
+SyntaxError: Parameter cannot have question mark and initializer [test-func-param8.ts:17:16]

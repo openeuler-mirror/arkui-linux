@@ -1,0 +1,22 @@
+Handle types for function: #1#A
+(instruction order, type): (-2, 111), (-1, 106), 
+Handle types for function: getName
+(instruction order, type): (-2, 111), (-1, 102), 
+Handle types for function: getId
+(instruction order, type): (-2, 111), (-1, 103), 
+Handle types for function: setName
+(instruction order, type): (-2, 111), (-1, 104), 
+Handle types for function: setId
+(instruction order, type): (-2, 111), (-1, 105), 
+Handle types for function: dump
+(instruction order, type): (-2, 111), (-1, 107), (16, 4), 
+Handle types for function: stest
+(instruction order, type): (-2, 101), (-1, 108), 
+Handle types for function: test
+(instruction order, type): (-2, 111), (-1, 109), 
+Handle types for function: testwiththis
+(instruction order, type): (-2, 111), (-1, 110), 
+Handle types for function: add
+(instruction order, type): (-1, 112), (9, 1), 
+Handle types for function: func_main_0
+(instruction order, type): (10, 112), (95, 101), 

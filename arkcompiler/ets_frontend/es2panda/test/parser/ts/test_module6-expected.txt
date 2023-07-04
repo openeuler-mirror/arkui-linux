@@ -1,0 +1,1 @@
+SyntaxError: ')' expected. [test_module6.ts:18:29]

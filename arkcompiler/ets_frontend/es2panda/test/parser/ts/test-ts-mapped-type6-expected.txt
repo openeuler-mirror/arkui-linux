@@ -1,0 +1,1 @@
+SyntaxError: ';' expected [test-ts-mapped-type6.ts:17:43]

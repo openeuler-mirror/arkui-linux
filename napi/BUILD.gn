@@ -1,0 +1,364 @@
+# Copyright (c) 2021 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//foundation/arkui/napi/napi.gni")
+
+config("ace_napi_config") {
+  include_dirs = [
+    "//foundation/arkui/napi",
+    "//foundation/arkui/napi/interfaces/inner_api",
+    "//foundation/arkui/napi/interfaces/kits",
+    "//third_party/libuv/include",
+    "//third_party/node/src",
+  ]
+}
+
+if (defined(ohos_lite)) {
+  import("//build/lite/config/component/lite_component.gni")
+  import("//build/lite/config/subsystem/aafwk/config.gni")
+
+  config("ace_napi_jerryscript_config") {
+    include_dirs = [
+      "//foundation/arkui/napi",
+      "//foundation/arkui/napi/native_engine",
+      "//foundation/arkui/napi/native_engine/impl/jerryscript",
+      "//third_party/jerryscript/jerry-ext/include",
+      "//third_party/jerryscript/jerry-core/include",
+      "//third_party/jerryscript/jerry-port/default/include",
+      "//third_party/libuv/include",
+    ]
+  }
+
+  shared_library("ace_napi") {
+    public_configs = [ ":ace_napi_config" ]
+
+    include_dirs = [
+      "//foundation/arkui/napi",
+      "//foundation/arkui/napi/interfaces/inner_api",
+      "//foundation/arkui/napi/interfaces/kits",
+      "//third_party/libuv/include",
+      "//third_party/node/src",
+      "//third_party/bounds_checking_function/include",
+    ]
+
+    sources = napi_sources
+
+    if (current_cpu == "arm64") {
+      defines = [ "_ARM64_" ]
+    }
+
+    deps = [
+      "//base//hiviewdfx/hilog_lite/frameworks/featured:hilog_shared",
+      "//third_party/bounds_checking_function:libsec_shared",
+      "//third_party/libuv:uv",
+    ]
+
+    cflags = [
+      "-fPIC",
+      "-DNAPI_TEST",
+    ]
+  }
+
+  shared_library("ace_napi_jerryscript") {
+    configs -= [ "//build/lite/config:language_cpp" ]
+
+    public_configs = [ ":ace_napi_jerryscript_config" ]
+
+    include_dirs = [
+      "//foundation/arkui/napi",
+      "//foundation/arkui/napi/native_engine",
+      "//foundation/arkui/napi/native_engine/impl/jerryscript",
+      "//third_party/jerryscript/jerry-ext/include",
+      "//third_party/jerryscript/jerry-core/include",
+      "//third_party/jerryscript/jerry-port/default/include",
+      "//third_party/libuv/include",
+      "//third_party/bounds_checking_function/include",
+      "//base/hiviewdfx/hilog_lite/interfaces/native/innerkits",
+    ]
+
+    cflags = [ "-fPIC" ]
+    cflags_cc = cflags
+    cflags_cc += [ "-std=c++14" ]
+
+    ldflags = [
+      "-lstdc++",
+      "-lpthread",
+    ]
+
+    sources = [
+      "native_engine/impl/jerryscript/jerryscript_ext.cpp",
+      "native_engine/impl/jerryscript/jerryscript_native_deferred.cpp",
+      "native_engine/impl/jerryscript/jerryscript_native_engine.cpp",
+      "native_engine/impl/jerryscript/jerryscript_native_reference.cpp",
+      "native_engine/impl/jerryscript/native_value/jerryscript_native_array.cpp",
+      "native_engine/impl/jerryscript/native_value/jerryscript_native_array_buffer.cpp",
+      "native_engine/impl/jerryscript/native_value/jerryscript_native_big_int.cpp",
+      "native_engine/impl/jerryscript/native_value/jerryscript_native_boolean.cpp",
+      "native_engine/impl/jerryscript/native_value/jerryscript_native_buffer.cpp",
+      "native_engine/impl/jerryscript/native_value/jerryscript_native_data_view.cpp",
+      "native_engine/impl/jerryscript/native_value/jerryscript_native_date.cpp",
+      "native_engine/impl/jerryscript/native_value/jerryscript_native_external.cpp",
+      "native_engine/impl/jerryscript/native_value/jerryscript_native_function.cpp",
+      "native_engine/impl/jerryscript/native_value/jerryscript_native_number.cpp",
+      "native_engine/impl/jerryscript/native_value/jerryscript_native_object.cpp",
+      "native_engine/impl/jerryscript/native_value/jerryscript_native_string.cpp",
+      "native_engine/impl/jerryscript/native_value/jerryscript_native_typed_array.cpp",
+      "native_engine/impl/jerryscript/native_value/jerryscript_native_value.cpp",
+    ]
+
+    deps = [
+      ":ace_napi",
+      "//base//hiviewdfx/hilog_lite/frameworks/featured:hilog_shared",
+      "//third_party/bounds_checking_function:libsec_shared",
+      "//third_party/jerryscript/jerry-core:jerry-core_shared",
+      "//third_party/jerryscript/jerry-ext:jerry-ext_shared",
+      "//third_party/jerryscript/jerry-port/default:jerry-port-default_shared",
+    ]
+  }
+} else {
+  import("//build/ohos.gni")
+  import("//foundation/arkui/ace_engine/ace_config.gni")
+
+  ohos_source_set("ace_napi_static") {
+    defines = []
+    public_configs = [ ":ace_napi_config" ]
+    deps = []
+
+    include_dirs = [
+      "//foundation/arkui/napi",
+      "//foundation/arkui/napi/interfaces/inner_api",
+      "//foundation/arkui/napi/interfaces/kits",
+      "//third_party/libuv/include",
+      "//third_party/node/src",
+      "//commonlibrary/c_utils/base/include",
+    ]
+
+    sources = napi_sources
+
+    if (current_cpu == "arm64") {
+      defines += [ "_ARM64_" ]
+    }
+    if (current_os == "ohos" && current_cpu == "x86_64") {
+      defines += [ "SIMULATOR" ]
+    }
+    if (use_mingw_win || use_mac || use_linux) {
+      defines += [ "PREVIEW" ]
+    }
+    if (use_mingw_win) {
+      defines += [ "WINDOWS_PLATFORM" ]
+    } else if (use_mac) {
+      defines += [ "MAC_PLATFORM" ]
+    } else if (use_linux) {
+      defines += [ "LINUX_PLATFORM" ]
+    } else if (is_cross_platform_build && target_os == "ios") {
+      defines += [ "IOS_PLATFORM" ]
+    } else if (is_cross_platform_build && target_os == "android") {
+      defines += [ "ANDROID_PLATFORM" ]
+      aosp_deps = [ "shared_library:liblog" ]
+    } else {
+      if (is_standard_system) {
+        external_deps = [
+          "hitrace_native:hitrace_meter",
+          "hitrace_native:libhitracechain",
+          "hiviewdfx_hilog_native:libhilog",
+          "init:libbegetutil",
+        ]
+        defines += [ "ENABLE_HITRACE" ]
+        if (product_name != "ohos-sdk") {
+          if (napi_enable_container_scope) {
+            if (target_os == "ios") {
+              deps += [ ":ace_container_scope_static" ]
+            } else {
+              deps += [ ":ace_container_scope" ]
+            }
+            defines += [ "ENABLE_CONTAINER_SCOPE" ]
+          }
+        }
+      } else {
+        external_deps = [ "hilog:libhilog" ]
+      }
+    }
+
+    deps += [
+      "//third_party/bounds_checking_function:libsec_static",
+      "//third_party/libuv:uv",
+    ]
+
+    # Use static libuv for cross build
+    if (is_cross_platform_build) {
+      deps -= [ "//third_party/libuv:uv" ]
+      deps += [ "//third_party/libuv:uv_static" ]
+    }
+
+    cflags_cc = [ "-Wno-missing-braces" ]
+
+    subsystem_name = "arkui"
+    part_name = "napi"
+  }
+
+  if (is_cross_platform_build && target_os == "ios") {
+    ohos_source_set("ace_napi") {
+      deps = [ ":ace_napi_static" ]
+      public_configs = [ ":ace_napi_config" ]
+      subsystem_name = "arkui"
+      part_name = "napi"
+    }
+  } else {
+    ohos_shared_library("ace_napi") {
+      deps = [ ":ace_napi_static" ]
+      public_configs = [ ":ace_napi_config" ]
+      if (!is_cross_platform_build) {
+        public_deps = [ "//third_party/libuv:uv" ]
+      }
+      subsystem_name = "arkui"
+      part_name = "napi"
+    }
+  }
+
+  config("container_scope_config") {
+    visibility = [ ":*" ]
+    include_dirs = [ "$ace_root/frameworks" ]
+  }
+
+  ohos_shared_library("ace_container_scope") {
+    public_configs = [ ":container_scope_config" ]
+
+    configs = [ "$ace_root:ace_config" ]
+
+    sources = [ "$ace_root/frameworks/core/common/container_scope.cpp" ]
+
+    subsystem_name = "arkui"
+    part_name = "napi"
+  }
+
+  ohos_source_set("ace_container_scope_static") {
+    public_configs = [ ":container_scope_config" ]
+
+    configs = [ "$ace_root:ace_config" ]
+
+    sources = [ "$ace_root/frameworks/core/common/container_scope.cpp" ]
+  }
+
+  template("ace_napi_lib") {
+    forward_variables_from(invoker, "*")
+    if (defined(use_js_debug) && use_js_debug) {
+      deps_ = [
+        "native_engine/impl/${engine_path}:ace_napi_impl_${engine_path}_debug",
+      ]
+    } else {
+      deps_ =
+          [ "native_engine/impl/${engine_path}:ace_napi_impl_${engine_path}" ]
+    }
+
+    if (target_os == "ios") {
+      ohos_source_set(target_name) {
+        public_configs = [
+          "native_engine/impl/${engine_path}:ace_napi_${engine_path}_config",
+        ]
+        deps = deps_
+        if (defined(use_icu) && use_icu) {
+          deps += [
+            "//third_party/icu/icu4c:static_icui18n",
+            "//third_party/icu/icu4c:static_icuuc",
+          ]
+        }
+        subsystem_name = "arkui"
+        part_name = "napi"
+      }
+    } else {
+      ohos_shared_library(target_name) {
+        public_configs = [
+          "native_engine/impl/${engine_path}:ace_napi_${engine_path}_config",
+        ]
+        deps = deps_
+        if (defined(use_icu) && use_icu) {
+          deps += [
+            "//third_party/icu/icu4c:shared_icui18n",
+            "//third_party/icu/icu4c:shared_icuuc",
+          ]
+        }
+        subsystem_name = "arkui"
+        part_name = "napi"
+      }
+    }
+  }
+  napi_libs = []
+
+  foreach(item, ace_platforms) {
+    if (item.name == "ohos" || is_cross_platform_build) {
+      engine_config = {
+      }
+      support_engines = {
+      }
+      engine_config = item.config
+      support_engines = engine_config.js_engines
+      foreach(engine, support_engines) {
+        if (engine.engine_name != "ark") {
+          ace_napi_lib("ace_napi_${engine.engine_path}") {
+            engine_path = engine.engine_path
+          }
+          napi_libs += [ ":ace_napi_${engine.engine_path}" ]
+          if (defined(engine.have_debug) && engine.have_debug) {
+            ace_napi_lib("ace_napi_${engine.engine_path}_debug") {
+              engine_path = engine.engine_path
+              use_js_debug = true
+            }
+            napi_libs += [ ":ace_napi_${engine.engine_path}_debug" ]
+          }
+        } else if (engine.engine_name == "ark") {
+          ace_napi_lib("ace_napi_${engine.engine_name}") {
+            engine_path = engine.engine_name
+            use_icu = true
+          }
+          napi_libs += [ ":ace_napi_${engine.engine_name}" ]
+        }
+      }
+    }
+  }
+
+  group("napi_packages") {
+    deps = [ ":ace_napi" ]
+    deps += napi_libs
+  }
+
+  ohos_ndk_library("libnapi_ndk") {
+    ndk_description_file = "./libnapi.ndk.json"
+    min_compact_version = "1"
+    output_name = "ace_napi"
+  }
+
+  ohos_ndk_headers("napi_header") {
+    dest_dir = "$ndk_headers_out_dir/napi"
+    sources = [ "//foundation/arkui/napi/interfaces/kits/napi/native_api.h" ]
+  }
+
+  group("napi_packages_ndk") {
+    deps = [ ":libnapi_ndk" ]
+  }
+
+  if (!build_ohos_ndk && !is_cross_platform_build) {
+    group("napi_packages_test") {
+      testonly = true
+
+      deps = [
+        "sample/native_module_calc:calc",
+        "sample/native_module_calc:number",
+        "sample/native_module_callback:callback",
+        "sample/native_module_demo:demo",
+        "sample/native_module_netserver:netserver",
+        "sample/native_module_storage:storage",
+        "test/unittest:unittest",
+      ]
+    }
+  }
+}

@@ -1,0 +1,178 @@
+{
+  "type": "Program",
+  "statements": [
+    {
+      "type": "VariableDeclaration",
+      "declarations": [
+        {
+          "type": "VariableDeclarator",
+          "id": {
+            "type": "Identifier",
+            "name": "a",
+            "typeAnnotation": {
+              "type": "TSTupleType",
+              "elementTypes": [
+                {
+                  "type": "TSNumberKeyword",
+                  "loc": {
+                    "start": {
+                      "line": 17,
+                      "column": 9
+                    },
+                    "end": {
+                      "line": 17,
+                      "column": 15
+                    }
+                  }
+                }
+              ],
+              "loc": {
+                "start": {
+                  "line": 17,
+                  "column": 8
+                },
+                "end": {
+                  "line": 17,
+                  "column": 16
+                }
+              }
+            },
+            "decorators": [],
+            "loc": {
+              "start": {
+                "line": 17,
+                "column": 5
+              },
+              "end": {
+                "line": 17,
+                "column": 6
+              }
+            }
+          },
+          "init": null,
+          "loc": {
+            "start": {
+              "line": 17,
+              "column": 5
+            },
+            "end": {
+              "line": 17,
+              "column": 6
+            }
+          }
+        }
+      ],
+      "kind": "var",
+      "loc": {
+        "start": {
+          "line": 17,
+          "column": 1
+        },
+        "end": {
+          "line": 17,
+          "column": 17
+        }
+      }
+    },
+    {
+      "type": "VariableDeclaration",
+      "declarations": [
+        {
+          "type": "VariableDeclarator",
+          "id": {
+            "type": "ArrayPattern",
+            "elements": [
+              {
+                "type": "Identifier",
+                "name": "b",
+                "decorators": [],
+                "loc": {
+                  "start": {
+                    "line": 18,
+                    "column": 6
+                  },
+                  "end": {
+                    "line": 18,
+                    "column": 7
+                  }
+                }
+              },
+              {
+                "type": "Identifier",
+                "name": "c",
+                "decorators": [],
+                "loc": {
+                  "start": {
+                    "line": 18,
+                    "column": 9
+                  },
+                  "end": {
+                    "line": 18,
+                    "column": 10
+                  }
+                }
+              }
+            ],
+            "loc": {
+              "start": {
+                "line": 18,
+                "column": 5
+              },
+              "end": {
+                "line": 18,
+                "column": 11
+              }
+            }
+          },
+          "init": {
+            "type": "Identifier",
+            "name": "a",
+            "decorators": [],
+            "loc": {
+              "start": {
+                "line": 18,
+                "column": 14
+              },
+              "end": {
+                "line": 18,
+                "column": 15
+              }
+            }
+          },
+          "loc": {
+            "start": {
+              "line": 18,
+              "column": 5
+            },
+            "end": {
+              "line": 18,
+              "column": 15
+            }
+          }
+        }
+      ],
+      "kind": "var",
+      "loc": {
+        "start": {
+          "line": 18,
+          "column": 1
+        },
+        "end": {
+          "line": 18,
+          "column": 16
+        }
+      }
+    }
+  ],
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 1
+    },
+    "end": {
+      "line": 18,
+      "column": 16
+    }
+  }
+}
+TypeError: Tuple type [number] of length 1 has no element at index 1. [arrayDestructuring15.ts:18:5]

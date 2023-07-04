@@ -1,0 +1,271 @@
+{
+  "type": "Program",
+  "statements": [
+    {
+      "type": "VariableDeclaration",
+      "declarations": [
+        {
+          "type": "VariableDeclarator",
+          "id": {
+            "type": "Identifier",
+            "name": "a",
+            "typeAnnotation": {
+              "type": "TSTypeLiteral",
+              "members": [
+                {
+                  "type": "TSIndexSignature",
+                  "parameters": {
+                    "type": "Identifier",
+                    "name": "a",
+                    "typeAnnotation": {
+                      "type": "TSNumberKeyword",
+                      "loc": {
+                        "start": {
+                          "line": 17,
+                          "column": 12
+                        },
+                        "end": {
+                          "line": 17,
+                          "column": 18
+                        }
+                      }
+                    },
+                    "decorators": [],
+                    "loc": {
+                      "start": {
+                        "line": 17,
+                        "column": 10
+                      },
+                      "end": {
+                        "line": 17,
+                        "column": 11
+                      }
+                    }
+                  },
+                  "typeAnnotation": {
+                    "type": "TSNumberKeyword",
+                    "loc": {
+                      "start": {
+                        "line": 17,
+                        "column": 20
+                      },
+                      "end": {
+                        "line": 17,
+                        "column": 26
+                      }
+                    }
+                  },
+                  "readonly": false,
+                  "loc": {
+                    "start": {
+                      "line": 17,
+                      "column": 9
+                    },
+                    "end": {
+                      "line": 17,
+                      "column": 27
+                    }
+                  }
+                },
+                {
+                  "type": "TSIndexSignature",
+                  "parameters": {
+                    "type": "Identifier",
+                    "name": "b",
+                    "typeAnnotation": {
+                      "type": "TSStringKeyword",
+                      "loc": {
+                        "start": {
+                          "line": 17,
+                          "column": 40
+                        },
+                        "end": {
+                          "line": 17,
+                          "column": 46
+                        }
+                      }
+                    },
+                    "decorators": [],
+                    "loc": {
+                      "start": {
+                        "line": 17,
+                        "column": 38
+                      },
+                      "end": {
+                        "line": 17,
+                        "column": 39
+                      }
+                    }
+                  },
+                  "typeAnnotation": {
+                    "type": "TSNumberKeyword",
+                    "loc": {
+                      "start": {
+                        "line": 17,
+                        "column": 48
+                      },
+                      "end": {
+                        "line": 17,
+                        "column": 54
+                      }
+                    }
+                  },
+                  "readonly": true,
+                  "loc": {
+                    "start": {
+                      "line": 17,
+                      "column": 28
+                    },
+                    "end": {
+                      "line": 17,
+                      "column": 55
+                    }
+                  }
+                }
+              ],
+              "loc": {
+                "start": {
+                  "line": 17,
+                  "column": 8
+                },
+                "end": {
+                  "line": 17,
+                  "column": 55
+                }
+              }
+            },
+            "decorators": [],
+            "loc": {
+              "start": {
+                "line": 17,
+                "column": 5
+              },
+              "end": {
+                "line": 17,
+                "column": 6
+              }
+            }
+          },
+          "init": null,
+          "loc": {
+            "start": {
+              "line": 17,
+              "column": 5
+            },
+            "end": {
+              "line": 17,
+              "column": 6
+            }
+          }
+        }
+      ],
+      "kind": "var",
+      "loc": {
+        "start": {
+          "line": 17,
+          "column": 1
+        },
+        "end": {
+          "line": 17,
+          "column": 56
+        }
+      }
+    },
+    {
+      "type": "ExpressionStatement",
+      "expression": {
+        "type": "AssignmentExpression",
+        "operator": "=",
+        "left": {
+          "type": "MemberExpression",
+          "object": {
+            "type": "Identifier",
+            "name": "a",
+            "decorators": [],
+            "loc": {
+              "start": {
+                "line": 18,
+                "column": 1
+              },
+              "end": {
+                "line": 18,
+                "column": 2
+              }
+            }
+          },
+          "property": {
+            "type": "StringLiteral",
+            "value": "foo",
+            "loc": {
+              "start": {
+                "line": 18,
+                "column": 3
+              },
+              "end": {
+                "line": 18,
+                "column": 8
+              }
+            }
+          },
+          "computed": true,
+          "optional": false,
+          "loc": {
+            "start": {
+              "line": 18,
+              "column": 1
+            },
+            "end": {
+              "line": 18,
+              "column": 9
+            }
+          }
+        },
+        "right": {
+          "type": "NumberLiteral",
+          "value": 5,
+          "loc": {
+            "start": {
+              "line": 18,
+              "column": 12
+            },
+            "end": {
+              "line": 18,
+              "column": 13
+            }
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 18,
+            "column": 1
+          },
+          "end": {
+            "line": 18,
+            "column": 13
+          }
+        }
+      },
+      "loc": {
+        "start": {
+          "line": 18,
+          "column": 1
+        },
+        "end": {
+          "line": 18,
+          "column": 14
+        }
+      }
+    }
+  ],
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 1
+    },
+    "end": {
+      "line": 19,
+      "column": 1
+    }
+  }
+}
+TypeError: Cannot assign to this property because it is readonly. [member_expression_71.ts:18:1]

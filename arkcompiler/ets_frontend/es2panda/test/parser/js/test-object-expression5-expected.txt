@@ -1,0 +1,1 @@
+SyntaxError: Unexpected super keyword [test-object-expression5.js:18:12]

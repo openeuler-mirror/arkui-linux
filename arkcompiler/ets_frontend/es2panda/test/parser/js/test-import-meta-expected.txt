@@ -1,0 +1,1 @@
+SyntaxError: 'import.Meta' may appear only with 'sourceType: module' [test-import-meta.js:21:14]
