@@ -1,0 +1,133 @@
+# Copyright 2015 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+declare_args() {
+  # Compile for Address Sanitizer to find memory bugs.
+  is_asan = false
+
+  # Customize asan detection.
+  asan_detector = false
+
+  # Compile for Leak Sanitizer to find leaks.
+  is_lsan = false
+
+  # Compile for Memory Sanitizer to find uninitialized reads.
+  is_msan = false
+
+  # Compile for Thread Sanitizer to find threading bugs.
+  is_tsan = false
+
+  # Compile for Undefined Behavior Sanitizer to find various types of
+  # undefined behavior (excludes vptr checks).
+  is_ubsan = false
+
+  # Halt the program if a problem is detected.
+  is_ubsan_no_recover = false
+
+  # Compile for Undefined Behavior Sanitizer's null pointer checks.
+  is_ubsan_null = false
+
+  # Compile for Undefined Behavior Sanitizer's vptr checks.
+  is_ubsan_vptr = false
+
+  # Compile with SafeStack shadow stack support.
+  is_safestack = false
+
+  # Track where uninitialized memory originates from. From fastest to slowest:
+  # 0 - no tracking, 1 - track only the initial allocation site, 2 - track the
+  # chain of stores leading from allocation site to use site.
+  msan_track_origins = 2
+
+  # Use dynamic libraries instrumented by one of the sanitizers instead of the
+  # standard system libraries. Set this flag to download prebuilt binaries from
+  # GCS.
+  use_prebuilt_instrumented_libraries = false
+
+  # Use dynamic libraries instrumented by one of the sanitizers instead of the
+  # standard system libraries. Set this flag to build the libraries from source.
+  use_locally_built_instrumented_libraries = false
+
+  # Compile with Control Flow Integrity to protect virtual calls and casts.
+  # See http://clang.llvm.org/docs/ControlFlowIntegrity.html
+  is_cfi = target_os == "linux" && !is_chromeos && target_cpu == "x64" &&
+           is_official_build
+
+  # Enable checks for bad casts: derived cast and unrelated cast.
+  use_cfi_cast = false
+
+  # Enable checks for indirect function calls via a function pointer.
+  use_cfi_icall = target_os == "linux" && !is_chromeos && target_cpu == "x64" &&
+                  is_official_build
+
+  # Print detailed diagnostics when Control Flow Integrity detects a violation.
+  use_cfi_diag = false
+
+  # Let Control Flow Integrity continue execution instead of crashing when
+  # printing diagnostics (use_cfi_diag = true).
+  use_cfi_recover = false
+
+  # Compile for fuzzing with LLVM LibFuzzer.
+  # See http://www.chromium.org/developers/testing/libfuzzer
+  use_libfuzzer = false
+
+  # Compile for fuzzing with AFL.
+  use_afl = false
+
+  # Enables core ubsan security features. Will later be removed once it matches
+  # is_ubsan.
+  is_ubsan_security = false
+
+  # Compile for fuzzing with Dr. Fuzz
+  # See http://www.chromium.org/developers/testing/dr-fuzz
+  use_drfuzz = false
+
+  # Helper variable for testing builds with disabled libfuzzer.
+  # Not for client use.
+  disable_libfuzzer = false
+
+  # Optimize for coverage guided fuzzing (balance between speed and number of
+  # branches). Can be also used to remove non-determinism and other issues.
+  optimize_for_fuzzing = false
+
+  # Value for -fsanitize-coverage flag. Setting this causes
+  # use_sanitizer_coverage to be enabled.
+  # This flag is not used for libFuzzer (use_libfuzzer=true) unless we are on
+  # Mac. Instead, we use:
+  #     -fsanitize=fuzzer-no-link
+  # Default value when unset and use_fuzzing_engine=true:
+  #     trace-pc-guard
+  # Default value when unset and use_sanitizer_coverage=true:
+  #     trace-pc-guard,indirect-calls
+  sanitizer_coverage_flags = ""
+}
+
+is_v8_host_toolchain =
+    current_toolchain == "//build/gn/toolchain/linux:clang_x64_v8_arm64" ||
+    current_toolchain == "//build/gn/toolchain/linux:clang_x86_v8_arm"
+
+# Disable sanitizers for non-default toolchains.
+if (current_toolchain == host_toolchain || is_v8_host_toolchain) {
+  is_asan = false
+  is_cfi = false
+  is_lsan = false
+  is_msan = false
+  is_tsan = false
+  is_ubsan = false
+  is_ubsan_null = false
+  is_ubsan_no_recover = false
+  is_ubsan_security = false
+  is_ubsan_vptr = false
+  msan_track_origins = 0
+  sanitizer_coverage_flags = ""
+  use_afl = false
+  use_cfi_diag = false
+  use_cfi_recover = false
+  use_drfuzz = false
+  use_libfuzzer = false
+  use_prebuilt_instrumented_libraries = false
+  use_locally_built_instrumented_libraries = false
+  use_sanitizer_coverage = false
+}
+
+using_sanitizer = false
