@@ -1,0 +1,145 @@
+# Copyright (c) 2021-2022 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/ohos.gni")
+import("//foundation/arkui/ace_engine/ace_config.gni")
+import("//foundation/arkui/ace_engine/build/ace_ext.gni")
+
+# build static
+template("ace_osal_ohos_source_set") {
+  forward_variables_from(invoker, "*")
+
+  ohos_source_set(target_name) {
+    subsystem_name = ace_engine_subsystem
+    part_name = ace_engine_part
+    defines += invoker.defines
+    if ("${product_name}" == "ohcore") {
+      defines += [ "EXT_SURFACE_ENABLE" ]
+    }
+    if (is_standard_system) {
+      external_deps = [
+        "hitrace_native:hitrace_meter",
+        "hiviewdfx_hilog_native:libhilog",
+        "init:libbeget_proxy",
+        "init:libbegetutil",
+      ]
+      configs = [ "$ace_root:ace_config" ]
+    } else {
+      external_deps = [
+        "hilog:libhilog",
+        "hitrace_native:hitrace_meter",
+        "init_lite:libbegetutil",
+      ]
+
+      configs = [ "$ace_root:ace_config" ]
+    }
+    include_dirs = [
+      "$ability_runtime_napi_path/inner/napi_common",
+      "//base/hiviewdfx/hicollie/interfaces/native/innerkits/include",
+      "//commonlibrary/c_utils/base/include",
+      "//foundation/window/window_manager/interfaces/innerkits",
+    ]
+
+    sources = [
+      "ace_engine_ext.cpp",
+      "ace_trace.cpp",
+      "anr_thread.cpp",
+      "event_report.cpp",
+      "exception_handler.cpp",
+      "frame_report.cpp",
+      "layout_inspector.cpp",
+      "log_wrapper.cpp",
+      "ressched_report.cpp",
+      "system_properties.cpp",
+      "trace_id_impl.cpp",
+      "want_wrap_ohos.cpp",
+    ]
+
+    public_deps = [ "//base/startup/init/interfaces/innerkits:libbegetutil" ]
+
+    if (is_standard_system) {
+      sources += [
+        "resource_adapter_impl.cpp",
+        "resource_convertor.cpp",
+        "resource_theme_style.cpp",
+      ]
+      deps = [
+        "$ability_runtime_path/frameworks/native/ability/native:abilitykit_native",
+        "$ace_flutter_engine_root/icu:ace_libicu_ohos",
+      ]
+      public_deps += [
+        "//base/global/resource_management/frameworks/resmgr:global_resmgr",
+      ]
+      external_deps += [
+        "ability_base:want",
+        "input:libmmi-client",
+        "multimedia_image_framework:image",
+        "napi:ace_napi",
+      ]
+      if (defined(config.accessibility_support) &&
+          config.accessibility_support) {
+        sources += [ "js_accessibility_manager.cpp" ]
+        deps += [ "$ace_root/frameworks/bridge/common/accessibility:bridge_accessibility_ohos" ]
+        external_deps += [
+          "ability_runtime:ability_manager",
+          "accessibility:accessibilityclient",
+          "accessibility:accessibilityconfig",
+        ]
+      } else {
+        sources += [ "fake_accessibility_manager.cpp" ]
+      }
+      if (frame_trace_support) {
+        include_dirs += [ "//foundation/resourceschedule/frame_aware_sched/interfaces/innerkits/frameintf" ]
+        sources += [ "frame_trace_adapter_impl.cpp" ]
+        deps += [ "//foundation/resourceschedule/frame_aware_sched/interfaces/innerkits/frameintf:frame_trace_intf" ]
+      } else {
+        sources += [ "frame_trace_adapter_fake_impl.cpp" ]
+      }
+    } else {
+      external_deps += [ "multimedia_image:image" ]
+    }
+    sources += [
+      "image_source_ohos.cpp",
+      "mouse_style_ohos.cpp",
+      "page_url_checker_ohos.cpp",
+      "pixel_map_ohos.cpp",
+    ]
+    external_deps += [
+      "ability_runtime:abilitykit_native",
+      "ability_runtime:runtime",
+      "bundle_framework:appexecfwk_core",
+      "hicollie_native:libhicollie",
+      "hisysevent_native:libhisysevent",
+      "hitrace_native:libhitracechain",
+    ]
+    deps += [ "//foundation/graphic/graphic_2d/rosen/modules/frame_analyzer:libframe_analyzer" ]
+  }
+}
+
+foreach(item, ace_platforms) {
+  platform = item.name
+  if (platform == "ohos") {
+    ace_osal_ohos_source_set("ace_osal_ohos") {
+      defines = []
+      config = {
+      }
+
+      if (defined(item.config)) {
+        config = item.config
+      }
+      if (defined(config.defines)) {
+        defines = config.defines
+      }
+    }
+  }
+}
