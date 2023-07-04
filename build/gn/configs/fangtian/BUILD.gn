@@ -1,0 +1,161 @@
+# Copyright 2014 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+import("config.gni")
+
+import("//build/gn/configs/compiler/compiler.gni")
+
+# This is included by reference in the //build/gn/configs/compiler config that
+# is applied to all targets. It is here to separate out the logic that is
+# ohos-only.
+config("compiler") {
+  cflags = [
+    "-ffunction-sections",
+    "-fno-short-enums",
+    "-ferror-limit=10"
+  ]
+  defines = [
+    # The NDK has these things, but doesn't define the constants to say that it
+    # does. Define them here instead.
+    "HAVE_SYS_UIO_H",
+  ]
+
+  ldflags = [
+    "-Wl,--no-undefined",
+    "-Wl,--exclude-libs=libunwind.a",
+    "-Wl,--exclude-libs=libc++.a",
+
+    # Don't allow visible symbols from libraries that contain
+    # assembly code with symbols that aren't hidden properly.
+    # http://crbug.com/448386
+    "-Wl,--exclude-libs=libvpx_assembly_arm.a",
+  ]
+
+  if (use_musl_oh) {
+    # cflags += [ "--target=$abi_target" ]
+    # ldflags += [ "--target=$abi_target" ]
+    # include_dirs = [ "${musl_sysroot}/usr/include/${abi_target}" ]
+  }
+
+  # Assign any flags set for the C compiler to asmflags so that they are sent
+  # to the assembler.
+  asmflags = cflags
+}
+
+# This is included by reference in the //build/config/compiler:runtime_library
+# config that is applied to all targets. It is here to separate out the logic
+# that is ohos-only. Please see that target for advice on what should go in
+# :runtime_library vs. :compiler.
+config("runtime_library") {
+  defines = [
+    "__GNU_SOURCE=1",  # Necessary for clone().
+    # "CHROMIUM_CXX_TWEAK_INLINES",  # Saves binary size.
+  ]
+
+  ldflags = []
+
+  # We add this parameter to speed up link process, enable_lto_O0 default is false.
+  if (!is_mac && !is_win && use_lld && enable_lto_O0) {
+    ldflags += [ "-Wl,--lto-O0" ]
+  }
+
+  # Config musl runtime library
+  if (use_musl) {
+    prebuilt_libcxx_path = project_root_dir + "/prebuilts/llvm"
+
+    # Ignore std libs
+    ldflags += [
+      "-nostdlib",
+      "-nostdlib++"
+    ]
+
+    # Add C preprocessor defines.
+    defines += [
+      "__MUSL__",
+      # "_LIBCPP_HAS_MUSL_LIBC",
+    ]
+    if (is_clang) {
+      defines += ["__BUILD_LINUX_WITH_CLANG"]
+    }
+
+    # Add libraries to link, because we have set `-nostdlib` ld flag
+    libs = []
+
+    if (current_cpu == "arm") {
+      # arm builds of libc++ starting in NDK r12 depend on unwind.
+      libs += [ "unwind" ]
+    }
+
+    if (use_musl_oh) {
+      # ldflags += [
+      #   "-L" + rebase_path("${musl_sysroot}/usr/lib/${abi_target}", root_build_dir),
+      #   "-L" + rebase_path("${clang_base_path}/lib/clang/12.0.1/lib/${abi_target}",
+      #                     root_build_dir),
+      # ]
+      # TODO: musl_oh
+      assert(false, "[GN ERROR] Unsupport musl_oh for toolchain currently.")
+    } else {
+      # same as `-L`
+      lib_dirs = [
+        "/usr/musl/lib", # musl C lib dir
+        "/usr/lib64/clang/12.0.1/lib/linux", # clang_rt dir
+        "${prebuilt_libcxx_path}/lib", # llvm C++ lib
+      ]
+
+      # Add libc++ search path
+      ldflags += [
+        "-Wl,-rpath,/usr/lib64",
+        "-Wl,-rpath,/usr/local/lib64",
+      ]
+
+      if (current_cpu == "x64") {
+        libs += [
+          # rebase_path(libclang_rt_file),
+          "/usr/lib64/clang/12.0.1/lib/libclang_rt.builtins-x86_64.a",
+        ]
+      } else {
+        assert(false, "[GN ERROR] Unsupported CPU for clang_rt.")
+      }
+    }
+
+    libs += [
+      "c",
+      # "/usr/musl/lib/libc.a",
+
+      "c++",
+      "c++abi",
+    ]
+
+    cflags = [
+      # using musl include dir
+      "-nostdinc",
+      "--sysroot", "/usr/musl",
+      "-isystem", "/usr/musl/include",
+    ]
+
+    cflags_cc = [
+      # using libc++ include dir
+      "-nostdinc++",
+      "-I${prebuilt_libcxx_path}/include/c++/v1",
+      "-I/usr/lib64/clang/12.0.1/include"
+    ]
+
+    if (current_cpu == "arm" && arm_version == 6) {
+      libs += [ "atomic" ]
+    }
+  }
+}
+
+config("executable_config") {
+  # Option: enable PIE(Position Independent Executable), for security.
+  cflags = [ "-fPIE" ]
+  asmflags = [ "-fPIE" ]
+  ldflags = [ "-pie" ]
+
+  # Option: enable dynamic linking and disable copy relocation for shared lib.
+  ldflags += [
+    "-Bdynamic",
+    "-Wl,-z,nocopyreloc",
+  ]
+}

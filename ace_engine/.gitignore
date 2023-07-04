@@ -5,6 +5,7 @@
 CMakeLists.txt
 adapter/*
 !adapter/ohos/
+!adapter/fangtian/
 !adapter/preview/
 cmake-build-debug/
 lite/appfwk/

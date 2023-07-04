@@ -1,0 +1,691 @@
+# Copyright (c) 2013 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+import("//build/gn/configs/compiler/compiler.gni")
+import("//build/gn/toolchain/toolchain.gni")
+
+if (current_cpu == "arm" || current_cpu == "arm64") {
+  import("//build/gn/configs/fangtian/arm.gni")
+}
+
+declare_args() {
+  # Default to warnings as errors for default workflow, where we catch
+  # warnings with known toolchains. Allow overriding this e.g. for Chromium
+  # builds on Linux that could use a different version of the compiler.
+  # With GCC, warnings in no-Chromium code are always not treated as errors.
+  treat_warnings_as_errors = true
+
+  # Build with C++ RTTI enabled. Chromium builds without RTTI by default,
+  # but some sanitizers are known to require it, like CFI diagnostics
+  # and UBsan variants.
+  use_rtti = use_cfi_diag || is_ubsan_vptr || is_ubsan_security
+
+  # Allow projects that wish to stay on C++11 to override Chromium's default.
+  use_cxx11 = false
+}
+
+# Determine whether to enable or disable frame pointers, based on the platform
+# and build arguments.
+if (is_mac || is_linux) {
+  enable_frame_pointers = is_debug
+} else {
+  # Explicitly ask for frame pointers, otherwise:
+  # * Stacks may be missing for sanitizer and profiling builds.
+  # * Debug tcmalloc can crash (crbug.com/636489).
+  # enable_frame_pointers = using_sanitizer || enable_profiling || is_debug
+  assert(false, "[GN ERROR] Unknow OS for frame pointer")
+}
+
+# compiler ----------------------------------------------------------------
+#
+# Base compiler configuration.
+config("compiler") {
+  cflags = []
+  cflags_cc = []
+  ldflags = []
+  configs = []
+  defines = []
+
+  # System-specific flags. If your compiler flags apply to one of the
+  # categories here, add it to the associated file to keep this shared config
+  # smaller.
+  if (is_ft) {
+    configs += [ "//build/gn/configs/fangtian:compiler" ]
+  }
+
+  if (is_linux) {
+    if (use_pic) {
+      cflags += [ "-fPIC" ]
+      ldflags += [ "-fPIC" ]
+    }
+  }
+
+  # C11/C++11 compiler flags setup.
+  # ---------------------------
+  if (is_linux || is_ft || (is_nacl && is_clang) || current_os == "aix") {
+    if (is_clang) {
+      standard_prefix = "c"
+
+      # Since we build with -std=c* and not -std=gnu*, _GNU_SOURCE will not be
+      # defined by the compiler.  However, lots of code relies on the
+      # non-standard features that _GNU_SOURCE enables, so define it manually.
+      defines += [ "_GNU_SOURCE" ]
+
+      if (is_nacl) {
+        # Undefine __STRICT_ANSI__ to get non-standard features which would
+        # otherwise not be enabled by NaCl's sysroots.
+        cflags += [ "-U__STRICT_ANSI__" ]
+      }
+    } else {
+      # Gcc does not support ##__VA_ARGS__ when in standards-conforming mode,
+      # but we use this feature in several places in Chromium.
+      standard_prefix = "gnu"
+    }
+
+    #   cflags_c += [ "-std=${standard_prefix}11" ]
+    if (use_cxx11) {
+      # Override Chromium's default for projects that wish to stay on C++11.
+      cflags_cc += [ "-std=${standard_prefix}++11" ]
+    } else {
+      cflags_cc += [ "-std=${standard_prefix}++17" ]
+    }
+  } else if (!is_win && !is_nacl && !is_mingw) {
+    if (use_cxx11) {
+      cflags_cc += [ "-std=c++11" ]
+    } else {
+      cflags_cc += [ "-std=c++17" ]
+    }
+  }
+}
+
+# This provides the basic options to select the target CPU and ABI.
+# It is factored out of "compiler" so that special cases can use this
+# without using everything that "compiler" brings in.  Options that
+# tweak code generation for a particular CPU do not belong here!
+# See "compiler_codegen", below.
+config("compiler_cpu_abi") {
+  cflags = []
+  ldflags = []
+  defines = []
+
+  if (is_posix && !is_mac) {
+    # CPU architecture. We may or may not be doing a cross compile now, so for
+    # simplicity we always explicitly set the architecture.
+    if (current_cpu == "x64") {
+      cflags += [
+        "-m64",
+        "-march=x86-64",
+      ]
+      ldflags += [ "-m64" ]
+    } else if (current_cpu == "x86") {
+      cflags += [ "-m32" ]
+      ldflags += [ "-m32" ]
+      if (!is_nacl) {
+        cflags += [
+          "-msse2",
+          "-mfpmath=sse",
+          "-mmmx",
+        ]
+      }
+    } else if (current_cpu == "arm") {
+      if (is_clang && !is_ft && !is_nacl) {
+        cflags += [ "--target=arm-linux-gnueabihf" ]
+        ldflags += [ "--target=arm-linux-gnueabihf" ]
+      }
+      if (!is_nacl) {
+        cflags += [
+          "-march=$arm_arch",
+          "-mfloat-abi=$arm_float_abi",
+        ]
+      }
+      if (arm_tune != "") {
+        cflags += [ "-mtune=$arm_tune" ]
+      }
+    } else if (current_cpu == "arm64") {
+      if (is_clang && !is_ft && !is_nacl) {
+        cflags += [ "--target=aarch64-linux-gnu" ]
+        ldflags += [ "--target=aarch64-linux-gnu" ]
+      }
+      if (is_clang && is_ft) {
+        ldflags += [ "-Wl,--hash-style=gnu" ]
+      }
+      cflags += [
+        "-march=$arm_arch",
+        "-mfloat-abi=$arm_float_abi",
+        "-mfpu=$arm_fpu",
+      ]
+      ldflags += [ "-march=$arm_arch" ]
+    }
+  }
+
+  asmflags = cflags
+  if (current_cpu == "arm64") {
+    asmflags += [ "-march=armv8.2-a+dotprod+fp16" ]
+  }
+}
+
+# runtime_library ----------------------------------------------------------------
+#
+# Sets the runtime library and associated options.
+#
+# How do you determine what should go in here vs. "compiler" above? Consider if
+# a target might choose to use a different runtime library (ignore for a moment
+# if this is possible or reasonable on your system). If such a target would want
+# to change or remove your option, put it in the runtime_library config. If a
+# target wants the option regardless, put it in the compiler config.
+
+config("runtime_library") {
+  defines = []
+  configs = []
+
+  # # The order of this config is important: it must appear before
+  # # ohos:runtime_library.
+  # if (is_posix) {
+  #   configs += [ "//build/gn/configs/posix:runtime_library" ]
+  # }
+
+  # # System-specific flags. If your compiler flags apply to one of the
+  # # categories here, add it to the associated file to keep this shared config
+  # # smaller.
+  if (is_ft) {
+    configs += [ "//build/gn/configs/fangtian:runtime_library" ]
+  }
+
+  if (is_component_build) {
+    defines += [ "COMPONENT_BUILD" ]
+  }
+}
+
+# default_warnings ------------------------------------------------------------
+#
+# Collects all warning flags that are used by default.  This is used as a
+# subconfig of both chromium_code and no_chromium_code.  This way these
+# flags are guaranteed to appear on the compile command line after -Wall.
+config("default_warnings") {
+  cflags = []
+  cflags_cc = []
+  ldflags = []
+
+  # Suppress warnings about ABI changes on ARM (Clang doesn't give this
+  # warning).
+  if (current_cpu == "arm" && !is_clang) {
+    cflags += [ "-Wno-psabi" ]
+  }
+
+  if (!is_clang) {
+    cflags_cc += [
+      # See comment for -Wno-c++11-narrowing.
+      "-Wno-narrowing",
+    ]
+
+    # -Wunused-local-typedefs is broken in gcc,
+    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63872
+    cflags += [ "-Wno-unused-local-typedefs" ]
+
+    # Don't warn about "maybe" uninitialized. Clang doesn't include this
+    # in -Wall but gcc does, and it gives false positives.
+    cflags += [ "-Wno-maybe-uninitialized" ]
+    cflags += [ "-Wno-deprecated-declarations" ]
+
+    # GCC assumes 'this' is never nullptr and optimizes away code
+    # like "if (this == nullptr) ...": [1].  However, some Chromium
+    # code relies on these types of null pointer checks [2], so
+    # disable this optimization.
+    # [1] https://gcc.gnu.org/gcc-6/porting_to.html#this-cannot-be-null
+    # [2] https://crbug.com/784492#c13
+    cflags += [ "-fno-delete-null-pointer-checks" ]
+
+    # -Wcomment gives too many false positives in the case a
+    # backslash ended comment line is followed by a new line of
+    # comments
+    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=61638
+    cflags += [ "-Wno-comments" ]
+  }
+
+  # Common Clang and GCC warning setup.
+  if (!is_win || is_clang) {
+    cflags += [
+      # Disables.
+      "-Wno-missing-field-initializers",  # "struct foo f = {0};"
+      "-Wno-unused-parameter",  # Unused function parameters.
+    ]
+  }
+
+  if (is_clang) {
+    cflags += [
+      # This warns on using ints as initializers for floats in
+      # initializer lists (e.g. |int a = f(); CGSize s = { a, a };|),
+      # which happens in several places in chrome code. Not sure if
+      # this is worth fixing.
+      "-Wno-c++11-narrowing",
+      "-Wno-unneeded-internal-declaration",
+    ]
+    if (use_musl) {
+      cflags += [
+        "-Wno-error=c99-designator",
+        "-Wno-error=anon-enum-enum-conversion",
+        "-Wno-error=implicit-fallthrough",
+        "-Wno-error=sizeof-array-div",
+        "-Wno-error=reorder-init-list",
+        "-Wno-error=range-loop-construct",
+        "-Wno-error=deprecated-copy",
+        "-Wno-error=implicit-int-float-conversion",
+        "-Wno-error=inconsistent-dllimport",
+        "-Wno-error=unknown-warning-option",
+        "-Wno-error=abstract-final-class",
+        "-Wno-error=sign-compare",
+        "-Wno-error=int-in-bool-context",
+        "-Wno-error=xor-used-as-pow",
+        "-Wno-error=return-stack-address",
+        "-Wno-error=dangling-gsl",
+      ]
+    }
+
+    # use_xcode_clang only refers to the iOS toolchain, host binaries use
+    # chromium's clang always.
+    if (!is_nacl && current_toolchain == host_toolchain) {
+        # Flags NaCl (Clang 3.7) and Xcode 9.2 (Clang clang-900.0.39.2) do not
+        # recognize.
+        print("[GN DEBUG] current_toolchain: $current_toolchain")
+        print("[GN DEBUG] host_toolchain: $host_toolchain")
+
+        cflags += [ "-Wno-enum-compare-switch" ]
+    }
+  }
+}
+
+# chromium_code ---------------------------------------------------------------
+#
+# Toggles between higher and lower warnings for code that is (or isn't)
+# part of Chromium.
+
+config("chromium_code_warnings") {
+  cflags = [ "-Wall" ]
+  if (treat_warnings_as_errors) {
+    cflags += [ "-Werror" ]
+
+    # The compiler driver can sometimes (rarely) emit warnings before calling
+    # the actual linker.  Make sure these warnings are treated as errors as
+    # well.
+    ldflags = [ "-Werror" ]
+  }
+  if (is_clang) {
+    # Enable extra warnings for chromium_code when we control the compiler.
+    cflags += [ "-Wextra" ]
+  }
+
+  # In Chromium code, we define __STDC_foo_MACROS in order to get the
+  # C99 macros on Mac and Linux.
+  defines = [
+    "__STDC_CONSTANT_MACROS",
+    "__STDC_FORMAT_MACROS",
+  ]
+
+  if (!is_debug && !using_sanitizer &&
+      (!is_linux || !is_clang || is_official_build)) {
+    # _FORTIFY_SOURCE isn't really supported by Clang now, see
+    # http://llvm.org/bugs/show_bug.cgi?id=16821.
+    # It seems to work fine with Ubuntu 12 headers though, so use it in
+    # official builds.
+    #
+    # Non-chromium code is not guaranteed to compile cleanly with
+    # _FORTIFY_SOURCE. Also, fortified build may fail when optimizations are
+    # disabled, so only do that for Release build.
+    defines += [ "_FORTIFY_SOURCE=2" ]
+  }
+
+  if (is_clang) {
+    cflags += [
+      # Warn on missing break statements at the end of switch cases.
+      # For intentional fallthrough, use FALLTHROUGH; from
+      # base/compiler_specific.h
+      # "-Wimplicit-fallthrough",
+
+      # Thread safety analysis. See base/thread_annotations.h and
+      # https://clang.llvm.org/docs/ThreadSafetyAnalysis.html
+      "-Wthread-safety",
+    ]
+  }
+
+  configs = [ ":default_warnings" ]
+}
+
+config("no_chromium_code_warnings") {
+  cflags = []
+
+  # GCC may emit unsuppressible warnings so don't add -Werror for no chromium
+  # code. crbug.com/589724
+  if (treat_warnings_as_errors && is_clang) {
+    cflags += [ "-Werror" ]
+    ldflags = [ "-Werror" ]
+  }
+  if (is_clang && !is_nacl) {
+    cflags += [ "-Wall" ]
+  }
+
+  if (is_clang) {
+    cflags += [
+      # Lots of third-party libraries have unused variables. Instead of
+      # suppressing them individually, we just blanket suppress them here.
+      "-Wno-unused-variable",
+    ]
+  }
+
+  configs = [ ":default_warnings" ]
+}
+
+# rtti ----------------------------------------------------------------
+#
+# Allows turning Run-Time Type Identification on or off.
+
+config("rtti") {
+  cflags_cc = [ "-frtti" ]
+}
+
+config("no_rtti") {
+  # Some sanitizer configs may require RTTI to be left enabled globally
+  if (!use_rtti) {
+    cflags_cc = [ "-fno-rtti" ]
+    cflags_objcc = cflags_cc
+  }
+}
+
+# export_dynamic ---------------------------------------------------------------
+#
+# Ensures all exported symbols are added to the dynamic symbol table.  This is
+# necessary to expose Chrome's custom operator new() and operator delete() (and
+# other memory-related symbols) to libraries.  Otherwise, they might
+# (de)allocate memory on a different heap, which would spell trouble if pointers
+# to heap-allocated memory are passed over shared library boundaries.
+config("export_dynamic") {
+  if (is_desktop_linux || export_libcxxabi_from_executables) {
+    ldflags = [ "-rdynamic" ]
+  }
+}
+
+# thin_archive -----------------------------------------------------------------
+#
+# Enables thin archives on posix.  Regular archives directly include the object
+# files used to generate it.  Thin archives merely reference the object files.
+# This makes building them faster since it requires less disk IO, but is
+# inappropriate if you wish to redistribute your static library.
+# This config is added to the global config, so thin archives should already be
+# enabled.  If you want to make a distributable static library, you need to do 2
+# things:
+# 1. Set complete_static_lib so that all dependencies of the library make it
+#    into the library. See `gn help complete_static_lib` for details.
+# 2. Remove the thin_archive config, so that the .a file actually contains all
+#    .o files, instead of just references to .o files in the build directory
+config("thin_archive") {
+  # Mac and iOS use the mac-specific "libtool" command, not ar, which doesn't
+  # have a "thin archive" mode (it does accept -T, but it means truncating
+  # archive names to 16 characters, which is not what we want).
+  if (is_posix && !is_nacl && !is_mac) {
+    arflags = [ "-T" ]
+  }
+}
+
+# exceptions -------------------------------------------------------------------
+#
+# Allows turning Exceptions on or off.
+
+config("exceptions") {
+  cflags_cc = [ "-fexceptions" ]
+  cflags_objcc = cflags_cc
+}
+
+config("no_exceptions") {
+  cflags_cc = [ "-fno-exceptions" ]
+  cflags_objcc = cflags_cc
+}
+
+# Optimization -----------------------------------------------------------------
+#
+# The BUILDCONFIG file sets the "default_optimization" config on targets by
+# default. It will be equivalent to either "optimize" (release) or
+# "no_optimize" (debug) optimization configs.
+#
+# You can override the optimization level on a per-target basis by removing the
+# default config and then adding the named one you want:
+#
+#   configs -= [ "//build/config/compiler:default_optimization" ]
+#   configs += [ "//build/config/compiler:optimize_max" ]
+
+# Shared settings for both "optimize" and "optimize_max" configs.
+# IMPORTANT: On Windows "/O1" and "/O2" must go before the common flags.
+common_optimize_on_cflags = []
+common_optimize_on_ldflags = [
+  # Warn in case of text relocations.
+  "-Wl,--warn-shared-textrel",
+]
+
+config("default_stack_frames") {
+  if (is_posix) {
+    if (enable_frame_pointers) {
+      cflags = [ "-fno-omit-frame-pointer" ]
+    } else {
+      cflags = [ "-fomit-frame-pointer" ]
+    }
+  }
+  # On Windows, the flag to enable framepointers "/Oy-" must always come after
+  # the optimization flag [e.g. "/O2"]. The optimization flag is set by one of
+  # the "optimize" configs, see rest of this file. The ordering that cflags are
+  # applied is well-defined by the GN spec, and there is no way to ensure that
+  # cflags set by "default_stack_frames" is applied after those set by an
+  # "optimize" config. Similarly, there is no way to propagate state from this
+  # config into the "optimize" config. We always apply the "/Oy-" config in the
+  # definition for common_optimize_on_cflags definition, even though this may
+  # not be correct.
+}
+
+# Default "optimization on" config.
+config("optimize") {
+  if (optimize_for_size && !is_nacl) {
+    # Favor size over speed.
+    if (is_clang) {
+      cflags = [ "-O2" ] + common_optimize_on_cflags
+    } else {
+      cflags = [ "-Os" ] + common_optimize_on_cflags
+    }
+  } else {
+    cflags = [ "-O2" ] + common_optimize_on_cflags
+  }
+  ldflags = common_optimize_on_ldflags
+}
+
+# Same config as 'optimize' but without the WPO flag.
+config("optimize_no_wpo") {
+  if (optimize_for_size && !is_nacl) {
+    # Favor size over speed.
+    if (is_clang) {
+      cflags = [ "-Oz" ] + common_optimize_on_cflags
+    } else {
+      cflags = [ "-Os" ] + common_optimize_on_cflags
+    }
+  } else if (optimize_for_fuzzing) {
+    cflags = [ "-O0" ] + common_optimize_on_cflags
+  } else {
+    cflags = [ "-O2" ] + common_optimize_on_cflags
+  }
+  ldflags = common_optimize_on_ldflags
+}
+
+# Turn off optimizations.
+config("no_optimize") {
+  if (!ft_full_debug) {
+    # On fangtian we kind of optimize some things that don't affect debugging
+    # much even when optimization is disabled to get the binary size down.
+    if (is_clang) {
+      cflags = [ "-Oz" ] + common_optimize_on_cflags
+      ldflags = common_optimize_on_ldflags
+    } else {
+      cflags = [ "-Os" ] + common_optimize_on_cflags
+      ldflags = common_optimize_on_ldflags
+    }
+  } else {
+    # On ft_full_debug mode, we close all optimization
+    cflags = [ "-O0" ]
+    ldflags = []
+  }
+}
+
+# Turns up the optimization level. On Windows, this implies whole program
+# optimization and link-time code generation which is very expensive and should
+# be used sparingly.
+config("optimize_max") {
+  ldflags = common_optimize_on_ldflags
+  if (optimize_for_fuzzing) {
+    cflags = [ "-O0" ] + common_optimize_on_cflags
+  } else {
+    cflags = [ "-O2" ] + common_optimize_on_cflags
+  }
+}
+
+# This config can be used to override the default settings for per-component
+# and whole-program optimization, optimizing the particular target for speed
+# instead of code size. This config is exactly the same as "optimize_max"
+# except that we use -O3 instead of -O2 on non-win, non-IRT platforms.
+config("optimize_speed") {
+  ldflags = common_optimize_on_ldflags
+  if (optimize_for_fuzzing) {
+    cflags = [ "-O0" ] + common_optimize_on_cflags
+  } else {
+    cflags = [ "-O3" ] + common_optimize_on_cflags
+  }
+}
+
+config("optimize_fuzzing") {
+  cflags = [ "-O0" ] + common_optimize_on_cflags
+  ldflags = common_optimize_on_ldflags
+  visibility = [ ":default_optimization" ]
+}
+
+# The default optimization applied to all targets. This will be equivalent to
+# either "optimize" or "no_optimize", depending on the build flags.
+config("default_optimization") {
+  if (is_debug) {
+    configs = [ ":no_optimize" ]
+  } else if (optimize_for_fuzzing) {
+    assert(!is_win, "Fuzzing optimize level not supported on Windows")
+
+    # # Coverage build is quite slow. Using "optimize_for_fuzzing" makes it even
+    # # slower as it uses "-O1" instead of "-O3". Prevent that from happening.
+    # assert(!use_clang_coverage,
+    #        "optimize_for_fuzzing=true should not be used with " +
+    #            "use_clang_coverage=true.")
+    configs = [ ":optimize_fuzzing" ]
+  } else {
+    # configs = [ ":optimize" ]
+    configs = [ ":optimize_speed" ]
+  }
+}
+
+# Symbols ----------------------------------------------------------------------
+
+# The BUILDCONFIG file sets the "default_symbols" config on targets by
+# default. It will be equivalent to one the three specific symbol levels.
+#
+# You can override the symbol level on a per-target basis by removing the
+# default config and then adding the named one you want:
+#
+#   configs -= [ "//build/config/compiler:default_symbols" ]
+#   configs += [ "//build/config/compiler:symbols" ]
+
+# Full symbols.
+config("symbols") {
+    cflags = []
+    if (current_cpu == "arm") {
+      # dump_syms has issues with dwarf4 on arm, https://crbug.com/744956
+      #
+      # debug fission needs DWARF DIEs to be emitted at version 4.
+      # Chrome OS emits Debug Frame in DWARF1 to make breakpad happy. [1]
+      # Unless fangtian needs debug fission, DWARF3 is the simplest solution.
+      #
+      # [1] crrev.com/a81d5ade0b043208e06ad71a38bcf9c348a1a52f
+      cflags += [ "-gdwarf-3" ]
+    }
+    if (!ft_full_debug) {
+      cflags += [ "-g2" ]
+    } else {
+      # Set -g3 symbol level when ft_full_debug is true
+      cflags += [ "-g3" ]
+    }
+
+    asmflags = cflags
+    ldflags = []
+
+    if (!is_mac && !is_nacl && current_cpu != "x86" && (use_gold || use_lld)) {
+      if (is_clang) {
+        # This flag enables the GNU-format pubnames and pubtypes sections,
+        # which lld needs in order to generate a correct GDB index.
+        cflags += [ "-ggnu-pubnames" ]
+      }
+      # FIXME
+      # ldflags += [ "-Wl,--gdb-index" ]
+    }
+}
+
+# Minimal symbols.
+# This config guarantees to hold symbol for stack trace which are shown to user
+# when crash happens in unittests running on buildbot.
+config("minimal_symbols") {
+  cflags = []
+  if (current_cpu == "arm") {
+    # dump_syms has issues with dwarf4 on arm, https://crbug.com/744956
+    cflags += [ "-gdwarf-3" ]
+  }
+  cflags += [ "-g1" ]
+  ldflags = []
+  if (is_ft && is_clang) {
+    # fangtian defaults to symbol_level=1 builds in production builds
+    # (https://crbug.com/648948), but clang, unlike gcc, doesn't emit
+    # DW_AT_linkage_name in -g1 builds. -fdebug-info-for-profiling enables
+    # that (and a bunch of other things we don't need), so that we get
+    # qualified names in stacks.
+    cflags += [ "-fdebug-info-for-profiling" ]
+  }
+
+  # Note: -gsplit-dwarf implicitly turns on -g2 with clang, so don't pass it.
+  asmflags = cflags
+}
+
+# No symbols.
+config("no_symbols") {
+  if (!is_win) {
+    cflags = [ "-g0" ]
+    asmflags = cflags
+  }
+}
+
+# Default symbols.
+config("default_symbols") {
+  if (symbol_level == 0) {
+    configs = [ ":no_symbols" ]
+  } else if (symbol_level == 1) {
+    configs = [ ":minimal_symbols" ]
+  } else if (symbol_level == 2) {
+    configs = [ ":symbols" ]
+  } else {
+    assert(false)
+  }
+
+  # This config is removed by base unittests app.
+  if (is_ft && is_clang && strip_debug_info) {
+    configs += [ ":strip_debug" ]
+  }
+}
+
+config("strip_debug") {
+  if (!defined(ldflags)) {
+    ldflags = []
+  }
+  ldflags += [ "-Wl,--strip-debug" ]
+}
+
+config("no_common") {
+  if (is_clang) {
+    cflags = [ "-fno-common" ]
+    asmflags = cflags
+  }
+}

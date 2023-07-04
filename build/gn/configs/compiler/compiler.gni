@@ -1,0 +1,71 @@
+# Copyright 2015 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+import("//build/gn/configs/sanitizers/sanitizers.gni")
+import("//build/gn/configs/fangtian/abi.gni")
+
+declare_args() {
+  # How many symbols to include in the build. This affects the performance of
+  # the build since the symbols are large and dealing with them is slow.
+  #   2 means regular build with symbols.
+  #   1 means minimal symbols, usually enough for backtraces only. Symbols with
+  # internal linkage (static functions or those in anonymous namespaces) may not
+  # appear when using this level.
+  #   0 means no symbols.
+  #   -1 means auto-set according to debug/release and platform.
+  symbol_level = -1
+
+  # ohos-only: Strip the debug info of libraries within lib.unstripped to
+  # reduce size. As long as symbol_level > 0, this will still allow stacks to be
+  # symbolized.
+  strip_debug_info = false
+
+  # Whether or not we should use position independent code.
+  use_pic = true
+}
+
+# If `symbol_level` wasn't manually set, set to an appropriate default.
+assert(symbol_level >= -1 && symbol_level <= 2, "Invalid symbol_level")
+if (symbol_level == -1) {
+  if (use_order_profiling) {
+    # With instrumentation enabled, debug info puts libchrome.so over 4gb, which
+    # causes the linker to produce an invalid ELF. http://crbug.com/574476
+    symbol_level = 0
+  } else if (!is_component_build &&
+             !(ft_64bit_target_cpu && !build_app_secondary_abi)) {
+    # Reduce symbol level when it will cause invalid elf files to be created
+    # (due to file size). https://crbug.com/648948.
+    symbol_level = 1
+  } else if ((!is_nacl && !is_linux) || is_debug || is_official_build) {
+    # Linux builds slower by having symbols as part of the target binary,
+    # whereas Mac and Windows have them separate, so in Release Linux, default
+    # them off, but keep them on for Official builds and Chromecast builds.
+    symbol_level = 2
+  } else if (using_sanitizer) {
+    # Sanitizers need line table info for stack traces. They don't need type
+    # info or variable info, so we can leave that out to speed up the build.
+    # Sanitizers also require symbols for filename suppressions to work.
+    symbol_level = 1
+  } else {
+    symbol_level = 0
+  }
+}
+
+# If true, optimize for size. Does not affect windows builds.
+# Linux & Mac favor speed over size.
+optimize_for_size = is_ft
+
+declare_args() {
+  # Set to true to use lld, the LLVM linker. This flag may be used on Windows,
+  # Linux.
+  use_lld = is_clang &&
+             (is_linux && current_cpu == "x64")
+}
+
+declare_args() {
+  # Whether to use the gold linker from binutils instead of lld or bfd.
+  use_gold = !use_lld &&
+             (is_linux && (current_cpu == "x64" || current_cpu == "x86" ||
+                            current_cpu == "arm"))
+}
