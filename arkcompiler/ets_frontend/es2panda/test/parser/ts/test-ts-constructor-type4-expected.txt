@@ -1,0 +1,1 @@
+SyntaxError: Unexpected token [test-ts-constructor-type4.ts:17:21]

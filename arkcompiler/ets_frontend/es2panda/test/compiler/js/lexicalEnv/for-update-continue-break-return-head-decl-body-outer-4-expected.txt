@@ -1,0 +1,3 @@
+check enter loop len == 7:  true
+check enter loop len == 7:  true
+1

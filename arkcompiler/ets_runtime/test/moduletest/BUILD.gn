@@ -1,0 +1,216 @@
+# Copyright (c) 2021 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+group("ark_js_moduletest") {
+  testonly = true
+  deps = [
+    "allocatearraybuffer:allocatearraybufferAction",
+    "array:arrayAction",
+    "arrayforeach:arrayforeachAction",
+    "arrayjoin:arrayjoinAction",
+    "assignproxy:assignproxyAction",
+    "async:asyncAction",
+    "asyncgenerator:asyncgeneratorAction",
+    "bindfunction:bindfunctionAction",
+    "bitwiseop:bitwiseopAction",
+    "builtins:builtinsAction",
+    "callframe:callframeAction",
+    "calltype:calltypeAction",
+    "class:classAction",
+    "compareobjecthclass:compareobjecthclassAction",
+    "container:containerAction",
+    "dataproperty:datapropertyAction",
+    "datecase:datecaseAction",
+    "dynamicimport:dynamicimportAction",
+    "dyninstruction:dyninstructionAction",
+    "ecmastringtable:ecmastringtableAction",
+    "esmnestedimportcjs:esmnestedimportcjsAction",
+    "forawaitof:forawaitofAction",
+    "fortest:fortestAction",
+    "generator:generatorAction",
+    "getunmappedargs:getunmappedargsAction",
+    "globalaccessor:globalaccessorAction",
+    "globalrecord:globalrecordAction",
+    "globalthis:globalthisAction",
+    "helloworld:helloworldAction",
+    "jsonparser:jsonparserAction",
+    "ldmodulensbyic:ldmodulensbyicAction",
+    "lexicalenv:lexicalenvAction",
+    "linkedhashtable:linkedhashtableAction",
+    "loadicbyvalue:loadicbyvalueAction",
+    "memleak/objectcreate:objectcreateAction",
+    "merge:mergeAction",
+    "module:moduleAction",
+    "moduleImportJson:moduleImportJsonAction",
+    "moduleUseCjs:moduleUseCjsAction",
+    "multiargs:multiargsAction",
+    "multiprotoic:multiprotoicAction",
+    "negintmin:negintminAction",
+    "newobjdynrange:newobjdynrangeAction",
+    "objectcloneproperties:objectclonepropertiesAction",
+    "objoperate:objoperateAction",
+    "promise:promiseAction",
+    "protobuf:protobufAction",
+    "proxy:proxyAction",
+    "regexpcallthrow:regexpcallthrowAction",
+    "require:requireAction",
+    "setobjectwithproto:setobjectwithprotoAction",
+    "spreadoperator:spreadoperatorAction",
+    "stackoverflow:stackoverflowAction",
+    "stubbuilder:stubbuilderAction",
+    "throwdyn:throwdynAction",
+    "trycatch:trycatchAction",
+    "typearray:typearrayAction",
+    "watch:watchAction",
+    "wrapperclassfunc:wrapperclassfuncAction",
+    "yieldstar:yieldstarAction",
+  ]
+  if (!is_debug) {
+    deps += [
+      "hugearray:hugearrayAction",
+      "multiconstpoolarray:multiconstpoolarrayAction",
+      "multiconstpoolclass:multiconstpoolclassAction",
+      "multiconstpoolconstructor:multiconstpoolconstructorAction",
+      "multiconstpoolfunc:multiconstpoolfuncAction",
+      "multiconstpoolobj:multiconstpoolobjAction",
+    ]
+  }
+}
+
+group("ark_asm_test") {
+  testonly = true
+  deps = [
+    "allocatearraybuffer:allocatearraybufferAsmAction",
+    "array:arrayAsmAction",
+    "arrayforeach:arrayforeachAsmAction",
+    "arrayjoin:arrayjoinAsmAction",
+    "asmstackoverflow:asmstackoverflowAsmAction",
+    "assignproxy:assignproxyAsmAction",
+    "async:asyncAsmAction",
+    "bindfunction:bindfunctionAsmAction",
+    "bitwiseop:bitwiseopAsmAction",
+
+    #"builtins:builtinsAsmAction",
+    "callframe:callframeAsmAction",
+    "calltype:calltypeAsmAction",
+    "class:classAsmAction",
+    "compareobjecthclass:compareobjecthclassAsmAction",
+    "container:containerAsmAction",
+    "dataproperty:datapropertyAsmAction",
+    "dynamicimport:dynamicimportAction",
+    "dyninstruction:dyninstructionAsmAction",
+    "ecmastringtable:ecmastringtableAsmAction",
+    "fortest:fortestAsmAction",
+    "generator:generatorAsmAction",
+    "getunmappedargs:getunmappedargsAsmAction",
+    "globalaccessor:globalaccessorAsmAction",
+    "globalrecord:globalrecordAsmAction",
+    "globalthis:globalthisAsmAction",
+    "helloworld:helloworldAsmAction",
+    "jsonparser:jsonparserAsmAction",
+    "ldmodulensbyic:ldmodulensbyicAction",
+    "lexicalenv:lexicalenvAsmAction",
+    "linkedhashtable:linkedhashtableAsmAction",
+    "loadicbyvalue:loadicbyvalueAsmAction",
+    "module:moduleAsmAction",
+    "multiargs:multiargsAsmAction",
+    "multiprotoic:multiprotoicAsmAction",
+    "negintmin:negintminAction",
+    "newobjdynrange:newobjdynrangeAsmAction",
+    "objectcloneproperties:objectclonepropertiesAsmAction",
+    "objoperate:objoperateAsmAction",
+    "promise:promiseAsmAction",
+    "proxy:proxyAsmAction",
+    "regexpcallthrow:regexpcallthrowAsmAction",
+    "setobjectwithproto:setobjectwithprotoAsmAction",
+    "spreadoperator:spreadoperatorAsmAction",
+    "stackoverflow:stackoverflowAsmAction",
+    "stubbuilder:stubbuilderAsmAction",
+    "throwdyn:throwdynAsmAction",
+    "trycatch:trycatchAsmAction",
+    "watch:watchAsmAction",
+    "wrapperclassfunc:wrapperclassfuncAsmAction",
+    "yieldstar:yieldstarAsmAction",
+  ]
+  if (!is_debug) {
+    deps += [
+      "hugearray:hugearrayAsmAction",
+      "multiconstpoolarray:multiconstpoolarrayAsmAction",
+      "multiconstpoolclass:multiconstpoolclassAsmAction",
+      "multiconstpoolconstructor:multiconstpoolconstructorAsmAction",
+      "multiconstpoolfunc:multiconstpoolfuncAsmAction",
+      "multiconstpoolobj:multiconstpoolobjAsmAction",
+    ]
+  }
+}
+
+group("ark_asm_single_step_test") {
+  testonly = true
+  deps = [
+    "allocatearraybuffer:allocatearraybufferAsmSingleStepAction",
+    "arrayforeach:arrayforeachAsmSingleStepAction",
+    "arrayjoin:arrayjoinAsmSingleStepAction",
+    "asmstackoverflow:asmstackoverflowAsmSingleStepAction",
+    "assignproxy:assignproxyAsmSingleStepAction",
+    "async:asyncAsmSingleStepAction",
+    "bindfunction:bindfunctionAsmSingleStepAction",
+    "bitwiseop:bitwiseopAsmSingleStepAction",
+    "callframe:callframeAsmSingleStepAction",
+    "calltype:calltypeAsmSingleStepAction",
+    "class:classAsmSingleStepAction",
+    "compareobjecthclass:compareobjecthclassAsmSingleStepAction",
+    "container:containerAsmSingleStepAction",
+    "dataproperty:datapropertyAsmSingleStepAction",
+    "dynamicimport:dynamicimportAction",
+    "dyninstruction:dyninstructionAsmSingleStepAction",
+    "ecmastringtable:ecmastringtableAsmSingleStepAction",
+    "fortest:fortestAsmSingleStepAction",
+    "generator:generatorAsmSingleStepAction",
+    "getunmappedargs:getunmappedargsAsmSingleStepAction",
+    "globalaccessor:globalaccessorAsmSingleStepAction",
+    "globalrecord:globalrecordAsmSingleStepAction",
+    "globalthis:globalthisAsmSingleStepAction",
+    "helloworld:helloworldAsmSingleStepAction",
+    "jsonparser:jsonparserAsmSingleStepAction",
+    "ldmodulensbyic:ldmodulensbyicAction",
+    "lexicalenv:lexicalenvAsmSingleStepAction",
+    "loadicbyvalue:loadicbyvalueAsmSingleStepAction",
+    "module:moduleAsmSingleStepAction",
+    "multiargs:multiargsAsmSingleStepAction",
+    "multiprotoic:multiprotoicAsmSingleStepAction",
+    "negintmin:negintminAction",
+    "newobjdynrange:newobjdynrangeAsmSingleStepAction",
+    "objectcloneproperties:objectclonepropertiesAsmSingleStepAction",
+    "objoperate:objoperateAsmSingleStepAction",
+    "promise:promiseAsmSingleStepAction",
+    "proxy:proxyAsmSingleStepAction",
+    "regexpcallthrow:regexpcallthrowAsmSingleStepAction",
+    "setobjectwithproto:setobjectwithprotoAsmSingleStepAction",
+    "spreadoperator:spreadoperatorAsmSingleStepAction",
+    "stackoverflow:stackoverflowAsmSingleStepAction",
+    "stubbuilder:stubbuilderAsmSingleStepAction",
+    "throwdyn:throwdynAsmSingleStepAction",
+    "trycatch:trycatchAsmSingleStepAction",
+    "watch:watchAsmSingleStepAction",
+    "yieldstar:yieldstarAsmSingleStepAction",
+  ]
+  if (!is_debug) {
+    deps += [
+      "multiconstpoolarray:multiconstpoolarrayAsmSingleStepAction",
+      "multiconstpoolclass:multiconstpoolclassAsmSingleStepAction",
+      "multiconstpoolconstructor:multiconstpoolconstructorAsmSingleStepAction",
+      "multiconstpoolfunc:multiconstpoolfuncAsmSingleStepAction",
+      "multiconstpoolobj:multiconstpoolobjAsmSingleStepAction",
+    ]
+  }
+}

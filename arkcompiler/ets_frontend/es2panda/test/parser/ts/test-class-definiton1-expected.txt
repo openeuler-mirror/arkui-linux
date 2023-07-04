@@ -1,0 +1,1 @@
+SyntaxError: Static modifier can not appear on a constructor [test-class-definiton1.ts:18:12]

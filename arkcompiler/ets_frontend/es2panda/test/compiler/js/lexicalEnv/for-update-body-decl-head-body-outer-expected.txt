@@ -1,0 +1,8 @@
+check enter loop, len == 5:  true
+check enter loop, len == 5:  true
+check enter loop, len == 5:  true
+check enter loop, len == 5:  true
+1
+2
+3
+4

@@ -1,0 +1,1 @@
+SyntaxError: Private identifiers are not allowed outside class bodies. [test-func-decl1.ts:18:10]

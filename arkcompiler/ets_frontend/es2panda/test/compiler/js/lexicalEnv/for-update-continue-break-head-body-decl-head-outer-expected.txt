@@ -1,0 +1,4 @@
+check exit loop, len == 6:  true
+1 1
+2 2
+4 4

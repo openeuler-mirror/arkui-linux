@@ -1,0 +1,1 @@
+SyntaxError: A get accessor must be at least as accessible as the setter [test-class-definiton16.ts:18:17]

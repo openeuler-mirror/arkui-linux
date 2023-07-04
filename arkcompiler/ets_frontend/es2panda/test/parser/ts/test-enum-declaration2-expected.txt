@@ -1,0 +1,1 @@
+SyntaxError: Unexpected token in enum member [test-enum-declaration2.ts:18:5]

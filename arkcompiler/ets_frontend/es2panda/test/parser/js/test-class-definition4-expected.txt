@@ -1,0 +1,1 @@
+SyntaxError: Classes may not have static property named prototype [test-class-definition4.js:18:10]

@@ -1,0 +1,1 @@
+SyntaxError: An index signature must have a type annotation. [test-interface7.ts:17:15]

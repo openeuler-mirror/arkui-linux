@@ -1,0 +1,61 @@
+# Copyright (c) 2021-2022 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//arkcompiler/ets_frontend/ts2panda/ts2abc_config.gni")
+import("//build/config/clang/clang.gni")
+import("//build/ohos.gni")
+
+action("ts2abc_ts_type_system_test") {
+  script = "${ts2abc_root}/../testTs/run_testTs.py"
+  deps = [ "${ts2abc_root}:copy_ts2abc_tests" ]
+  outputs = [ "$target_out_dir/ts2abc_ts_type_system_test/" ]
+}
+
+action("ts2abc_ts_instruction_type_test") {
+  script = "${ts2abc_root}/../testTs/run_testTs.py"
+  deps = [ "${ts2abc_root}:copy_ts2abc_tests" ]
+  args = [ "--testinstype" ]
+  outputs = [ "$target_out_dir/ts2abc_ts_instruction_type_test/" ]
+}
+
+action("ts2abc_ts_ut_test") {
+  script = "${ts2abc_root}/scripts/run_tests.py"
+  deps = [ "${ts2abc_root}:copy_ts2abc_tests" ]
+
+  args = [
+    "--src-dir",
+    rebase_path("${ts2abc_root}"),
+    "--dist-dir",
+    rebase_path(target_out_dir + "/.."),
+    "--node-modules",
+    rebase_path("${node_modules}"),
+  ]
+
+  if (host_toolchain == toolchain_linux) {
+    args += [
+      "--platform",
+      "linux",
+    ]
+  } else if (host_toolchain == toolchain_mac) {
+    args += [
+      "--platform",
+      "mac",
+    ]
+  } else {
+    args += [
+      "--platform",
+      "win",
+    ]
+  }
+  outputs = [ "$target_out_dir/ts2abc_ts_ut_test/" ]
+}

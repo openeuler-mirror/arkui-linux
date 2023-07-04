@@ -1,0 +1,1 @@
+SyntaxError: ',' expected. [test-tuple-type1.ts:17:19]

@@ -1,0 +1,2 @@
+{'literalBuffer': [{'tag': 2, 'value': 1}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}]}
+{'literalBuffer': [{'tag': 2, 'value': 2}, {'tag': 2, 'value': 51}]}

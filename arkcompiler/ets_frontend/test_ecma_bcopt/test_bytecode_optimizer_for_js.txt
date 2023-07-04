@@ -1,0 +1,31 @@
+#
+# source binary: test_bytecode_optimizer_for_js.abc
+#
+
+.language ECMAScript
+
+# ====================
+# LITERALS
+
+
+# ====================
+# RECORDS
+
+.record _ESTypeAnnotation <external>
+
+.record _ESCallTypeAnnotation <external>
+
+# ====================
+# METHODS
+
+.function any func_main_0_any_any_any_any_(any a0, any a1, any a2) <static> {
+	ecma.ldlexenvdyn
+	ecma.createarraywithbuffer 0x0
+	ecma.stlettoglobalrecord "a"
+	ecma.tryldglobalbyname "a"
+	sta.dyn v0
+	ldai.dyn 0x2
+	ecma.stobjbyindex v0, 0x0
+	ecma.returnundefined
+}
+

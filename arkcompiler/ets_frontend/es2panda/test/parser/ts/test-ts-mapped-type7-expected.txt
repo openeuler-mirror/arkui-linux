@@ -1,0 +1,1 @@
+SyntaxError: '}' expected [test-ts-mapped-type7.ts:17:44]

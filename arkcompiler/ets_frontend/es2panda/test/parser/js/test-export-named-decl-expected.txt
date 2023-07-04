@@ -1,0 +1,1 @@
+SyntaxError: 'import' and 'export' may appear only with 'sourceType: module' [test-export-named-decl.js:20:1]

@@ -1,0 +1,1 @@
+SyntaxError: A binding pattern parameter cannot be optional in an implementation signature [test-func-param6.ts:17:16]

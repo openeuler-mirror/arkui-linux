@@ -1,0 +1,1 @@
+SyntaxError: Missing catch or finally clause [test-try-without-catch-and-finally.js:18:1]

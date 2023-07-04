@@ -1,0 +1,288 @@
+/*
+ * Copyright (c) 2021 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#ifndef ECMASCRIPT_INTERPRETER_FAST_RUNTIME_STUB_INL_H
+#define ECMASCRIPT_INTERPRETER_FAST_RUNTIME_STUB_INL_H
+
+#include "ecmascript/interpreter/fast_runtime_stub.h"
+
+#include "ecmascript/global_dictionary-inl.h"
+#include "ecmascript/global_env.h"
+#include "ecmascript/interpreter/interpreter.h"
+#include "ecmascript/js_function.h"
+#include "ecmascript/js_proxy.h"
+#include "ecmascript/js_tagged_value-inl.h"
+#include "ecmascript/object_factory-inl.h"
+#include "ecmascript/object_fast_operator-inl.h"
+#include "ecmascript/runtime_call_id.h"
+
+namespace panda::ecmascript {
+// NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
+#define CHECK_IS_ON_PROTOTYPE_CHAIN(receiver, holder) \
+    if (UNLIKELY((receiver) != (holder))) {           \
+        return JSTaggedValue::Hole();                 \
+    }
+
+JSTaggedValue FastRuntimeStub::FastMul(JSTaggedValue left, JSTaggedValue right)
+{
+    if (left.IsNumber() && right.IsNumber()) {
+        return JSTaggedValue(left.GetNumber() * right.GetNumber());
+    }
+
+    return JSTaggedValue::Hole();
+}
+
+JSTaggedValue FastRuntimeStub::FastDiv(JSTaggedValue left, JSTaggedValue right)
+{
+    if (left.IsNumber() && right.IsNumber()) {
+        double dLeft = left.IsInt() ? left.GetInt() : left.GetDouble();
+        double dRight = right.IsInt() ? right.GetInt() : right.GetDouble();
+        if (UNLIKELY(dRight == 0.0)) {
+            if (dLeft == 0.0 || std::isnan(dLeft)) {
+                return JSTaggedValue(base::NAN_VALUE);
+            }
+            uint64_t flagBit = ((bit_cast<uint64_t>(dLeft)) ^ (bit_cast<uint64_t>(dRight))) & base::DOUBLE_SIGN_MASK;
+            return JSTaggedValue(bit_cast<double>(flagBit ^ (bit_cast<uint64_t>(base::POSITIVE_INFINITY))));
+        }
+        return JSTaggedValue(dLeft / dRight);
+    }
+    return JSTaggedValue::Hole();
+}
+
+JSTaggedValue FastRuntimeStub::FastMod(JSTaggedValue left, JSTaggedValue right)
+{
+    if (right.IsInt() && left.IsInt()) {
+        int iRight = right.GetInt();
+        int iLeft = left.GetInt();
+        if (iRight > 0 && iLeft > 0) {
+            return JSTaggedValue(iLeft % iRight);
+        }
+    }
+    if (left.IsNumber() && right.IsNumber()) {
+        double dLeft = left.IsInt() ? left.GetInt() : left.GetDouble();
+        double dRight = right.IsInt() ? right.GetInt() : right.GetDouble();
+        if (dRight == 0.0 || std::isnan(dRight) || std::isnan(dLeft) || std::isinf(dLeft)) {
+            return JSTaggedValue(base::NAN_VALUE);
+        }
+        if (dLeft == 0.0 || std::isinf(dRight)) {
+            return JSTaggedValue(dLeft);
+        }
+        return JSTaggedValue(std::fmod(dLeft, dRight));
+    }
+    return JSTaggedValue::Hole();
+}
+
+JSTaggedValue FastRuntimeStub::FastEqual(JSTaggedValue left, JSTaggedValue right)
+{
+    if (left == right) {
+        if (UNLIKELY(left.IsDouble())) {
+            return JSTaggedValue(!std::isnan(left.GetDouble()));
+        }
+        return JSTaggedValue::True();
+    }
+    if (left.IsNumber()) {
+        if (left.IsInt() && right.IsInt()) {
+            return JSTaggedValue::False();
+        }
+    }
+    if (right.IsUndefinedOrNull()) {
+        if (left.IsHeapObject()) {
+            return JSTaggedValue::False();
+        }
+        if (left.IsUndefinedOrNull()) {
+            return JSTaggedValue::True();
+        }
+    }
+    if (left.IsBoolean()) {
+        if (right.IsSpecial()) {
+            return JSTaggedValue::False();
+        }
+    }
+    if (left.IsBigInt() && right.IsBigInt()) {
+        return JSTaggedValue(BigInt::Equal(left, right));
+    }
+    return JSTaggedValue::Hole();
+}
+
+bool FastRuntimeStub::FastStrictEqual(JSTaggedValue left, JSTaggedValue right)
+{
+    if (left.IsNumber()) {
+        if (right.IsNumber()) {
+            double dLeft = left.IsInt() ? left.GetInt() : left.GetDouble();
+            double dRight = right.IsInt() ? right.GetInt() : right.GetDouble();
+            return JSTaggedValue::StrictNumberEquals(dLeft, dRight);
+        }
+        return false;
+    }
+    if (right.IsNumber()) {
+        return false;
+    }
+    if (left == right) {
+        return true;
+    }
+    if (left.IsString() && right.IsString()) {
+        return EcmaStringAccessor::StringsAreEqual(static_cast<EcmaString *>(left.GetTaggedObject()),
+                                                   static_cast<EcmaString *>(right.GetTaggedObject()));
+    }
+    if (left.IsBigInt()) {
+        if (right.IsBigInt()) {
+            return BigInt::Equal(left, right);
+        }
+        return false;
+    }
+    if (right.IsBigInt()) {
+        return false;
+    }
+    return false;
+}
+
+JSTaggedValue FastRuntimeStub::CallGetter(JSThread *thread, JSTaggedValue receiver, JSTaggedValue holder,
+                                          JSTaggedValue value)
+{
+    return ObjectFastOperator::CallGetter(thread, receiver, holder, value);
+}
+
+JSTaggedValue FastRuntimeStub::CallSetter(JSThread *thread, JSTaggedValue receiver, JSTaggedValue value,
+                                          JSTaggedValue accessorValue)
+{
+    return ObjectFastOperator::CallSetter(thread, receiver, value, accessorValue);
+}
+
+template<bool UseOwn>
+JSTaggedValue FastRuntimeStub::GetPropertyByIndex(JSThread *thread, JSTaggedValue receiver, uint32_t index)
+{
+    return ObjectFastOperator::GetPropertyByIndex<UseOwn>(thread, receiver, index);
+}
+
+template<bool UseOwn>
+JSTaggedValue FastRuntimeStub::GetPropertyByValue(JSThread *thread, JSTaggedValue receiver, JSTaggedValue key)
+{
+    return ObjectFastOperator::GetPropertyByValue<UseOwn>(thread, receiver, key);
+}
+
+template<bool UseOwn>
+JSTaggedValue FastRuntimeStub::GetPropertyByName(JSThread *thread, JSTaggedValue receiver, JSTaggedValue key)
+{
+    return ObjectFastOperator::GetPropertyByName<UseOwn>(thread, receiver, key);
+}
+
+template<bool UseOwn>
+JSTaggedValue FastRuntimeStub::SetPropertyByName(JSThread *thread, JSTaggedValue receiver, JSTaggedValue key,
+                                                 JSTaggedValue value)
+{
+    return ObjectFastOperator::SetPropertyByName<UseOwn>(thread, receiver, key, value);
+}
+
+template<bool UseOwn>
+JSTaggedValue FastRuntimeStub::SetPropertyByIndex(JSThread *thread, JSTaggedValue receiver, uint32_t index,
+                                                  JSTaggedValue value)
+{
+    return ObjectFastOperator::SetPropertyByIndex<UseOwn>(thread, receiver, index, value);
+}
+
+template<bool UseOwn>
+JSTaggedValue FastRuntimeStub::SetPropertyByValue(JSThread *thread, JSTaggedValue receiver, JSTaggedValue key,
+                                                  JSTaggedValue value)
+{
+    return ObjectFastOperator::SetPropertyByValue<UseOwn>(thread, receiver, key, value);
+}
+
+JSTaggedValue FastRuntimeStub::GetGlobalOwnProperty(JSThread *thread, JSTaggedValue receiver, JSTaggedValue key)
+{
+    JSObject *obj = JSObject::Cast(receiver);
+    TaggedArray *properties = TaggedArray::Cast(obj->GetProperties().GetTaggedObject());
+    GlobalDictionary *dict = GlobalDictionary::Cast(properties);
+    int entry = dict->FindEntry(key);
+    if (entry != -1) {
+        auto value = dict->GetValue(entry);
+        if (UNLIKELY(value.IsAccessor())) {
+            return CallGetter(thread, receiver, receiver, value);
+        }
+        ASSERT(!value.IsAccessor());
+        return value;
+    }
+    return JSTaggedValue::Hole();
+}
+
+JSTaggedValue FastRuntimeStub::FastTypeOf(JSThread *thread, JSTaggedValue obj)
+{
+    INTERPRETER_TRACE(thread, FastTypeOf);
+    const GlobalEnvConstants *globalConst = thread->GlobalConstants();
+    switch (obj.GetRawData()) {
+        case JSTaggedValue::VALUE_TRUE:
+        case JSTaggedValue::VALUE_FALSE:
+            return globalConst->GetBooleanString();
+        case JSTaggedValue::VALUE_NULL:
+            return globalConst->GetObjectString();
+        case JSTaggedValue::VALUE_UNDEFINED:
+            return globalConst->GetUndefinedString();
+        default:
+            if (obj.IsHeapObject()) {
+                if (obj.IsString()) {
+                    return globalConst->GetStringString();
+                }
+                if (obj.IsSymbol()) {
+                    return globalConst->GetSymbolString();
+                }
+                if (obj.IsCallable()) {
+                    return globalConst->GetFunctionString();
+                }
+                if (obj.IsBigInt()) {
+                    return globalConst->GetBigIntString();
+                }
+                return globalConst->GetObjectString();
+            }
+            if (obj.IsNumber()) {
+                return globalConst->GetNumberString();
+            }
+    }
+    return globalConst->GetUndefinedString();
+}
+
+JSTaggedValue FastRuntimeStub::NewLexicalEnv(JSThread *thread, ObjectFactory *factory, uint16_t numVars)
+{
+    INTERPRETER_TRACE(thread, NewLexicalEnv);
+    [[maybe_unused]] EcmaHandleScope handleScope(thread);
+    LexicalEnv *newEnv = factory->InlineNewLexicalEnv(numVars);
+    if (UNLIKELY(newEnv == nullptr)) {
+        return JSTaggedValue::Hole();
+    }
+    JSTaggedValue currentLexenv = thread->GetCurrentLexenv();
+    newEnv->SetParentEnv(thread, currentLexenv);
+    newEnv->SetScopeInfo(thread, JSTaggedValue::Hole());
+    return JSTaggedValue(newEnv);
+}
+
+JSTaggedValue FastRuntimeStub::NewThisObject(JSThread *thread, JSTaggedValue ctor, JSTaggedValue newTarget,
+                                             InterpretedFrame *state)
+{
+    [[maybe_unused]] EcmaHandleScope handleScope(thread);
+    ObjectFactory *factory = thread->GetEcmaVM()->GetFactory();
+
+    JSHandle<JSFunction> ctorHandle(thread, ctor);
+    JSHandle<JSTaggedValue> newTargetHandle(thread, newTarget);
+    JSHandle<JSObject> obj = factory->NewJSObjectByConstructor(ctorHandle, newTargetHandle);
+    RETURN_VALUE_IF_ABRUPT_COMPLETION(thread, JSTaggedValue::Exception());
+
+    Method *method = Method::Cast(ctorHandle->GetMethod().GetTaggedObject());
+    state->function = ctorHandle.GetTaggedValue();
+    state->constpool = method->GetConstantPool();
+    state->profileTypeInfo = method->GetProfileTypeInfo();
+    state->env = ctorHandle->GetLexicalEnv();
+
+    return obj.GetTaggedValue();
+}
+}  // namespace panda::ecmascript
+#endif  // ECMASCRIPT_INTERPRETER_FAST_RUNTIME_STUB_INL_H

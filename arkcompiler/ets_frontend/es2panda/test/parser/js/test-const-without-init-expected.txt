@@ -1,0 +1,1 @@
+SyntaxError: Missing initializer in const declaration [test-const-without-init.js:17:8]

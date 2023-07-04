@@ -1,0 +1,1 @@
+SyntaxError: 'get' and 'set' accessors cannot declare 'this' parameters [test-func-param4.ts:18:17]

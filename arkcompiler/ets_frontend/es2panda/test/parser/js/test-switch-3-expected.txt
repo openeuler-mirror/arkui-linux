@@ -1,0 +1,1 @@
+SyntaxError: Primary expression expected [test-switch-3.js:17:9]

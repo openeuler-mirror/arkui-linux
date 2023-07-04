@@ -1,0 +1,1 @@
+SyntaxError: '=>' expected [test-ts-constructor-type1.ts:17:37]

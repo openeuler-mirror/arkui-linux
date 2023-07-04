@@ -1,0 +1,1 @@
+SyntaxError: A required parameter cannot follow an optional parameter [test-func-param1.ts:17:22]

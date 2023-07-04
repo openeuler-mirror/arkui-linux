@@ -1,0 +1,1 @@
+SyntaxError: Tagged Template Literals are not allowed in optionalChain [test-optional-chain.js:17:10]

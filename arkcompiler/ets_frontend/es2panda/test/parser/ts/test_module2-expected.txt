@@ -1,0 +1,1 @@
+SyntaxError: A 'declare' modifier cannot be used in an already ambient context. [test_module2.ts:18:5]

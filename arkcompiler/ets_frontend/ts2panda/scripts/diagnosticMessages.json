@@ -1,0 +1,575 @@
+{
+    "Identifier expected.": {
+        "category": "Error",
+        "code": 1003
+    },
+    "A rest parameter or binding pattern may not have a trailing comma.": {
+        "category": "Error",
+        "code": 1013
+    },
+    "A rest parameter must be last in a parameter list.": {
+        "category": "Error",
+        "code": 1014
+    },
+    "Parameter cannot have question mark and initializer.": {
+        "category": "Error",
+        "code": 1015
+    },
+    "A required parameter cannot follow an optional parameter.": {
+        "category": "Error",
+        "code": 1016
+    },
+    "The 'readonly' modifier can only appear on a property declaration or index signature.": {
+        "category": "Error",
+        "code": 1024
+    },
+    "Accessibility modifier already seen.": {
+        "category": "Error",
+        "code": 1028
+    },
+    "'{0}' modifier must precede '{1}' modifier.": {
+        "category": "Error",
+        "code": 1029
+    },
+    "'{0}' modifier already seen.": {
+        "category": "Error",
+        "code": 1030
+    },
+    "'{0}' modifier cannot appear on class elements of this kind.": {
+        "category": "Error",
+        "code": 1031
+    },
+    "A 'declare' modifier cannot be used in an already ambient context.": {
+        "category": "Error",
+        "code": 1038
+    },
+    "'{0}' modifier cannot be used in an ambient context.": {
+        "category": "Error",
+        "code": 1040
+    },
+    "'{0}' modifier cannot be used here.": {
+        "category": "Error",
+        "code": 1042
+    },
+    "'{0}' modifier cannot appear on a module or namespace element.": {
+        "category": "Error",
+        "code": 1044
+    },
+    "A rest parameter cannot be optional.": {
+        "category": "Error",
+        "code": 1047
+    },
+    "A rest parameter cannot have an initializer.": {
+        "category": "Error",
+        "code": 1048
+    },
+    "'{0}' modifier cannot appear on a type member.": {
+        "category": "Error",
+        "code": 1070
+    },
+    "'{0}' modifier cannot appear on an index signature.": {
+        "category": "Error",
+        "code": 1071
+    },
+    "A '{0}' modifier cannot be used with an import declaration.": {
+        "category": "Error",
+        "code": 1079
+    },
+    "'{0}' modifier cannot appear on a constructor declaration.": {
+        "category": "Error",
+        "code": 1089
+    },
+    "'{0}' modifier cannot appear on a parameter.": {
+        "category": "Error",
+        "code": 1090
+    },
+    "Only a single variable declaration is allowed in a 'for...in' statement.": {
+        "category": "Error",
+        "code": 1091
+    },
+    "Invalid use of '{0}' in strict mode.": {
+        "category": "Error",
+        "code": 1100
+    },
+    "A 'with' statements are not allowed in strict mode.": {
+        "category": "Error",
+        "code": 1101
+    },
+    "A 'delete' cannot be called on an identifier in strict mode.": {
+        "category": "Error",
+        "code": 1102
+    },
+    "A 'continue' statement can only be used within an enclosing iteration statement.": {
+        "category": "Error",
+        "code": 1104
+    },
+    "A 'break' statement can only be used within an enclosing iteration or switch statement.": {
+        "category": "Error",
+        "code": 1105
+    },
+    "Jump target cannot cross function boundary.": {
+        "category": "Error",
+        "code": 1107
+    },
+    "A 'return' statement can only be used within a function body.": {
+        "category": "Error",
+        "code": 1108
+    },
+    "A 'default' clause cannot appear more than once in a 'switch' statement.": {
+        "category": "Error",
+        "code": 1113
+    },
+    "Duplicate label '{0}'.": {
+        "category": "Error",
+        "code": 1114
+    },
+    "A 'continue' statement can only jump to a label of an enclosing iteration statement.": {
+        "category": "Error",
+        "code": 1115
+    },
+    "A 'break' statement can only jump to a label of an enclosing statement.": {
+        "category": "Error",
+        "code": 1116
+    },
+    "An object literal cannot have multiple properties with the same name in strict mode.": {
+        "category": "Error",
+        "code": 1117
+    },
+    "An object literal cannot have multiple get/set accessors with the same name.": {
+        "category": "Error",
+        "code": 1118
+    },
+    "An object literal cannot have property and accessor with the same name.": {
+        "category": "Error",
+        "code": 1119
+    },
+    "An export assignment cannot have modifiers.": {
+        "category": "Error",
+        "code": 1120
+    },
+    "Octal literals are not allowed in strict mode.": {
+        "category": "Error",
+        "code": 1121
+    },
+    "Octal escape sequences are not allowed in strict mode.": {
+        "category": "Error",
+        "code": 1122
+    },
+    "Variable declaration list cannot be empty.": {
+        "category": "Error",
+        "code": 1123
+    },
+    "Line break not permitted here.": {
+        "category": "Error",
+        "code": 1142
+    },
+    "Cannot use imports, exports, or module augmentations when '--module' is 'none'.": {
+        "category": "Error",
+        "code": 1148
+    },
+    "The 'const' declarations can only be declared inside a block.": {
+        "category": "Error",
+        "code": 1156
+    },
+    "The 'const' declarations must be initialized.": {
+        "category": "Error",
+        "code": 1155
+    },
+    "The 'let' declarations can only be declared inside a block.": {
+        "category": "Error",
+        "code": 1157
+    },
+    "Unterminated regular expression literal.": {
+        "category": "Error",
+        "code": 1161
+    },
+    "An object member cannot be declared optional.": {
+        "category": "Error",
+        "code": 1162
+    },
+    "A 'yield' expression is only allowed in a generator body.": {
+        "category": "Error",
+        "code": 1163
+    },
+    "A comma expression is not allowed in a computed property name.": {
+        "category": "Error",
+        "code": 1171
+    },
+    "The 'extends' clause already seen.": {
+        "category": "Error",
+        "code": 1172
+    },
+    "Classes can only extend a single class.": {
+        "category": "Error",
+        "code": 1174
+    },
+    "The 'implements' clause already seen.": {
+        "category": "Error",
+        "code": 1175
+    },
+    "Property destructuring pattern expected.": {
+        "category": "Error",
+        "code": 1180
+    },
+    "A destructuring declaration must have an initializer.": {
+        "category": "Error",
+        "code": 1182
+    },
+    "A_rest_element_cannot_have_an_initializer.": {
+        "category": "Error",
+        "code": 1186
+    },
+    "A parameter property may not be declared using a binding pattern.": {
+        "category": "Error",
+        "code": 1187
+    },
+    "Only a single variable declaration is allowed in a 'for...of' statement.": {
+        "category": "Error",
+        "code": 1188
+    },
+    "The variable declaration of a 'for...in' statement cannot have an initializer.": {
+        "category": "Error",
+        "code": 1189
+    },
+    "The variable declaration of a 'for...of' statement cannot have an initializer.": {
+        "category": "Error",
+        "code": 1190
+    },
+    "An import declaration cannot have modifiers.": {
+        "category": "Error",
+        "code": 1191
+    },
+    "An export declaration cannot have modifiers.": {
+        "category": "Error",
+        "code": 1193
+    },
+    "Line terminator not permitted before arrow.": {
+        "category": "Error",
+        "code": 1200
+    },
+    "Decorators are not valid here.": {
+        "category": "Error",
+        "code": 1206
+    },
+    "Decorators cannot be applied to multiple get/set accessors of the same name.": {
+        "category": "Error",
+        "code": 1207
+    },
+    "Invalid use of '{0}'. Class definitions are automatically in strict mode.": {
+        "category": "Error",
+        "code": 1210
+    },
+    "A class or function declaration without the 'default' modifier must have a name.": {
+        "category": "Error",
+        "code": 1211
+    },
+    "Identifier expected. '{0}' is a reserved word in strict mode.": {
+        "category": "Error",
+        "code": 1212
+    },
+    "Identifier expected. '{0}' is a reserved word in strict mode. Class definitions are automatically in strict mode.": {
+        "category": "Error",
+        "code": 1213
+    },
+    "Identifier expected. '{0}' is a reserved word in strict mode. Modules are automatically in strict mode.": {
+        "category": "Error",
+        "code": 1214
+    },
+    "An export assignment must be at the top level of a file or module declaration.": {
+        "category": "Error",
+        "code": 1231
+    },
+    "An import declaration can only be used in a namespace or module.": {
+        "category": "Error",
+        "code": 1232
+    },
+    "An export declaration can only be used in a module.": {
+        "category": "Error",
+        "code": 1233
+    },
+    "The 'abstract' modifier can only appear on a class, method, or property declaration.": {
+        "category": "Error",
+        "code": 1242
+    },
+    "'{0}' modifier cannot be used with '{1}' modifier.": {
+        "category": "Error",
+        "code": 1243
+    },
+    "Abstract methods can only appear within an abstract class.": {
+        "category": "Error",
+        "code": 1244
+    },
+    "A class member cannot have the '{0}' keyword.": {
+        "category": "Error",
+        "code": 1248
+    },
+    "A decorator can only decorate a method implementation, not an overload.": {
+        "category": "Error",
+        "code": 1249
+    },
+    "Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'.": {
+        "category": "Error",
+        "code": 1250
+    },
+    "Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'. Class definitions are automatically in strict mode.": {
+        "category": "Error",
+        "code": 1251
+    },
+    "Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'. Modules are automatically in strict mode.": {
+        "category": "Error",
+        "code": 1252
+    },
+    "A definite assignment assertion '!' is not permitted in this context.": {
+        "category": "Error",
+        "code": 1255
+    },
+    "Identifier expected. '{0}' is a reserved word at the top-level of a module.": {
+        "category": "Error",
+        "code": 1262
+    },
+    "Declarations with initializers cannot also have definite assignment assertions.": {
+        "category": "Error",
+        "code": 1263
+    },
+    "Declarations with definite assignment assertions must also have type annotations.": {
+        "category": "Error",
+        "code": 1264
+    },
+    "await expressions are only allowed within async functions and at the top levels of modules.": {
+        "category": "Error",
+        "code": 1308
+    },
+    "Did you mean to use a ':'? An '=' can only follow a property name when the containing object literal is part of a destructuring pattern.": {
+        "category": "Error",
+        "code": 1312
+    },
+    "A parameter property cannot be declared using a rest parameter.": {
+        "category": "Error",
+        "code": 1317
+    },
+    "A default export can only be used in an ECMAScript-style module.": {
+        "category": "Error",
+        "code": 1319
+    },
+    "Argument of dynamic import cannot be spread element.": {
+        "category": "Error",
+        "code": 1325
+    },
+    "use strict directive cannot be used with non-simple parameter list.": {
+        "category": "Error",
+        "code": 1347
+    },
+    "Identifier expected. '{0}' is a reserved word that cannot be used here.": {
+        "category": "Error",
+        "code": 1359
+    },
+    "Dynamic imports can only accept a module specifier, optional assertion is not supported yet.": {
+        "category": "Error",
+        "code": 1450
+    },
+    "Duplicate identifier '{0}'.": {
+        "category": "Error",
+        "code": 2300
+    },
+    "Module '{0}' has no exported member '{1}'.": {
+        "category": "Error",
+        "code": 2305
+    },
+    "Module '{0}' has already exported a member named '{1}'.": {
+        "category": "Error",
+        "code": 2308
+    },
+    "An export assignment cannot be used in a module with other exported elements.": {
+        "category": "Error",
+        "code": 2309
+    },
+    "The 'super' can only be referenced in a derived class.": {
+        "category": "Error",
+        "code": 2335
+    },
+    "The 'super' cannot be referenced in constructor arguments.": {
+        "category": "Error",
+        "code": 2336
+    },
+    "Super calls are not permitted outside constructors or in nested functions inside constructors.": {
+        "category": "Error",
+        "code": 2337
+    },
+    "The 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class.": {
+        "category": "Error",
+        "code": 2338
+    },
+    "The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.": {
+        "category": "Error",
+        "code": 2358
+    },
+    "The right-hand side of an 'instanceof' expression must be of type 'any' or of a type assignable to the 'Function' interface type.": {
+        "category": "Error",
+        "code": 2359
+    },
+    "The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.": {
+        "category": "Error",
+        "code": 2360
+    },
+    "The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.": {
+        "category": "Error",
+        "code": 2361
+    },
+    "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.": {
+        "category": "Error",
+        "code": 2362
+    },
+    "The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.": {
+        "category": "Error",
+        "code": 2363
+    },
+    "The left-hand side of an assignment expression must be a variable or a property access.": {
+        "category": "Error",
+        "code": 2364
+    },
+    "Multiple constructor implementations are not allowed.": {
+        "category": "Error",
+        "code": 2392
+    },
+    "Declaration name conflicts with built-in global identifier '{0}'.": {
+        "category": "Error",
+        "code": 2397
+    },
+    "The left-hand side of a 'for...in' statement cannot use a type annotation.": {
+        "category": "Error",
+        "code": 2404
+    },
+    "Import declaration conflicts with local declaration of '{0}'.": {
+        "category": "Error",
+        "code": 2440
+    },
+    "The 'super' cannot be referenced in a computed property name.": {
+        "category": "Error",
+        "code": 2466
+    },
+    "A rest element must be last in a destructuring pattern.": {
+        "category": "Error",
+        "code": 2462
+    },
+    "The 'let' is not allowed to be used as a name in 'let' or 'const' declarations.": {
+        "category": "Error",
+        "code": 2480
+    },
+    "The left-hand side of a 'for...of' statement cannot use a type annotation.": {
+        "category": "Error",
+        "code": 2483
+    },
+    "The left-hand side of a 'for...of' statement must be a variable or a property access.": {
+        "category": "Error",
+        "code": 2487
+    },
+    "The left-hand side of a 'for...in' statement cannot be a destructuring pattern.": {
+        "category": "Error",
+        "code": 2491
+    },
+    "A rest element cannot contain a binding pattern.": {
+        "category": "Error",
+        "code": 2501
+    },
+    "A module cannot have multiple default exports.": {
+        "category": "Error",
+        "code": 2528
+    },
+    "The 'super' can only be referenced in members of derived classes or object literal expressions.": {
+        "category": "Error",
+        "code": 2660
+    },
+    "Cannot export '{0}'. Only local declarations can be exported from a module.": {
+        "category": "Error",
+        "code": 2661
+    },
+    "Left side of comma operator is unused and has no side effects.": {
+        "category": "Error",
+        "code": 2695,
+        "reportsUnnecessary": true
+    },
+    "The target of an object rest assignment must be a variable or a property access.": {
+        "category": "Error",
+        "code": 2701
+    },
+    "The target of an object rest assignment may not be an optional property access.": {
+        "category": "Error",
+        "code": 2778
+    },
+    "The left-hand side of an assignment expression may not be an optional property access.": {
+        "category": "Error",
+        "code": 2779
+    },
+    "The left-hand side of a 'for...of' statement may not be an optional property access.": {
+        "category": "Error",
+        "code": 2781
+    },
+    "'{0}' is not a valid meta-property for keyword '{1}'. Did you mean '{2}'?": {
+        "category": "Error",
+        "code": 17012
+    },
+    "Meta-property '{0}' is only allowed in the body of a function declaration, function expression, or constructor.": {
+        "category": "Error",
+        "code": 17013
+    },
+    "An accessibility modifier cannot be used with a private identifier.": {
+        "category": "Error",
+        "code": 18010
+    },
+    "Private identifiers are not allowed outside class bodies.": {
+        "category": "Error",
+        "code": 18016
+    },
+    "'{0}' modifier cannot be used with a private identifier.": {
+        "category": "Error",
+        "code": 18019
+    },
+    "In strict mode code, functions can only be declared at top level or inside a block.": {
+        "category": "Error",
+        "code": 19000
+    },
+    "Class Declaration can only be declared at top level or inside a block.": {
+        "category": "Error",
+        "code": 19001
+    },
+    "Incorrect regular expression": {
+        "category": "Error",
+        "code": 19002
+    },
+    "Invalid regular expression: '{0}': Invalid escape": {
+        "category": "Error",
+        "code": 19003
+    },
+    "\\8 and \\9 are not allowed in strict mode": {
+        "category": "Error",
+        "code": 19004
+    },
+    "const and let declarations not allowed in statement positions": {
+        "category": "Error",
+        "code": 19005
+    },
+    "Getter must not have any formal parameters": {
+        "category": "Error",
+        "code": 19006
+    },
+    "Class declaration not allowed in statement position": {
+        "category": "Error",
+        "code": 19007
+    },
+    "Lexical declaration 'let' not allowed in statement position": {
+        "category": "Error",
+        "code": 19008
+    },
+    "Lexical declaration 'const' not allowed in statement position": {
+        "category": "Error",
+        "code": 19009
+    },
+    "Invalid regular expression flag '{0}'": {
+        "category": "Error",
+        "code": 19010
+    },
+    "Unexpected eval or arguments in strict mode": {
+        "category": "Error",
+        "code": 20000
+    }
+}

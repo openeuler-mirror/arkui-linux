@@ -1,0 +1,4 @@
+test-ts-namespace-11 flag2
+test-ts-namespace-11 flag1
+test-ts-namespace-11 flag1
+test-ts-namespace-11 flag1

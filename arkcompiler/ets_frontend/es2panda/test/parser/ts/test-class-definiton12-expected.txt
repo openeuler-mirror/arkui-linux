@@ -1,0 +1,1 @@
+SyntaxError: ';' expected. [test-class-definiton12.ts:18:9]

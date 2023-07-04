@@ -1,0 +1,1 @@
+SyntaxError: A decorator can only decorate a method implementation, not an overload. [test_decorator4.ts:18:5]

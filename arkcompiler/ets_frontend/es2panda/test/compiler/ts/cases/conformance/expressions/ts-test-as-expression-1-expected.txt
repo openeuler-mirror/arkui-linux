@@ -1,0 +1,2 @@
+1
+ts-test-as-expression-1
