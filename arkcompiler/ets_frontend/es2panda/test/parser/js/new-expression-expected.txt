@@ -1,0 +1,1 @@
+SyntaxError: Unexpected token [new-expression.js:17:8]

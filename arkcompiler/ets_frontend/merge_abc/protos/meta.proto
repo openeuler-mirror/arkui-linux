@@ -1,0 +1,57 @@
+/**
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+syntax = "proto3";
+package protoPanda;
+
+import "annotation.proto";
+import "assemblyType.proto";
+
+message Metadata {
+    repeated bytes set_attributes = 1;
+    message Attributes {
+        bytes key = 1;
+        repeated bytes value = 2;
+    }
+    repeated Attributes attributes = 2;
+}
+
+message AnnotationMetadata {
+    Metadata father = 1;
+    repeated AnnotationData annotations = 2;
+}
+
+message ItemMetadata {
+    AnnotationMetadata father = 1;
+    uint32 accessFlags = 2;
+}
+
+message RecordMetadata {
+    ItemMetadata father = 1;
+}
+
+message FieldMetadata {
+    ItemMetadata father = 1;
+    Type fieldType = 2;
+    optional ScalarValue value = 3;
+}
+
+message FunctionMetadata {
+    ItemMetadata father = 1;
+}
+
+message ParamMetadata {
+    AnnotationMetadata father = 1;
+}

@@ -1,0 +1,1 @@
+SyntaxError: Escape sequences are not allowed in keywords [test-escaped-keyword.js:16:616]

@@ -1,0 +1,242 @@
+diff --git a/bin/run.js b/bin/run.js
+index 650f19a..b2a554b 100755
+--- a/bin/run.js
++++ b/bin/run.js
+@@ -76,6 +76,7 @@ if (argv.prelude) {
+ let hostType;
+ let hostPath;
+ let features;
++let mode;
+ 
+ if (argv.hostType) {
+   hostType = argv.hostType;
+@@ -123,6 +124,12 @@ if (argv.features) {
+   features = argv.features.split(',').map(feature => feature.trim());
+ }
+ 
++mode = "only strict mode"
++
++if (argv.mode) {
++  mode = argv.mode
++}
++
+ // Show help if no arguments provided
+ if (!argv._.length) {
+   cli.showHelp();
+@@ -130,15 +137,18 @@ if (!argv._.length) {
+   return;
+ }
+ 
+-// Test Pipeline
+-const pool = new AgentPool(
+-  Number(argv.threads), hostType, argv.hostArgs, hostPath, { tempDir, timeout, transform }
+-);
+ 
+ if (!test262Dir) {
+   test262Dir = test262Finder(argv._[0]);
+ }
++
+ reporterOpts.test262Dir = test262Dir;
++reporterOpts.tempDir = tempDir
++
++// Test Pipeline
++const pool = new AgentPool(
++  Number(argv.threads), hostType, argv.hostArgs, hostPath, { tempDir, timeout, transform, test262Dir }
++);
+ 
+ const remove = path.relative(process.cwd(), test262Dir);
+ argv._ = argv._.map(p => path.relative(remove, p));
+@@ -166,6 +176,7 @@ if (preprocessor) {
+   tests = tests.pipe(filter(preprocessor));
+ }
+ 
++tests = tests.pipe(filter(operMode));
+ const results = zip(pool, tests).pipe(
+   flatMap(pair => {
+     return pool.runTest(pair);
+@@ -209,3 +220,11 @@ function hasFeatures(test) {
+   }
+   return features.filter(feature => (test.attrs.features || []).includes(feature)).length > 0;
+ }
++
++function operMode(test) {
++  test_scenario = test.scenario
++  if (mode.indexOf(test_scenario) != -1) {
++    return true;
++  }
++  return false;
++}
+diff --git a/lib/agent-pool.js b/lib/agent-pool.js
+index ad14b84..1b8a184 100644
+--- a/lib/agent-pool.js
++++ b/lib/agent-pool.js
+@@ -1,6 +1,6 @@
+ 'use strict';
+ const {Subject} = require('rxjs');
+-const eshost = require('eshost');
++const eshost = require('../../eshost/lib/eshost');
+ 
+ const internal = new WeakMap();
+ 
+@@ -18,6 +18,7 @@ class AgentPool extends Subject {
+         shortName: '$262',
+         transform: options.transform,
+         out: options.tempDir,
++        test262Dir: options.test262Dir,
+       })
+       .then(agent => {
+         this.agents.push(agent);
+diff --git a/lib/cli.js b/lib/cli.js
+index 4a74309..91d1735 100644
+--- a/lib/cli.js
++++ b/lib/cli.js
+@@ -1,4 +1,4 @@
+-const { supportedHosts } = require("eshost");
++const { supportedHosts } = require("./../../eshost/lib/eshost");
+ const yargs = require('yargs');
+ const yargv = yargs
+   .strict()
+@@ -22,6 +22,9 @@ const yargv = yargs
+   .nargs('threads', 1)
+   .default('threads', 1)
+   .alias('threads', 't')
++  .nargs('mode', 1)
++  .default('mode', 1)
++  .alias('mode', 'm')
+   .describe('reporter', 'format of data written to standard output')
+   .choices('reporter', ['simple', 'json'])
+   .nargs('reporter', 1)
+diff --git a/lib/reporters/simple.js b/lib/reporters/simple.js
+index 08f9a55..a386924 100644
+--- a/lib/reporters/simple.js
++++ b/lib/reporters/simple.js
+@@ -1,5 +1,6 @@
+ 'use strict';
+ const path = require('path');
++const fs = require('fs');
+ const saveCompiledTest = require('../saveCompiledTest');
+ 
+ function simpleReporter(results, opts) {
+@@ -12,11 +13,13 @@ function simpleReporter(results, opts) {
+ 
+     clearPassed();
+     lastPassed = true;
+-    process.stdout.write(`PASS ${test.file}`);
++    let mess = `PASS ${test.file} (${test.scenario})\n`
++    console.log(mess);
++    writeStatistics(mess,opts);
+ 
+     if (opts.saveCompiledTests && !opts.saveOnlyFailed) {
+       test.savedTestPath = saveCompiledTest(test, opts);
+-      process.stdout.write(`\nSaved compiled passed test as ${test.savedTestPath}\n`);
++      // process.stdout.write(`\nSaved compiled passed test as ${test.savedTestPath}\n`);
+     }
+   });
+ 
+@@ -24,14 +27,21 @@ function simpleReporter(results, opts) {
+     failed++;
+     clearPassed();
+     lastPassed = false;
+-    console.log(`FAIL ${test.file} (${test.scenario})`);
+-    console.log(`  ${test.result.message}`);
++
++    let mess = `FAIL ${test.file} (${test.scenario})\n`
++    saveInfoToFile(test,opts);
++
++    console.log(mess);
++    console.log(`${test.result.message}`);
+     console.log('');
+ 
++    writeStatistics(mess,opts);
++
+     if (opts.saveCompiledTests) {
+       test.savedTestPath = saveCompiledTest(test, opts);
+-      process.stdout.write(`Saved compiled failed test as ${test.savedTestPath}\n`);
++      // process.stdout.write(`Saved compiled failed test as ${test.savedTestPath}\n`);
+     }
++
+   });
+ 
+   results.on('end', function () {
+@@ -52,6 +62,29 @@ function simpleReporter(results, opts) {
+       }
+     }
+   }
++
++  function saveInfoToFile(test,opts){
++    let filePath = test.file;
++    let tmps = filePath.split(opts.test262Dir);
++    let outFile = path.join(opts.tempDir,tmps[1]);
++    let scenario = test.scenario === 'strict mode' ? 'strict' : test.scenario;
++    let outcome = 'err';
++    let savedTestPath = path.normalize(
++      `${outFile}.${opts.hostType}.${scenario}.${outcome}`
++    );
++    fs.writeFileSync(savedTestPath, `  ${test.result.message}`);
++  }
++
++  function writeStatistics(data,opts) {
++    let save_file = path.join(opts.tempDir,"result.txt");
++    fs.appendFile(save_file,data,'utf8',function(err){
++      if(err)
++      {
++          console.error(err);
++      }
++    });
++  }
++
+ }
+ 
+ module.exports = simpleReporter;
+diff --git a/lib/saveCompiledTest.js b/lib/saveCompiledTest.js
+index c233adb..7739946 100644
+--- a/lib/saveCompiledTest.js
++++ b/lib/saveCompiledTest.js
+@@ -6,8 +6,11 @@ const path = require('path');
+ module.exports = function saveCompiledTest(test, options) {
+   let outcome = test.result.pass ? 'pass' : 'fail';
+   let scenario = test.scenario === 'strict mode' ? 'strict' : test.scenario;
++  let filePath = test.file;
++  let tmps = filePath.split(options.test262Dir);
++  let outFile = path.join(options.tempDir,tmps[1]);
+   let savedTestPath = path.normalize(
+-    `${test.file}.${options.hostType}.${scenario}.${outcome}`
++    `${outFile}.${options.hostType}.${scenario}.${outcome}`
+   );
+   fs.writeFileSync(savedTestPath, test.compiled);
+   return savedTestPath;
+diff --git a/lib/validator.js b/lib/validator.js
+index e7cb695..38a113c 100644
+--- a/lib/validator.js
++++ b/lib/validator.js
+@@ -35,7 +35,7 @@ module.exports = function validate(test) {
+       } else {
+         return {
+           pass: false,
+-          message: `Expected no error, got ${result.error.name}: ${result.error.message}`,
++          message: `Expected no error, but got ${result.error.name}: \n ${result.stderr}`,
+         };
+       }
+     } else if (!ranToFinish && !test.attrs.flags.raw) {
+@@ -46,7 +46,7 @@ module.exports = function validate(test) {
+       }
+       return {
+         pass: false,
+-        message,
++        message: `Expected no error, but got : \n ${result.stderr}`,
+       };
+     } else {
+       return {
+@@ -78,9 +78,9 @@ module.exports = function validate(test) {
+       } else {
+         return {
+           pass: false,
+-          message: `Expected test to throw error of type ${test.attrs.negative.type}, got ${result.error.name}: ${result.error.message}`,
++          message: `Expected test to throw error of type ${test.attrs.negative.type}, but got ${result.error.name}: \n ${result.stderr}`,
+         };
+       }
+     }
+   }
+-};
++};
+\ No newline at end of file

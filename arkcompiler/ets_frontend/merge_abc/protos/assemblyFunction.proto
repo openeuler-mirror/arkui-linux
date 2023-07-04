@@ -1,0 +1,80 @@
+/**
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+syntax = "proto3";
+package protoPanda;
+
+import "assemblyIns.proto";
+import "assemblyLabel.proto";
+import "assemblyType.proto";
+import "assemblyDebug.proto";
+import "assemblyFileLocation.proto";
+import "ideHelpers.proto";
+import "meta.proto";
+
+message CatchBlock {
+    bytes wholeLine = 1;
+    bytes exceptionRecord = 2;
+    bytes tryBeginLabel = 3;
+    bytes tryEndLabel = 4;
+    bytes catchBeginLabel = 5;
+    bytes catchEndLabel = 6;
+}
+
+message TryCatchInfo {
+    message TryCatchLabel {
+        bytes key = 1;
+        uint64 value = 2;
+    }
+    message TryCatchMap {
+        bytes key = 1;
+        repeated CatchBlock catchBlocks = 2;
+    }
+    repeated TryCatchLabel tryCatchLabels = 1;
+    repeated TryCatchMap tryCatchMap = 2;
+    repeated bytes tryCatchOrder = 3;
+}
+
+message Parameter {
+    Type type = 1;
+    ParamMetadata metadata = 2;
+}
+
+message Function {
+    message LabelTable {
+        bytes key = 1;
+        Label value = 2;
+    }
+
+    bytes name = 1;
+    uint32 language = 2;
+    FunctionMetadata metadata = 3;
+    repeated LabelTable labelTable = 4;
+    repeated Ins ins = 5;
+    repeated LocalVariable localVariableDebug = 6;
+    bytes sourceFile = 7;
+    bytes sourceCode = 8;
+    repeated CatchBlock catchBlocks = 9;
+    int64 valueOfFirstParam = 10;
+    uint64 regsNum = 11;
+    repeated Parameter params = 12;
+    bool bodyPresence = 13;
+    Type returnType = 14;
+    SourceLocation bodyLocation = 15;
+    optional FileLocation fileLocation = 16;
+    uint32 function_kind = 17;
+    uint64 slotsNum = 18;
+}
+

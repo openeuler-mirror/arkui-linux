@@ -1,0 +1,1 @@
+SyntaxError: A parameter property is only allowed in a constructor implementation. [test-ts-parameter-property2.ts:19:7]

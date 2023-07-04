@@ -1,0 +1,1 @@
+SyntaxError: Unexpected token, expected ';' in 'ForStatement'. [test-for-4.js:17:17]

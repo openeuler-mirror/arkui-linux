@@ -1,0 +1,2 @@
+1
+ts-test-type-assertions-1

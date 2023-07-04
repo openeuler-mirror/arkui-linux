@@ -1,0 +1,25 @@
+{
+  "type": "Program",
+  "statements": [],
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 1
+    },
+    "end": {
+      "line": 1,
+      "column": 1
+    }
+  }
+}
+.language ECMAScript
+
+.function any .func_main_0(any a0, any a1, any a2) {
+label_1: 
+label_0: 
+	ldundefined
+	returnundefined
+label_2: 
+}
+
+

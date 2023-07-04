@@ -1,0 +1,12 @@
+{'literalBuffer': [{'tag': 2, 'value': 4}, {'tag': 2, 'value': 2}, {'tag': 2, 'value': 4}, {'tag': 2, 'value': 1}]}
+{'literalBuffer': [{'tag': 2, 'value': 3}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}, {'tag': 5, 'value': 'isC1'}, {'tag': 2, 'value': 1}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}]}
+{'literalBuffer': [{'tag': 2, 'value': 3}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}, {'tag': 5, 'value': 'isC2'}, {'tag': 2, 'value': 1}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}]}
+{'literalBuffer': [{'tag': 2, 'value': 3}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}, {'tag': 5, 'value': 'isD1'}, {'tag': 2, 'value': 1}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}]}
+{'literalBuffer': [{'tag': 2, 'value': 4}, {'tag': 2, 'value': 2}, {'tag': 2, 'value': 57}, {'tag': 2, 'value': 59}]}
+{'literalBuffer': [{'tag': 2, 'value': 1}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 1}, {'tag': 5, 'value': 'p1'}, {'tag': 2, 'value': 4}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}]}
+{'literalBuffer': [{'tag': 2, 'value': 2}, {'tag': 2, 'value': 56}]}
+{'literalBuffer': [{'tag': 2, 'value': 1}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 1}, {'tag': 5, 'value': 'p2'}, {'tag': 2, 'value': 1}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}]}
+{'literalBuffer': [{'tag': 2, 'value': 2}, {'tag': 2, 'value': 58}]}
+{'literalBuffer': [{'tag': 2, 'value': 4}, {'tag': 2, 'value': 2}, {'tag': 2, 'value': 59}, {'tag': 2, 'value': 62}]}
+{'literalBuffer': [{'tag': 2, 'value': 1}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 56}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 1}, {'tag': 5, 'value': 'p3'}, {'tag': 2, 'value': 1}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}, {'tag': 2, 'value': 0}]}
+{'literalBuffer': [{'tag': 2, 'value': 2}, {'tag': 2, 'value': 61}]}

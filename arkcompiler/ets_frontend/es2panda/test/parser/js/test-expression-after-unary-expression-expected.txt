@@ -1,0 +1,1 @@
+SyntaxError: Unexpected token [test-expression-after-unary-expression.js:17:4]

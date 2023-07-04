@@ -1,0 +1,1 @@
+SyntaxError: Unexpected token [test-switch-6.js:18:36]

@@ -1,0 +1,98 @@
+# Copyright (c) 2022 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+if (!defined(ark_standalone_build)) {
+  ark_standalone_build = false
+}
+
+if (!ark_standalone_build) {
+  build_root = "//build"
+  ark_third_party_root = "//third_party"
+  import("$build_root/ohos.gni")
+} else {
+  ark_third_party_root = "//arkcompiler/toolchain/build/third_party_gn"
+  import("$build_root/ark.gni")
+}
+ark_root = "//arkcompiler/runtime_core"
+js_root = "//arkcompiler/ets_runtime"
+compile_llvm_online = false
+run_with_asan = false
+enable_leak_check = false
+enable_bytrace = true
+enable_hitrace = true
+enable_hilog = true
+enable_dump_in_faultlog = true
+enable_cow_array = true
+enable_coverage = false
+enable_asm_assert = false
+asan_lib_path = "/usr/lib/llvm-10/lib/clang/10.0.0/lib/linux"
+if (is_standard_system) {
+  icu_part_name = "icu"
+  icu_subsystem_name = "thirdparty"
+} else {
+  icu_part_name = "i18n"
+  icu_subsystem_name = "global"
+}
+
+# For OpenHarmony build, always link with the static lib:
+sdk_libc_secshared_dep =
+    "$ark_third_party_root/bounds_checking_function:libsec_static"
+sdk_libc_secshared_config =
+    "$ark_third_party_root/bounds_checking_function:libsec_public_config"
+
+# Generate file for a template and YAML data provided.
+#
+# Mandatory arguments:
+# data_file -- YAML data full name
+# template_file -- template full name
+# output_file -- output file full name
+# requires -- a list of scripts that provide data-querying API for templates
+# extra_dependencies -- a list of files that should be considered as dependencies, must be lable
+template("ark_gen_file") {
+  assert(defined(invoker.data_file), "data_file is required!")
+  assert(defined(invoker.template_file), "template_file is required!")
+  assert(defined(invoker.output_file), "output_file is required!")
+
+  requires = ""
+  if (defined(invoker.requires)) {
+    requires = string_join(",", rebase_path(invoker.requires, root_build_dir))
+  }
+
+  extra_dependencies = []
+  if (defined(invoker.extra_dependencies)) {
+    extra_dependencies += invoker.extra_dependencies
+  }
+
+  action("$target_name") {
+    script = "$ark_root/isa/gen.rb"
+
+    # rerun action when data file or template file update
+    inputs = [
+      invoker.template_file,
+      invoker.data_file,
+    ]
+    outputs = [ invoker.output_file ]
+    args = [
+      "--template",
+      rebase_path(invoker.template_file, root_build_dir),
+      "--data",
+      rebase_path(invoker.data_file, root_build_dir),
+      "--require",
+      requires,
+      "--output",
+      rebase_path(outputs[0]),
+    ]
+
+    deps = extra_dependencies
+  }
+}

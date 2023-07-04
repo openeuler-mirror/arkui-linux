@@ -1,0 +1,1 @@
+SyntaxError: Numeric separators are not allowed at the end of numeric literals [test-numeric-separator2.js:16:611]

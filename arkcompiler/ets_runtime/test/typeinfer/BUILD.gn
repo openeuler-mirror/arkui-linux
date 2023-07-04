@@ -1,0 +1,78 @@
+# Copyright (c) 2022 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+group("ark_typeinfer_test") {
+  testonly = true
+  deps = [
+    "add2dyn:add2dynAotTypeInferAction",
+    "assertTypeRules:assertTypeRulesAotTypeInferAction",
+    "binarysearch:binarysearchAotTypeInferAction",
+    "bitwise_op:bitwise_opAotTypeInferAction",
+    "builtins:builtinsAotTypeInferAction",
+    "callarg0dyn:callarg0dynAotTypeInferAction",
+    "callarg1dyn:callarg1dynAotTypeInferAction",
+    "callargs2dyn:callargs2dynAotTypeInferAction",
+    "callargs3dyn:callargs3dynAotTypeInferAction",
+    "callirangedyn:callirangedynAotTypeInferAction",
+    "callithisrange:callithisrangeAotTypeInferAction",
+    "callprimitivebuiltin:callprimitivebuiltinAotTypeInferAction",
+    "class:classAotTypeInferAction",
+    "createemptyarray:createemptyarrayAotTypeInferAction",
+    "createemptyobject:createemptyobjectAotTypeInferAction",
+    "createobjecthavingmethod:createobjecthavingmethodAotTypeInferAction",
+    "defineasyncfunc:defineasyncfuncAotTypeInferAction",
+    "defineclasswithbuffer:defineclasswithbufferAotTypeInferAction",
+    "definefunctiondyn:definefunctiondynAotTypeInferAction",
+    "definegeneratorfunc:definegeneratorfuncAotTypeInferAction",
+    "div2dyn:div2dynAotTypeInferAction",
+    "getiterator:getiteratorAotTypeInferAction",
+    "infergetterfunc:infergetterfuncAotTypeInferAction",
+    "interface:interfaceAotTypeInferAction",
+    "ldboolean:ldbooleanAotTypeInferAction",
+    "ldglobalvar:ldglobalvarAotTypeInferAction",
+    "ldinfinity:ldinfinityAotTypeInferAction",
+    "ldnan:ldnanAotTypeInferAction",
+    "ldnull:ldnullAotTypeInferAction",
+    "ldobjbyindex:ldobjbyindexAotTypeInferAction",
+    "ldobjbyname:ldobjbynameAotTypeInferAction",
+    "ldobjbyvalue:ldobjbyvalueAotTypeInferAction",
+    "ldsuperproperty:ldsuperpropertyAotTypeInferAction",
+    "ldundefined:ldundefinedAotTypeInferAction",
+    "lex_env_var:lex_env_varAotTypeInferAction",
+    "lex_env_var_class:lex_env_var_classAotTypeInferAction",
+    "lex_env_var_duplication:lex_env_var_duplicationAotTypeInferAction",
+    "lex_env_var_multiple:lex_env_var_multipleAotTypeInferAction",
+    "logic_op:logic_opAotTypeInferAction",
+    "loopbeginphi:loopbeginphiAotTypeInferAction",
+    "mod2dyn:mod2dynAotTypeInferAction",
+    "mul2dyn:mul2dynAotTypeInferAction",
+    "newobjdynrange:newobjdynrangeAotTypeInferAction",
+    "parainfer:parainferAotTypeInferAction",
+    "parainfer_class:parainfer_classAotTypeInferAction",
+    "phiwithloop:phiwithloopAotTypeInferAction",
+    "phiwithnumber:phiwithnumberAotTypeInferAction",
+    "stconsttoglobalrecord:stconsttoglobalrecordAotTypeInferAction",
+    "stglobalvar:stglobalvarAotTypeInferAction",
+    "stlettoglobalrecord:stlettoglobalrecordAotTypeInferAction",
+    "sub2dyn:sub2dynAotTypeInferAction",
+    "supercall:supercallAotTypeInferAction",
+    "superclass:superclassAotTypeInferAction",
+    "throwdyn_1:throwdyn_1AotTypeInferAction",
+    "throwdyn_2:throwdyn_2AotTypeInferAction",
+    "tryldglobalbyname:tryldglobalbynameAotTypeInferAction",
+    "trystglobalbyname:trystglobalbynameAotTypeInferAction",
+    "tsarraytobuiltin:tsarraytobuiltinAotTypeInferAction",
+    "typeof:typeofAotTypeInferAction",
+    "variable_after_loops:variable_after_loopsAotTypeInferAction",
+  ]
+}

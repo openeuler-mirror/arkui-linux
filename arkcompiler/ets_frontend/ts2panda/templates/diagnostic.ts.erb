@@ -1,0 +1,187 @@
+// Copyright (c) 2021-2022 Huawei Device Co., Ltd.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+import * as ts from "typescript";
+import * as jshelpers from "./jshelpers"
+import { LOGE } from "./log"
+export class DiagnosticError {
+  irnode:ts.Node | undefined;
+  code:number;
+  file: ts.SourceFile | undefined;
+  args: (string | number | undefined)[];
+
+  constructor(irnode:ts.Node | undefined, code:number, file?:ts.SourceFile | undefined, args?:(string | number | undefined)[]) {
+    this.code = code
+    this.irnode = irnode
+    this.file = file ? file : undefined
+    this.args = args ? args : []
+  }
+}
+
+export function printDiagnostic(diagnostic: ts.Diagnostic) {
+
+  let message = ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n");
+  if (diagnostic.file && diagnostic.start!= undefined) {
+    let { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
+    LOGE(`${diagnostic.file.fileName} (${line + 1},${character + 1})`, `${message}`);
+  } else {
+    LOGE("Error",message);
+  }
+
+}
+
+export function createDiagnosticOnFirstToken(file:ts.SourceFile, node: ts.Node ,message: ts.DiagnosticMessage,...args:(string | number | undefined)[]) {
+   let span = jshelpers.getSpanOfTokenAtPosition(file, node.pos);
+   let diagnostic = jshelpers.createFileDiagnostic(file,span.start,span.length,message,...args);
+   return diagnostic;
+}
+
+export function createFileDiagnostic(node: ts.Node, message: ts.DiagnosticMessage, ...args: (string | number | undefined)[]) {
+    let diagnostic;
+    let soureceFile: ts.SourceFile = jshelpers.getSourceFileOfNode(node);
+    let span = jshelpers.getErrorSpanForNode(soureceFile, node);
+    switch (node.kind) {
+        case ts.SyntaxKind.Identifier:
+            diagnostic = jshelpers.createFileDiagnostic(soureceFile, span.start, span.length, message, ts.idText(<ts.Identifier>node));
+            break;
+        case ts.SyntaxKind.PrivateIdentifier:
+            diagnostic = jshelpers.createFileDiagnostic(soureceFile, span.start, span.length, message, ts.idText(<ts.PrivateIdentifier>node));
+            break;
+        case ts.SyntaxKind.ReturnStatement:
+            diagnostic = createDiagnosticOnFirstToken(soureceFile, node, message, ...args);
+            break;
+        default:
+            diagnostic = jshelpers.createDiagnosticForNode(node, message, ...args);
+            break;
+    }
+
+    return diagnostic;
+}
+
+export function createDiagnostic(file:ts.SourceFile | undefined, location: ts.Node | undefined, message: ts.DiagnosticMessage,...args:(string | number | undefined)[]) {
+  var diagnostic;
+
+  if (!location) {
+    return jshelpers.createCompilerDiagnostic(message, ...args);
+   }
+
+  if (file) {
+    diagnostic = createFileDiagnostic(location, message, ...args);
+  } else {
+    diagnostic = jshelpers.createDiagnosticForNode(location, message, ...args)
+  }
+
+  return diagnostic
+}
+
+// @ts-ignore
+function diag(code:number, category:ts.DiagnosticCategory, key:string, message:string, reportsUnnecessary?:{},elidedInCompatabilityPyramid?:{}):ts.DiagnosticMessage {
+   return { code: code, category: category, key: key, message: message, reportsUnnecessary: reportsUnnecessary };
+}
+
+% def convertPropertyName(origName)
+%   result = ""
+%   origName.each_char{|char|
+%   if char == "*"
+%      result += "_Asterisk"
+%   elsif char == "/"
+%      result +=  "_Slash"
+%   elsif char == ":"
+%      result += "_Colon"
+%   elsif /\w/.match(char)
+%      result += char
+%   else
+%      result += "_"
+%   end
+%   }
+%   #get rid of all multi-underscores
+%   result = result.gsub(/_+/, "_");
+%
+%   #remove any leading underscore, unless it is followed by a number.
+%   result = result.gsub(/^_([^\d])/, "$1");
+%
+%   #get rid of all trailing underscores.
+%   result = result.gsub(/_$/, "");
+%   return result
+% end
+
+export enum DiagnosticCode {
+% Diagnostic::datas.each do |data|
+% name = data[0]
+% propName = convertPropertyName(name)
+% code = data[1]["code"]
+   <%= propName %> = <%= code %>,
+%end
+};
+
+export function getDiagnostic(code:DiagnosticCode): ts.DiagnosticMessage|undefined {
+   switch (code) {
+%
+% def createKey(name,code)
+%   key = ""
+%   name = name.slice(0,100)
+%   key = name + "_" + code.to_s
+%   return key
+% end
+%
+% def genReportsUnnecessary(reportsUnnecessary)
+%   if reportsUnnecessary.nil?
+%      return ""
+%   end
+%   return ", /*reportsUnnecessary*/ " + reportsUnnecessary.to_s
+% end
+%
+% def genElidedInCompatabilityPyramid(elidedInCompatabilityPyramid,reportsUnnecessary)
+%   reportsUnnecessaryVal = ""
+%   if reportsUnnecessary.nil? || !reportsUnnecessary
+%      reportsUnnecessaryVal = ", /*reportsUnnecessary*/ undefined"
+%   end
+%   if elidedInCompatabilityPyramid.nil? || !elidedInCompatabilityPyramid
+%      return ""
+%   end
+%   return reportsUnnecessaryVal + ", /*elidedInCompatabilityPyramid*/ " + elidedInCompatabilityPyramid.to_s
+% end
+%
+% def genReportsDeprecated(reportsDeprecated,argElidedInCompatabilityPyramid)
+%   argElidedInCompatabilityPyramidVal = ""
+%   if argElidedInCompatabilityPyramid.nil?
+%      argElidedInCompatabilityPyramidVal = ", /*reportsUnnecessary*/ undefined, /*elidedInCompatabilityPyramid*/ undefined"
+%   end
+%   if reportsDeprecated.nil? || !reportsDeprecated
+%      return ""
+%   end
+%   return argElidedInCompatabilityPyramidVal + "/*reportsDeprecated*/ " + reportsDeprecated.to_s
+% end
+%
+% Diagnostic::datas.each do |data|
+% name = data[0]
+% propName = convertPropertyName(name)
+% diagnosticDetials = data[1]
+% code = diagnosticDetials["code"]
+% category = diagnosticDetials["category"]
+% reportsUnnecessary = diagnosticDetials["reportsUnnecessary"]
+% elidedInCompatabilityPyramid = diagnosticDetials["elidedInCompatabilityPyramid"]
+% reportsDeprecated = diagnosticDetials["reportsDeprecated"]
+% key = createKey(propName,code)
+% argReportsUnnecessary = genReportsUnnecessary(reportsUnnecessary)
+% argElidedInCompatabilityPyramid = genElidedInCompatabilityPyramid(elidedInCompatabilityPyramid,reportsUnnecessary)
+% argReportsDeprecated = genReportsDeprecated(reportsDeprecated,argElidedInCompatabilityPyramid)
+% message = name.to_json + argReportsUnnecessary + argElidedInCompatabilityPyramid + argReportsDeprecated
+   case <%= code %> :
+      return diag(<%= code %>, ts.DiagnosticCategory.<%= category %>, "<%= key %>", <%= message %>);
+% end
+   default :
+      console.log('The syntax error code is not supported.');
+      return undefined;
+    }
+};

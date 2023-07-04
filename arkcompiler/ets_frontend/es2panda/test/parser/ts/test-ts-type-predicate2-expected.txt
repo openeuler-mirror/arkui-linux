@@ -1,0 +1,1 @@
+SyntaxError: Type expected [test-ts-type-predicate2.ts:17:46]
