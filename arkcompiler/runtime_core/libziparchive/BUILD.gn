@@ -1,0 +1,91 @@
+# Copyright (c) 2021-2022 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//arkcompiler/runtime_core/ark_config.gni")
+
+config("arkziparchive_config") {
+  include_dirs = [
+    "$ark_root/libziparchive",
+    "$ark_root/libpandabase",
+  ]
+
+  include_dirs += [
+    "//third_party/zlib",
+    "//third_party/zlib/contrib/minizip",
+  ]
+}
+
+source_set("libarkziparchive_static") {
+  sources = [ "zip_archive.cpp" ]
+
+  public_configs = [
+    ":arkziparchive_config",
+    "$ark_root:ark_config",
+    "$ark_root/libpandabase:arkbase_public_config",
+    sdk_libc_secshared_config,
+  ]
+
+  deps = [
+    "$ark_root/libpandabase:libarkbase_static",
+    sdk_libc_secshared_dep,
+  ]
+
+  if (ark_standalone_build) {
+    deps += [ "$ark_third_party_root/zlib:libz" ]
+  } else {
+    deps += [ "$ark_third_party_root/zlib:shared_libz" ]
+  }
+}
+
+ohos_shared_library("libarkziparchive") {
+  deps = [ ":libarkziparchive_static" ]
+
+  if (!is_standard_system) {
+    relative_install_dir = "ark"
+  }
+  if (!is_mingw && !is_mac) {
+    output_extension = "so"
+  }
+
+  part_name = "runtime_core"
+  subsystem_name = "arkcompiler"
+}
+
+source_set("libarkziparchive_frontend_set_static") {
+  sources = [ "zip_archive.cpp" ]
+
+  public_configs = [
+    ":arkziparchive_config",
+    "$ark_root:ark_config",
+    "$ark_root/libpandabase:arkbase_public_config",
+    sdk_libc_secshared_config,
+  ]
+
+  deps = [
+    "$ark_root/libpandabase:libarkbase_frontend_static",
+    sdk_libc_secshared_dep,
+  ]
+
+  if (!ark_standalone_build) {
+    deps += [ "$ark_third_party_root/zlib:libz" ]
+  } else {
+    deps += [ "$ark_third_party_root/zlib:libz" ]
+  }
+}
+
+ohos_static_library("libarkziparchive_frontend_static") {
+  deps = [ ":libarkziparchive_frontend_set_static" ]
+
+  part_name = "runtime_core"
+  subsystem_name = "arkcompiler"
+}

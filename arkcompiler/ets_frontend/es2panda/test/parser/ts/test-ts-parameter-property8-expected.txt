@@ -1,0 +1,1 @@
+SyntaxError: A parameter property cannot be declared using a rest parameter. [test-ts-parameter-property8.ts:18:17]

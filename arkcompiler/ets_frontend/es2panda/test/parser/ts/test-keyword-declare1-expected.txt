@@ -1,0 +1,1 @@
+SyntaxError: Initializers are not allowed in ambient contexts. [test-keyword-declare1.ts:17:17]

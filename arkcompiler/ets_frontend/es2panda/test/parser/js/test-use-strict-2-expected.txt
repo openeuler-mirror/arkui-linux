@@ -1,0 +1,1 @@
+SyntaxError: Primary expression expected [test-use-strict-2.js:19:1]
