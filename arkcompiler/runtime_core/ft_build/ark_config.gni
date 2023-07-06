@@ -41,13 +41,13 @@ enable_bytecode_optimizer = true
 enable_relayout_profile = false
 
 sdk_libc_secshared_dep =
-    "$ark_third_party_root/bounds_checking_function:libsec_shared"
+    "//build/gn/configs/system_libs:c_utils"
 sdk_libc_secshared_config =
     "$ark_third_party_root/bounds_checking_function:libsec_public_config"
 
 if (is_mingw || is_mac || is_linux || target_os == "ios") {
   sdk_libc_secshared_dep =
-      "$ark_third_party_root/bounds_checking_function:libsec_static"
+      "//build/gn/configs/system_libs:c_utils"
 }
 
 is_mob = !is_standard_system && (current_cpu != "arm" || is_wearable_product)

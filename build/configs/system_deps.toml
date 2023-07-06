@@ -30,4 +30,5 @@ package_deps = [
     "libcurl-devel",
     "harfbuzz-devel",
     "cjson-devel",
+    "ruby",
 ]

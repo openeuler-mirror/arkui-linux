@@ -47,7 +47,7 @@ if (is_standard_system) {
 
 # For OpenHarmony build, always link with the static lib:
 sdk_libc_secshared_dep =
-    "$ark_third_party_root/bounds_checking_function:libsec_static"
+    "//build/gn/configs/system_libs:c_utils"
 sdk_libc_secshared_config =
     "$ark_third_party_root/bounds_checking_function:libsec_public_config"
 
