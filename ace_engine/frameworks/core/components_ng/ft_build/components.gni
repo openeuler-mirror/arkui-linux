@@ -14,6 +14,8 @@
 import("//build/gn/fangtian.gni")
 import("//ace_engine/ft_build/ace_config.gni")
 
+render_server_dir = "//third_party/ft_engine/display_server"
+
 template("build_component_ng") {
   forward_variables_from(invoker, "*")
 
@@ -112,31 +114,25 @@ template("build_component_ng") {
       include_dirs = [
         # Fangtian TODO
         # "//base/hiviewdfx/hilog/interfaces/native/innerkits/include",
-        # "//foundation/graphic/graphic_2d/rosen/modules/2d_engine",
-        # "//foundation/graphic/graphic_2d/rosen/modules/2d_engine/rosen_text",
-        # "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics/include",
-        # "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics/src",
-        # "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics/src/drawing/engine_adapter",
+        "$render_server_dir/rosen/modules/2d_engine",
+        "$render_server_dir/rosen/modules/2d_engine/rosen_text",
+        "$render_server_dir/rosen/modules/2d_graphics/include",
+        "$render_server_dir/rosen/modules/2d_graphics/src",
+        "$render_server_dir/rosen/modules/2d_graphics/src/drawing/engine_adapter",
         # "//third_party/bounds_checking_function/include",
       ]
 
-      # Fangtian TODO
-      # if (platform == "ohos") {
-      #    deps += [ "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics:2d_graphics" ]
-      #  } else {
-      #    deps += [ "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics:2d_graphics_source_$platform" ]
-      #  }
+      deps += [ "$render_server_dir/rosen/modules/2d_graphics/ft_build:2d_graphics_source_$platform" ]
 
       deps += [
         "//build/gn/configs/system_libs:c_utils",
-        "//build/gn/configs/system_libs:graphics_2d",
       ]
 
       if (defined(config.enable_rosen_backend) && config.enable_rosen_backend &&
           defined(invoker.rosen_sources)) {
         sources += invoker.rosen_sources
         # Fangtian TODO
-        #deps += [ "//foundation/graphic/graphic_2d/rosen/modules/render_service_client:librender_service_client" ]
+        deps += [ "$render_server_dir/rosen/modules/render_service_client/ft_build:librender_service_client" ]
         # include_dirs +=
         #     [ "//foundation/window/window_manager/interfaces/innerkits" ]
       }

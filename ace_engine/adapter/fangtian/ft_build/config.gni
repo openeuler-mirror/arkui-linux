@@ -12,7 +12,7 @@
 # limitations under the License.
 
 import("//build/gn/fangtian.gni")
-import("ds_config.gni")
+import("//third_party/ft_engine/display_server/ft_build/ds_config.gni")
 
 defines = [
   "LINUX_PLATFORM",
