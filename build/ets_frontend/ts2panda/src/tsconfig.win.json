@@ -1,9 +1,0 @@
-{
-  "extends": "../tsconfig.json",
-  "compilerOptions": {
-    "outDir": "../build-win",
-    "incremental": true,
-    "tsBuildInfoFile": "../build-win/src/tsconfig.tsbuildinfo",
-    "composite":   true
-  }
-}
