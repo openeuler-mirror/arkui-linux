@@ -94,7 +94,7 @@ template("declarative_js_engine_ark") {
 
     configs = [ "$ace_root/ft_build:ace_config" ]
 
-    #configs += [ "${uicast_configs.ace_uicast}:uicast_jsi_config" ]
+  #  configs += [ "${uicast_configs.ace_uicast}/ft_build:uicast_jsi_config" ]
 
     public_configs = [ "//arkcompiler/ets_runtime/ft_build:ark_jsruntime_public_config" ]
 

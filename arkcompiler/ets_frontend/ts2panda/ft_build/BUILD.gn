@@ -1,0 +1,343 @@
+# Copyright (c) 2022 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//arkcompiler/ets_frontend/ts2panda/ft_build/ts2abc_config.gni")
+import("//arkcompiler/runtime_core/ft_build/ark_config.gni")
+
+src_dir = target_out_dir + "/src"
+src_dir_full_path = rebase_path("${ts2abc_root}/../src")
+arguments = [ "-c" ]
+arguments += [ "ls ${src_dir_full_path} " ]
+src_files = exec_script("/bin/sh", arguments, "list lines")
+
+foreach(file, src_files) {
+  ft_copy("ts2abc_src_${file}") {
+    sources = [ "${ts2abc_root}/../src/${file}" ]
+    outputs = [ "${src_dir}/${file}" ]
+    #module_install_name = ""
+  }
+}
+
+group("ts2abc_src") {
+  deps = []
+  foreach(file, src_files) {
+    deps += [ ":ts2abc_src_${file}" ]
+  }
+}
+
+ft_copy("node_modules") {
+  sources = [ rebase_path("${node_modules}") ]
+  outputs = [ target_out_dir + "/node_modules" ]
+  #module_install_name = ""
+}
+
+ft_copy("config_files") {
+  sources = [
+    "${ts2abc_root}/../package-lock.json",
+    "${ts2abc_root}/../package.json",
+    "${ts2abc_root}/../tsconfig.json",
+    "${ts2abc_root}/../webpack.config.js",
+  ]
+
+  outputs = [ target_out_dir + "/{{source_file_part}}" ]
+  #module_install_name = ""
+}
+
+#ft_copy("ts2abc_deps") {
+#  sources =
+#      [ "//third_party/typescript/build_package/ohos-typescript-4.2.3-r2.tgz" ]
+#
+#  outputs = [ target_out_dir + "/$target_name/{{source_file_part}}" ]
+#  ##module_source_dir = target_out_dir + "/$target_name"
+#  #module_install_name = ""
+#  #license_file = "//third_party/typescript/LICENSE"
+#  part_name = "ets_frontend"
+#  subsystem_name = "arkcompiler"
+#}
+#
+#ft_copy("ts2abc_deps_ets") {
+#  sources =
+#      [ "//third_party/typescript/build_package/ohos-typescript-4.2.3-r2.tgz" ]
+#
+#  outputs = [ target_out_dir + "/$target_name/{{source_file_part}}" ]
+#  #module_source_dir = target_out_dir + "/$target_name"
+#  #module_install_name = ""
+#  #license_file = "//third_party/typescript/LICENSE"
+#  part_name = "ets_frontend"
+#  subsystem_name = "arkcompiler"
+#}
+#
+#ft_copy("ts2abc_deps_win") {
+#  sources =
+#      [ "//third_party/typescript/build_package/ohos-typescript-4.2.3-r2.tgz" ]
+#
+#  outputs = [ target_out_dir + "/$target_name/{{source_file_part}}" ]
+#  #module_source_dir = target_out_dir + "/$target_name"
+#  #module_install_name = ""
+#  #license_file = "//third_party/typescript/LICENSE"
+#  part_name = "ets_frontend"
+#  subsystem_name = "arkcompiler"
+#}
+#
+#ft_copy("ts2abc_deps_win_ets") {
+#  sources =
+#      [ "//third_party/typescript/build_package/ohos-typescript-4.2.3-r2.tgz" ]
+#
+#  outputs = [ target_out_dir + "/$target_name/{{source_file_part}}" ]
+#  #module_source_dir = target_out_dir + "/$target_name"
+#  #module_install_name = ""
+#  #license_file = "//third_party/typescript/LICENSE"
+#  part_name = "ets_frontend"
+#  subsystem_name = "arkcompiler"
+#}
+#
+#ft_copy("ts2abc_deps_mac") {
+#  sources =
+#      [ "//third_party/typescript/build_package/ohos-typescript-4.2.3-r2.tgz" ]
+#
+#  outputs = [ target_out_dir + "/$target_name/{{source_file_part}}" ]
+#  #module_source_dir = target_out_dir + "/$target_name"
+#  #module_install_name = ""
+#  #license_file = "//third_party/typescript/LICENSE"
+#  part_name = "ets_frontend"
+#  subsystem_name = "arkcompiler"
+#}
+#
+#ft_copy("ts2abc_deps_mac_ets") {
+#  sources =
+#      [ "//third_party/typescript/build_package/ohos-typescript-4.2.3-r2.tgz" ]
+#
+#  outputs = [ target_out_dir + "/$target_name/{{source_file_part}}" ]
+#  #module_source_dir = target_out_dir + "/$target_name"
+#  #module_install_name = ""
+#  #license_file = "//third_party/typescript/LICENSE"
+#  part_name = "ets_frontend"
+#  subsystem_name = "arkcompiler"
+#}
+
+action("ts2abc_diagnostic_ts") {
+  visibility = [ ":*" ]
+  script = "../scripts/gen_diagnostic.rb"
+  args = [
+    "--template",
+    rebase_path("../templates/diagnostic.ts.erb", root_build_dir),
+    "--data",
+    rebase_path("../scripts/diagnosticMessages.json", root_build_dir),
+    "--output",
+    rebase_path("${src_dir}/diagnostic.ts"),
+  ]
+
+  outputs = [ "${src_dir}/diagnostic.ts" ]
+  deps = [ "$ts2abc_root:ts2abc_src" ]
+}
+
+ark_gen_file("ts2abc_irnodes_ts") {
+  template_file = "../templates/irnodes.ts.erb"
+  data_file = "$root_gen_dir/isa/isa.yaml"
+  requires = [
+    "$ark_root/isa/isapi.rb",
+    "$ark_root/libpandafile/pandafile_isapi.rb",
+  ]
+  output_file = "$src_dir/irnodes.ts"
+  extra_dependencies = [
+    "$ts2abc_root:ts2abc_src",
+    "$ark_root/isa/ft_build:isa_combine",
+  ]
+}
+
+action("npm_run_build") {
+  visibility = [ ":*" ]
+  deps = [
+    "$ts2abc_root:config_files",
+    "$ts2abc_root:node_modules",
+    "$ts2abc_root:ts2abc_diagnostic_ts",
+    "$ts2abc_root:ts2abc_irnodes_ts",
+    "$ts2abc_root:ts2abc_src",
+  ]
+
+  if (is_linux || is_mingw || is_mac) {
+    deps += [ "$ts2abc_root/../ts2abc/ft_build:ts2abc" ]
+  }
+
+  script = "${ts2abc_root}/../scripts/run.py"
+  args = [
+    "--src-dir",
+    rebase_path(ts2abc_root),
+    "--dist-dir",
+    rebase_path(target_out_dir),
+    "--node",
+    rebase_path(node_path),
+    "--node-modules",
+    rebase_path(node_modules),
+  ]
+
+  if (is_linux) {
+    args += [
+      "--platform",
+      "linux",
+      "--js2abc",
+      rebase_path("${root_out_dir}/arkcompiler/ets_frontend/js2abc"),
+    ]
+  } else if (is_mingw) {
+    args += [
+      "--platform",
+      "win",
+      "--js2abc",
+      rebase_path("${root_out_dir}/arkcompiler/ets_frontend/js2abc.exe"),
+    ]
+  } else if (is_mac) {
+    args += [
+      "--platform",
+      "mac",
+      "--js2abc",
+      rebase_path("${root_out_dir}/arkcompiler/ets_frontend/js2abc"),
+    ]
+  }
+
+  if (is_debug) {
+    args += [
+      "--buildMode",
+      "debug",
+    ]
+  } else {
+    args += [
+      "--buildMode",
+      "release",
+    ]
+  }
+
+  outputs = []
+  if (is_mingw) {
+    outputs += [ "${root_out_dir}/arkcompiler/ets_frontend/build-win" ]
+  } else if (is_mac) {
+    outputs += [ "${root_out_dir}/arkcompiler/ets_frontend/build-mac" ]
+  } else {
+    outputs += [ "${root_out_dir}/arkcompiler/ets_frontend/build" ]
+  }
+}
+
+if (is_linux) {
+  ft_copy("ts2abc_build") {
+    deps = [ "$ts2abc_root:npm_run_build" ]
+    sources = [ "${root_out_dir}/arkcompiler/ets_frontend/build" ]
+    outputs = [ "${target_out_dir}/build-tmp" ]
+    #module_source_dir = "${root_out_dir}/arkcompiler/ets_frontend/build"
+    #module_install_name = ""
+  }
+
+  ft_copy("ts2abc_build_ets") {
+    deps = [ "$ts2abc_root:npm_run_build" ]
+
+    sources = [ "${root_out_dir}/arkcompiler/ets_frontend/build" ]
+    outputs = [ "${root_out_dir}/arkcompiler/ets_frontend/build-ets" ]
+    #module_source_dir = "${root_out_dir}/arkcompiler/ets_frontend/build-ets"
+    #module_install_name = ""
+  }
+}
+
+if (is_mingw) {
+  ft_copy("ts2abc_build_win") {
+    deps = [ "$ts2abc_root:npm_run_build" ]
+    sources = [ "${root_out_dir}/arkcompiler/ets_frontend/build-win" ]
+    outputs = [ "${target_out_dir}/build-tmp" ]
+    #module_source_dir = "${root_out_dir}/arkcompiler/ets_frontend/build-win"
+    #module_install_name = ""
+  }
+
+  ft_copy("ts2abc_build_win_ets") {
+    deps = [ "$ts2abc_root:npm_run_build" ]
+    sources = [ "${root_out_dir}/arkcompiler/ets_frontend/build-win" ]
+    outputs = [ "${root_out_dir}/arkcompiler/ets_frontend/build-win-ets" ]
+    #module_source_dir = "${root_out_dir}/arkcompiler/ets_frontend/build-win-ets"
+    #module_install_name = ""
+  }
+}
+
+if (is_mac) {
+  ft_copy("ts2abc_build_mac") {
+    deps = [ "$ts2abc_root:npm_run_build" ]
+    sources = [ "${root_out_dir}/arkcompiler/ets_frontend/build-mac" ]
+    outputs = [ "${target_out_dir}/build-tmp" ]
+    #module_source_dir = "${root_out_dir}/arkcompiler/ets_frontend/build-mac"
+    #module_install_name = ""
+  }
+
+  ft_copy("ts2abc_build_mac_ets") {
+    deps = [ "$ts2abc_root:npm_run_build" ]
+    sources = [ "${root_out_dir}/arkcompiler/ets_frontend/build-mac" ]
+    outputs = [ "${root_out_dir}/arkcompiler/ets_frontend/build-mac-ets" ]
+    #module_source_dir = "${root_out_dir}/arkcompiler/ets_frontend/build-mac-ets"
+    #module_install_name = ""
+  }
+}
+
+ft_copy("panda_ts2abc") {
+  sources = [ "${ts2abc_root}/../scripts/ts2abc.js" ]
+
+  outputs = [ target_out_dir + "/$target_name/{{source_file_part}}" ]
+  #module_source_dir = target_out_dir + "/$target_name/"
+  #module_install_name = ""
+}
+
+ft_copy("panda_ts2abc_ets") {
+  sources = [ "${ts2abc_root}/../scripts/ts2abc.js" ]
+  outputs = [ target_out_dir + "/$target_name/{{source_file_part}}" ]
+  #module_source_dir = target_out_dir + "/$target_name/"
+  #module_install_name = ""
+}
+
+ft_copy("ts2abc_js_file") {
+  sources = [ "${ts2abc_root}/../scripts/ts2abc.js" ]
+  outputs = [ target_out_dir + "/{{source_file_part}}" ]
+}
+
+group("ark_ts2abc_build") {
+  deps = []
+  if (host_os != "mac") {
+    deps += [
+      #"${ts2abc_root}:ts2abc_build(${toolchain_linux})",
+      #"${ts2abc_root}:ts2abc_build_ets(${toolchain_linux})",
+    ]
+  } else {
+    deps += [
+      "${ts2abc_root}:ts2abc_build_mac(${toolchain_mac})",
+      "${ts2abc_root}:ts2abc_build_mac_ets(${toolchain_mac})",
+    ]
+  }
+}
+
+group("ark_ts2abc_build_win") {
+  deps = [
+    #"${ts2abc_root}:ts2abc_build_win(${toolchain_win})",
+    #"${ts2abc_root}:ts2abc_build_win_ets(${toolchain_win})",
+  ]
+}
+
+#ft_copy("copy_ts2abc_tests") {
+#  sources = [ "${ts2abc_root}/tests" ]
+#  deps = [ ":npm_run_build" ]
+#
+#  outputs = [ target_out_dir + "/tests" ]
+#  #module_install_name = ""
+#}
+#
+#group("ts2abc_unittests") {
+#  if (host_os == "linux") {
+#    testonly = true
+#    deps = [
+#      #"tests:ts2abc_ts_instruction_type_test(${toolchain_linux})",
+#      #"tests:ts2abc_ts_type_system_test(${toolchain_linux})",
+#      #"tests:ts2abc_ts_ut_test(${toolchain_linux})",
+#    ]
+#  }
+#}

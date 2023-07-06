@@ -24,7 +24,7 @@
 #include "optimizer/ir/inst.h"
 #include "optimizer/optimizations/types_resolving.h"
 #ifndef __clang_analyzer__
-#include "irtoc_ir_inline.h"
+// #include "irtoc_ir_inline.h"
 #endif
 
 namespace panda::compiler {

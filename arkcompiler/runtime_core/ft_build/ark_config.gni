@@ -21,6 +21,7 @@ if (is_standard_system) {
 
 declare_args() {
   enabled_plugins = default_enabled_plugins
+  build_public_version = true
 }
 
 if (current_cpu == "arm") {
@@ -42,8 +43,7 @@ enable_relayout_profile = false
 
 sdk_libc_secshared_dep =
     "//build/gn/configs/system_libs:c_utils"
-sdk_libc_secshared_config =
-    "$ark_third_party_root/bounds_checking_function:libsec_public_config"
+sdk_libc_secshared_config = "//build/gn/configs/system_libs:c_utils_config"
 
 if (is_mingw || is_mac || is_linux || target_os == "ios") {
   sdk_libc_secshared_dep =
@@ -184,11 +184,13 @@ template("ark_gen") {
   assert(defined(invoker.template_files),
          "template_files were not passed to ark_gen")
 
+  #assert(true, "data were not passed to ark_gen")
+  #assert(false, "data were not passed to ark_gen")
   dir = ""
   if (defined(invoker.sources)) {
     dir = invoker.sources
   } else {
-    dir = "templates"
+    dir = "../templates"
   }
 
   destination = ""

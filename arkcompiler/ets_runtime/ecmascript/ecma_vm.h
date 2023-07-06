@@ -15,9 +15,8 @@
 
 #ifndef ECMASCRIPT_ECMA_VM_H
 #define ECMASCRIPT_ECMA_VM_H
-
-#include <mutex>
-
+#include "os/mutex.h"
+// #include <mutex>
 #include "ecmascript/base/config.h"
 #include "ecmascript/builtins/builtins_method_index.h"
 #include "ecmascript/js_handle.h"
