@@ -31,6 +31,10 @@ if ! command -v pip3 &> /dev/null; then
     echo "pip3 is not installed"
     exit 1
 fi
+if ! command -v python &> /dev/null; then
+    echo "python is not installed"
+    sudo yum install python -y
+fi
 
 # Check python version
 PYTHON_VERSION=$(python3 --version 2>&1 | awk '{print $2}')
@@ -67,52 +71,69 @@ python3 ${PROJECT_DIR}/build/builder.py check --install-packages $*
 # =============================================================================
 #
 # download prebuild files
+cd $home
+PREBUILD_DIR="ft_prebuild"
+if [ ! -d ${PREBUILD_DIR} ]; then
+mkdir ${PREBUILD_DIR}
+fi
+cd ${PREBUILD_DIR}
+FT_PREBUILD_DIR=$(pwd)
 
-# Install prebuild librarys
-if [ ! -d ${PROJECT_DIR}/prebuilts/libs ]; then
-git clone https://gitee.com/yanansong/ft_engine_prebuild.git -b rpms ${PROJECT_DIR}/prebuilts/libs
+# install prebuild library
+if [ ! -d ${FT_PREBUILD_DIR}/libs ]; then
+git clone https://gitee.com/yanansong/ft_engine_prebuild.git -b rpms ${FT_PREBUILD_DIR}/libs
 fi
 
 ARCHNAME=`uname -m`
 
-cd ${PROJECT_DIR}/prebuilts/libs/rpms/${ARCHNAME}
+cd ${FT_PREBUILD_DIR}/libs/rpms/${ARCHNAME}
 sudo ./installRPM
 
-cd ${PROJECT_DIR}
-rm -fr ${PROJECT_DIR}/prebuilts/libs
-
-# Install prebuild include files.
-if [ ! -d ${PROJECT_DIR}/prebuilts/inc ]; then
-git clone https://gitee.com/yanansong/devel_inc.git ${PROJECT_DIR}/prebuilts/inc
+# install prebuild include.
+if [ ! -d ${FT_PREBUILD_DIR}/inc ]; then
+git clone https://gitee.com/yanansong/devel_inc.git ${FT_PREBUILD_DIR}/inc
 fi
-# copy include files to /usr/include. & delete download files
-cd ${PROJECT_DIR}/prebuilts/inc
+
+# copy include files to /usr/include. 
+cd ${FT_PREBUILD_DIR}/inc
 sudo cp -fr * /usr/local/include
-cd ${PROJECT_DIR}
-rm -fr ${PROJECT_DIR}/prebuilts/inc
 
-# Install ft_surface_wrapper
-if [ ! -d ${PROJECT_DIR}/prebuilts/rpm/ft_surface_wrapper ]; then
-    git clone https://gitee.com/ShaoboFeng/ft_surface_wrapper.git ${PROJECT_DIR}/prebuilts/rpm/ft_surface_wrapper
-fi
-cd ${PROJECT_DIR}/prebuilts/rpm/ft_surface_wrapper/
-if [ ! -d ${PROJECT_DIR}/prebuilts/rpm/ft_surface_wrapper/build ]; then
-    mkdir build
+# install prebuild include.
+if [ ! -d ${FT_PREBUILD_DIR}/inc_libz ]; then
+git clone https://gitee.com/all-seeing-eyes/ace_include.git ${FT_PREBUILD_DIR}/inc_libz
 fi
 
-cd build
-cmake ..
-make -j6
-sudo make install
-rm -fr ${PROJECT_DIR}/prebuilts/rpm/ft_surface_wrapper
-cd ${PROJECT_DIR}
+cd ${FT_PREBUILD_DIR}/inc_libz
+sudo cp -fr libz /usr/local/include
 
-# Install mesa_fangtian
-if [ ! -d ${PROJECT_DIR}/prebuilts/rpm/binary ]; then
-    git clone https://gitee.com/ShaoboFeng/rpm-fangtian.git ${PROJECT_DIR}/prebuilts/rpm/binary
+# install prebuild include.
+if [ ! -d ${FT_PREBUILD_DIR}/cjson ]; then
+git clone https://gitee.com/src-openeuler/cjson.git ${FT_PREBUILD_DIR}/cjson
+cd ${FT_PREBUILD_DIR}/cjson
+tar xf v1.7.15.tar.gz
+cd cJSON-1.7.15/
+mkdir cJSON
+cp *.h cJSON
+sudo cp -r cJSON /usr/local/include
 fi
-cd ${PROJECT_DIR}/prebuilts/rpm/binary
-./install.sh
-cd ${PROJECT_DIR}
+
+# =============================================================================
+# third_party
+# =============================================================================
+if [ ! -d ${PROJECT_DIR}/third_party/ft_engine/build ]; then
+git clone https://gitee.com/openeuler/ft_engine.git ${PROJECT_DIR}/third_party/ft_engine
+fi
+
+if [ ! -e /usr/lib64/libace_skia_fangtian.so ]; then
+    echo "start build libace_skia_fangtian.so"
+    if [ ! -d ${PROJECT_DIR}/third_party/flutter/project_build ]; then
+        git clone https://gitee.com/openeuler/ft_flutter.git ${PROJECT_DIR}/third_party/flutter
+        cd ${PROJECT_DIR}/third_party/flutter
+        ./project_build/prebuild.sh
+    fi
+    cd ${PROJECT_DIR}/third_party/flutter
+    ./build.sh -i
+    cd ${PROJECT_DIR}
+fi
 
 echo -e "\033[32m[*] Pre-build Done. You need exec 'build.sh'.\033[0m"

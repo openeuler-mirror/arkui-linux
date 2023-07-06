@@ -25,25 +25,34 @@ def build_deps(output_dir):
     if os.path.exists(output_dir):
         shutil.rmtree(output_dir)
     if not os.path.exists(abs_copy_path):
-        os.makedirs(abs_copy_path) 
-    # build gn
-    gn_dir = os.path.join(output_dir, "gn-build")
-    cmd = ['git', 'clone', 'https://gitee.com/src-openeuler/gn.git', '-b', 'openEuler-22.03-LTS-SP1', gn_dir]
-    is_success, _output = exec_sys_command(cmd)
-    if is_success:
-        cur_work_dir = os.getcwd()
-        exec_sys_command(['tar', 'xf', os.path.join(gn_dir, 'gn-e1ac69b17da0c6d4f5e34e686690ff70c6a43e6f.tar.gz'), '-C', gn_dir])
-        os.chdir(gn_dir)
-        #exec_sys_command(['patch', '-p1<gn-always-python3.patch'])
-        os.makedirs(os.path.join(gn_dir, 'out'))
-        exec_sys_command(['cp', 'last_commit_position.h', 'out/'])
-        exec_sys_command(['python3', 'build/gen.py', '--no-last-commit-position', '--no-static-libstdc++'])
-        exec_sys_command(['ninja', '-C', 'out'])
-        os.chdir(os.path.join(gn_dir, "out"))
-        if os.path.exists("gn"):
-            exec_sys_command(['cp', 'gn', gn_path])
-            logger.info("build gn success")
-        os.chdir(cur_work_dir)
+        os.makedirs(abs_copy_path)
+
+    usr_bin_path = '/usr/bin/'
+    usr_gn_path = os.path.join(usr_bin_path, 'gn')
+    if os.path.exists(usr_gn_path):
+        exec_sys_command(['cp', usr_gn_path, gn_path])
+        logger.info("get gn success")
+    else:
+        # build gn
+        gn_dir = os.path.join(output_dir, "gn-build")
+        cmd = ['git', 'clone', 'https://gitee.com/src-openeuler/gn.git', '-b', 'openEuler-22.03-LTS-SP1', gn_dir]
+        is_success, _output = exec_sys_command(cmd)
+        if is_success:
+            cur_work_dir = os.getcwd()
+            exec_sys_command(['tar', 'xf', os.path.join(gn_dir, 'gn-e1ac69b17da0c6d4f5e34e686690ff70c6a43e6f.tar.gz'), '-C', gn_dir])
+            os.chdir(gn_dir)
+            #exec_sys_command(['patch', '-p1<gn-always-python3.patch'])
+            os.makedirs(os.path.join(gn_dir, 'out'))
+            exec_sys_command(['cp', 'last_commit_position.h', 'out/'])
+            exec_sys_command(['python3', 'build/gen.py', '--no-last-commit-position', '--no-static-libstdc++'])
+            exec_sys_command(['ninja', '-C', 'out'])
+            os.chdir(os.path.join(gn_dir, "out"))
+            if os.path.exists("gn"):
+                exec_sys_command(['cp', 'gn', gn_path])
+                logger.info("build gn success")
+                exec_sys_command(['sudo', 'cp', 'gn', usr_bin_path])
+                logger.info("copy gn success")
+            os.chdir(cur_work_dir)
 
 if __name__ == "__main__":
     sys.exit(main())
