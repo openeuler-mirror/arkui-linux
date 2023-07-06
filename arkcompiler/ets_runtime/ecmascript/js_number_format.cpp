@@ -356,7 +356,7 @@ FractionDigitsOption SetNumberFormatUnitOptions(JSThread *thread,
     if (style == StyleOption::CURRENCY) {
         JSHandle<EcmaString> currencyStr = JSHandle<EcmaString>::Cast(currency);
         std::string currencyCStr = JSLocale::ConvertToStdString(currencyStr);
-        std::transform(currencyCStr.begin(), currencyCStr.end(), currencyCStr.begin(), toupper);
+        std::transform(currencyCStr.begin(), currencyCStr.end(), currencyCStr.begin(), ::toupper);
         ObjectFactory *factory = thread->GetEcmaVM()->GetFactory();
         JSHandle<JSTaggedValue> currencyValue = JSHandle<JSTaggedValue>::Cast(factory->NewFromStdString(currencyCStr));
         numberFormat->SetCurrency(thread, currencyValue);
