@@ -21,7 +21,8 @@ source_set("ark_js_vm_set") {
     "$js_root/ft_build:ark_jsruntime_public_config",
   ]
   deps = [ "$ark_root/libpandabase/ft_build:libarkbase_static" ]
-
+  deps += [ "//arkcompiler/ets_runtime/ft_build:libark_jsruntime_static" ]
+  
   deps += [ "//build/gn/configs/system_libs:c_utils" ]
 }
 

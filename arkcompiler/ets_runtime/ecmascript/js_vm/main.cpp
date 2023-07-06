@@ -30,6 +30,10 @@
 #include "ecmascript/mem/clock_scope.h"
 #include "ecmascript/napi/include/jsnapi.h"
 
+extern const std::string PUBLIC_API COMMON_HELP_HEAD_MSG;
+extern const std::string PUBLIC_API HELP_OPTION_MSG;
+extern const std::string PUBLIC_API HELP_TAIL_MSG;
+
 namespace panda::ecmascript {
 void BlockSignals()
 {

@@ -57,7 +57,7 @@ libarkfile_sources = [
 ]
 
 libarkfile_configs = [
-  # sdk_libc_secshared_config,
+   sdk_libc_secshared_config,
   "$ark_root/ft_build:ark_config",
   "$ark_root/libpandabase/ft_build:arkbase_public_config",
   ":arkfile_public_config",
@@ -111,7 +111,7 @@ ft_shared_library("libarkfile") {
   deps = [ ":libarkfile_static" ]
 
   if (!is_standard_system) {
-    relative_install_dir = "ark"
+   #relative_install_dir = "ark"
   }
   if (!is_mingw && !is_mac) {
     output_extension = "so"

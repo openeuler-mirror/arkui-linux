@@ -1307,7 +1307,7 @@ std::map<std::string, std::string> JSDateTimeFormat::GetSpecialTimeZoneMap()
     std::map<std::string, std::string> map;
     for (const auto &item : specialTimeZones) {
         std::string upper(item);
-        transform(upper.begin(), upper.end(), upper.begin(), toupper);
+        transform(upper.begin(), upper.end(), upper.begin(), ::toupper);
         map.emplace(upper, item);
     }
     return map;
@@ -1316,7 +1316,7 @@ std::map<std::string, std::string> JSDateTimeFormat::GetSpecialTimeZoneMap()
 std::string JSDateTimeFormat::ConstructFormattedTimeZoneID(const std::string &input)
 {
     std::string result = input;
-    transform(result.begin(), result.end(), result.begin(), toupper);
+    transform(result.begin(), result.end(), result.begin(), ::toupper);
     static const std::vector<std::string> tzStyleEntry = {
         "GMT", "ETC/UTC", "ETC/UCT", "GMT0", "ETC/GMT", "GMT+0", "GMT-0"
     };
@@ -1336,7 +1336,7 @@ std::string JSDateTimeFormat::ConstructFormattedTimeZoneID(const std::string &in
 std::string JSDateTimeFormat::ToTitleCaseFunction(const std::string &input)
 {
     std::string result(input);
-    transform(result.begin(), result.end(), result.begin(), tolower);
+    transform(result.begin(), result.end(), result.begin(), ::tolower);
     result[0] = static_cast<int8_t>(toupper(result[0]));
     return result;
 }

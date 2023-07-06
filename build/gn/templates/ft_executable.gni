@@ -63,7 +63,7 @@ template("ft_executable") {
                              #"symlink_target_name",
                              "output_dir",
                              #"install_enable",
-                             #"version_script",
+                             "version_script",
                              #"license_file",
                              #"license_as_sources",
                              "use_exceptions",
@@ -86,7 +86,16 @@ template("ft_executable") {
       configs += [ "//build/gn/configs/compiler:rtti" ]
       configs -= [ "//build/gn/configs/compiler:no_rtti" ]
     }
+    if (defined(invoker.version_script)) {
+      _version_script = rebase_path(invoker.version_script, root_build_dir)
+      if (!defined(ldflags)) {
+        ldflags = []
+      }
+      ldflags += [
+        "-rdynamic",
+        "-Wl,--version-script=${_version_script}",
+      ]
+    }
   }
-
   output_dir = output_dir
 }

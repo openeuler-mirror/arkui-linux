@@ -34,4 +34,5 @@ package_deps = [
     "libuv-devel",
     "nodejs-devel",
     "patch",
+    "jsoncpp-devel",
 ]

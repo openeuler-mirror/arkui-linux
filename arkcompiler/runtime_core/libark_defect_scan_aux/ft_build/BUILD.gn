@@ -55,7 +55,7 @@ ark_isa_gen("defectscanaux_intrinsic") {
   destination = "$target_gen_dir/generated"
 }
 
-ohos_shared_library("libark_defect_scan_aux") {
+ft_shared_library("libark_defect_scan_aux") {
   sources = libarkdefectscanaux_sources
   configs = [ ":defectscanaux_public_config" ]
 
@@ -69,12 +69,12 @@ ohos_shared_library("libark_defect_scan_aux") {
   ]
 
   output_extension = "so"
-  relative_install_dir = "ark"
+ #relative_install_dir = "ark"
   part_name = "runtime_core"
   subsystem_name = "arkcompiler"
 }
 
-ohos_static_library("libark_defect_scan_aux_static_test") {
+ft_static_library("libark_defect_scan_aux_static_test") {
   sources = libarkdefectscanaux_sources
   configs = [ ":defectscanaux_public_config" ]
 
