@@ -58,8 +58,8 @@
 #endif
 
 #ifndef OHOS_PALTFORM
-// extern const char _binary_strip_native_min_abc_start[];
-// extern const char _binary_strip_native_min_abc_end[];
+extern const char _binary_strip_native_min_abc_start[];
+extern const char _binary_strip_native_min_abc_end[];
 #endif
 
 namespace OHOS::Ace::Framework {
@@ -2991,16 +2991,12 @@ bool JsiEngineInstance::InitJsEnv(bool debugger_mode, const std::unordered_map<s
         return false;
     }
 #else
-    if (!runtime_->ExecuteJsBin("/system/etc/strip.native.min.abc")) {
+    bool jsfwkResult = runtime_->EvaluateJsCode((uint8_t*)_binary_strip_native_min_abc_start,
+        _binary_strip_native_min_abc_end - _binary_strip_native_min_abc_start);
+    if (!jsfwkResult) {
         LOGE("Failed to load js framework!");
         return false;
     }
-    // bool jsfwkResult = runtime_->EvaluateJsCode((uint8_t*)_binary_strip_native_min_abc_start,
-    //     _binary_strip_native_min_abc_end - _binary_strip_native_min_abc_start);
-    // if (!jsfwkResult) {
-    //     LOGE("Failed to load js framework!");
-    //     return false;
-    // }
 #endif
     LOGD("Load js framework success");
 
