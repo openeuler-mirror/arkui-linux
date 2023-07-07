@@ -1,0 +1,231 @@
+# Copyright (c) 2021-2023 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/gn/fangtian.gni")
+import("//ace_engine/ft_build/ace_config.gni")
+# import("//ace_engine/interfaces/napi/kits/napi_lib.gni")
+
+config("ace_pc_preview_config") {
+  cflags_cc = [
+    "-std=c++17",
+    "-Wno-c99-designator",
+    "-Wno-unknown-warning-option",
+    "-Wno-thread-safety-attributes",
+  ]
+
+  include_dirs = [
+    "$ace_root",
+    "$ace_root/frameworks",
+    "$flutter_root/engine",
+    "$flutter_root/engine/flutter/shell/platform/common/cpp/public",
+    "$flutter_root/engine/ace_adapter/flutter/shell/platform/glfw/public",
+    "$flutter_root/skia",
+    "$flutter_root/glfw/include",
+  ]
+}
+
+if (is_fangtian_build) {
+  platform = "fangtian"
+}
+platform_defines = []
+foreach(item, ace_platforms) {
+  if (platform == item.name) {
+    if (defined(item.config)) {
+      platform_config = item.config
+      if (defined(platform_config.defines)) {
+        platform_defines = platform_config.defines
+      }
+    }
+  }
+}
+
+ft_executable("hap_executor") {
+    defines = platform_defines
+    defines += [ "USE_GLFW_WINDOW" ]
+    configs = [ ":ace_pc_preview_config" ]
+    # public_configs = [ "//third_party/flutter/build/fangtian/skia:skia_public_config" ]
+    output_dir = "$root_out_dir/common/samples"
+    sources = [
+      "hap_executor.cpp",
+      "key_input_handler.cpp",
+      "touch_event_handler_flutter.cpp",
+    ]
+    deps = [
+        #":copy_napi_modules_shared_library",
+        ":copy_linux_shared_library",
+    ]
+    include_dirs = [ "//third_party/flutter/glfw/include" ]
+    if (defined(platform_config.enable_rosen_backend) &&
+        platform_config.enable_rosen_backend) {
+      sources -= [ "touch_event_handler_flutter.cpp" ]
+      sources += [ "touch_event_handler_rs.cpp" ]
+      defines += [ "ENABLE_ROSEN_BACKEND" ]
+      deps += [
+        "//foundation/graphic/graphic_2d/rosen/modules/glfw_render_context:libglfw_render_context",
+      ]
+    } else {
+      deps += [
+        "$ace_flutter_engine_root/glfw:flutter_glfw_$platform",
+      ]
+    }
+
+    deps += [
+      "//build/gn/configs/system_libs:c_utils",
+    ]
+
+    defines += [ "LINUX_PLATFORM" ]
+    deps += [
+       "$ace_root/adapter/fangtian/ft_build:libace_engine",
+       "//resource_management/frameworks/resmgr/ft_build:global_resmgr_linux",
+       # "//base/global/resource_management/frameworks/resmgr:global_resmgr_linux",
+       # "//base/hiviewdfx/hitrace/interfaces/native/innerkits:hitrace_meter",
+       # "//commonlibrary/c_utils/base:utils",
+       # "//base/hiviewdfx/hilog/interfaces/native/innerkits:libhilog",
+       # "//base/startup/init/interfaces/innerkits:libbegetutil",
+       # "//third_party/mbedtls:mbedtls",
+       # "//foundation/communication/ipc/interfaces/innerkits/ipc_core:ipc_core",
+       # "//base/startup/init/interfaces/innerkits:libbeget_proxy",
+       # "//foundation/communication/ipc/interfaces/innerkits/ipc_single:ipc_single",
+       # "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy:samgr_proxy",
+       # "$ace_napi/fangtian:ace_napi",
+    ]
+    libs = ["z", "icui18n", "icuuc"]
+}
+
+# All dynamic libraries to be copied to the path "/common/sample/module/",
+# which are called by the napi framework, can be added to this script.
+
+# advanced_copy("copy_napi_modules_shared_library") {
+#   deps = []
+#   sources = []
+#   foreach(module, common_napi_libs) {
+#     out_path = get_label_info("$ace_root/interfaces/napi/kits:${module}",
+#                               "root_out_dir")
+#     deps += [ "$ace_root/interfaces/napi/kits:${module}" ]
+#     sources += [ "${out_path}/arkui/ace_engine/lib${module}${dylib_suffix}" ]
+#   }
+#
+#   # Set the output directory for all dynamic libraries.
+#   outputs = [ root_out_dir + "/common/samples/module/{{source_file_part}}" ]
+# }
+ 
+  # All dynamic libraries to be copied to the path "/previewer/common/bin/",
+  # which are related to the previewer, can be added to this script.
+ft_copy("copy_linux_shared_library") {
+    deps = []
+    sources = []
+
+    # Add some resources
+    # Add ohos fonts
+    sources += [
+      #"//base/global/system_resources/fonts",
+      #"//foundation/arkui/ace_engine/adapter/linux/sdk/fontconfig.json",
+    ]
+
+    # Add dynamic library "libsec_shared"
+    # sec_path = get_label_info("//third_party/bounds_checking_function:libsec_shared",
+    #                  "root_out_dir")
+    # sources += [ sec_path + "/thirdparty/bounds_checking_function/libsec_shared.so"]
+    deps += [
+      "//build/gn/configs/system_libs:c_utils",
+    ]
+
+    # Add napi framework-related dynamic libraries
+#    ace_napi_path = get_label_info("//foundation/arkui/napi:ace_napi", "root_out_dir")
+#    deps += [ "$ace_napi/fangtian:ace_napi"]
+#    sources += [ "$ace_napi_path/arkui/napi/libace_napi${dylib_suffix}" ]
+
+    # Add ark engine-related dynamic libraries
+#   ark_js_path = get_label_info("//arkcompiler/ets_runtime:libark_jsruntime",
+#                                "root_out_dir")
+#   sources += [
+#       "$ace_napi_path/arkui/napi/libace_napi_ark${dylib_suffix}",
+#       "$ark_js_path/arkcompiler/ets_runtime/libark_jsruntime${dylib_suffix}",
+#       "//third_party/icu/ohos_icu4j/data/icudt69l.dat",
+#   ]
+
+    # Add dynamic libraries
+    ace_engine_path = get_label_info("$ace_root/adapter/fangtian/build::libace_engine",
+                         "root_out_dir") + "/common/common/libace_engine.so"
+    #resource_manager_path = get_label_info(
+    #                              "//resource_management/frameworks/resmgr/ft_build:global_resmgr_linux",
+    #                              "root_out_dir") + "/common/common/libglobal_resmgr_linux.so"
+    glfw_path = get_label_info("//third_party/flutter/glfw:glfw",
+                                    "root_out_dir") + "/graphic/graphic_standard/libglfw.so"
+
+  #  hitrace_path = get_label_info("//base/hiviewdfx/hitrace/interfaces/native/innerkits:hitrace_meter",
+  #                                 "root_out_dir") + "/hiviewdfx/hitrace_native/libhitrace_meter.so"
+  #   utils_path = get_label_info("//commonlibrary/c_utils/base:utils",
+  #                                 "root_out_dir") + "/commonlibrary/c_utils/libutils.so"
+  #   hilog_path = get_label_info("//base/hiviewdfx/hilog/interfaces/native/innerkits:libhilog",
+  #                                 "root_out_dir") + "/hiviewdfx/hilog_native/libhilog.so"
+  #   libbegetutil_path = get_label_info("//base/startup/init/interfaces/innerkits:libbegetutil",
+  #                                 "root_out_dir") + "/startup/init/libbegetutil.so"
+  #   mbedtls_path = get_label_info("//third_party/mbedtls:mbedtls",
+  #                                 "root_out_dir") + "/common/dsoftbus/libmbedtls.so"
+  #   ipc_core_path = get_label_info("//foundation/communication/ipc/interfaces/innerkits/ipc_core:ipc_core",
+  #                                 "root_out_dir") + "/communication/ipc/libipc_core.so"
+  #   libbeget_proxy_path = get_label_info("//base/startup/init/interfaces/innerkits:libbeget_proxy",
+  #                                 "root_out_dir") + "/startup/init/libbeget_proxy.so"
+  #   ipc_single_path = get_label_info("//foundation/communication/ipc/interfaces/innerkits/ipc_single:ipc_single",
+  #                                 "root_out_dir") + "/communication/ipc/libipc_single.so"
+  #   samgr_proxy_path = get_label_info("//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy:samgr_proxy",
+  #                                   "root_out_dir") + "/systemabilitymgr/samgr/libsamgr_proxy.so"
+  #   skia_path = get_label_info("//third_party/flutter/build/fangtian/skia:ace_skia_fangtian",
+  #                                   "root_out_dir") + "/thirdparty/flutter/libace_skia_fangtian.so"
+
+    deps += [
+        #"$ace_napi/fangtian:ace_napi_ark",
+        #"//arkcompiler/ets_runtime:libark_jsruntime",
+        "$ace_root/adapter/fangtian/ft_build:libace_engine",
+        #"//base/global/resource_management/frameworks/resmgr:global_resmgr_linux",
+        #"//base/hiviewdfx/hitrace/interfaces/native/innerkits:hitrace_meter",
+        #"//third_party/bounds_checking_function:libsec_shared",
+        #"//commonlibrary/c_utils/base:utils",
+        #"//base/hiviewdfx/hilog/interfaces/native/innerkits:libhilog",
+        #"//base/startup/init/interfaces/innerkits:libbegetutil",
+        #"//third_party/mbedtls:mbedtls",
+       # "//foundation/communication/ipc/interfaces/innerkits/ipc_core:ipc_core",
+        #"//base/startup/init/interfaces/innerkits:libbeget_proxy",
+        #"//foundation/communication/ipc/interfaces/innerkits/ipc_single:ipc_single",
+        #"//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy:samgr_proxy",
+        "//third_party/flutter/glfw:glfw",
+    ]
+    deps += [
+      "//build/gn/configs/system_libs:skia",
+    ]
+    sources += [
+        glfw_path,
+        # resource_manager_path,
+        ace_engine_path,
+        # skia_path,
+        # hitrace_path,
+        # utils_path,
+        # hilog_path,
+        # samgr_proxy_path,
+        # ipc_single_path,
+        # libbeget_proxy_path,
+        # ipc_core_path,
+        # mbedtls_path,
+        # libbegetutil_path,
+    ]
+
+    # Set the output directory for all dynamic libraries.
+    outputs = [ root_out_dir + "/common/samples/{{source_file_part}}" ]
+}
+
+group("arkui") {
+    deps = [
+      ":hap_executor",
+    ]
+}
