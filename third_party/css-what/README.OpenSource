@@ -1,0 +1,11 @@
+[
+    {
+        "Name": "css-what",
+        "License": "BSD 2-Clause License",
+        "License File": "LICENSE",
+        "Version Number": "v6.1.0",
+        "Owner": "lixingchi1@huawei.com",
+        "Upstream URL": "https://github.com/fb55/css-what",
+        "Description": "a CSS selector parser."
+    }
+]

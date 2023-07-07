@@ -1,0 +1,290 @@
+# Copyright (c) 2021 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/ohos.gni")
+import("//foundation/arkui/ace_engine/ace_config.gni")
+
+prebuilt_js_path = get_label_info(":gen_snapshot", "target_out_dir") +
+                   "/dist/strip.native.min.js"
+prebuilt_js_api_mock_path = get_label_info(":gen_snapshot", "target_out_dir") +
+                            "/dist/jsMockSystemPlugin.js"
+
+action("gen_node_modules") {
+  script = "//third_party/jsframework/prebuild_env.sh"
+  args = []
+  inputs = [
+    "package.json",
+    "package-lock.json",
+  ]
+  outputs = [ "$root_out_dir/jsframework/node_modules" ]
+}
+
+action("gen_snapshot") {
+  script = "//third_party/jsframework/js_framework_build.sh"
+
+  js_framework = "//third_party/jsframework/runtime"
+  js_framework_mock_generate = "//third_party/jsframework/mock-generate"
+  is_mac = "false"
+  use_mac = host_os == "mac"
+
+  if (is_standard_system || is_cross_platform_build) {
+    node_modules = "//prebuilts/build-tools/common/js-framework/node_modules"
+    if (use_mac) {
+      nodejs_path =
+          "//prebuilts/build-tools/common/nodejs/node-v12.18.4-darwin-x64"
+      is_mac = "true"
+    } else {
+      nodejs_path =
+          "//prebuilts/build-tools/common/nodejs/node-v12.18.4-linux-x64"
+      is_mac = "false"
+    }
+  } else {
+    node_modules = "//prebuilts/ace-toolkit/js-framework/node_modules"
+    if (use_mac) {
+      nodejs_path = "//prebuilts/ace-toolkit/nodejs/node-v12.18.4-darwin-x64"
+      is_mac = "true"
+    } else {
+      nodejs_path = "//prebuilts/ace-toolkit/nodejs/node-v12.18.4-linux-x64"
+      is_mac = "false"
+    }
+  }
+
+  buildfile_jsmock = "//third_party/jsframework/build_jsmock_system_plugin.js"
+  buildfile_native_min = "//third_party/jsframework/build_strip_native_min.js"
+
+  package_file = "//third_party/jsframework/package.json"
+  tsconfig = "//third_party/jsframework/tsconfig.json"
+  eslint = "//third_party/jsframework/.eslintrc"
+  babel = "//third_party/jsframework/.babelrc"
+  test_file = "//third_party/jsframework/test"
+  css_what = "//third_party/css-what"
+
+  args = [
+    rebase_path(buildfile_jsmock, root_build_dir),
+    rebase_path(nodejs_path, root_build_dir),
+    rebase_path(js_framework, root_build_dir),
+    rebase_path(node_modules, root_build_dir),
+    rebase_path(package_file, root_build_dir),
+    rebase_path(tsconfig, root_build_dir),
+    rebase_path(eslint, root_build_dir),
+    rebase_path(test_file, root_build_dir),
+    rebase_path(target_out_dir, root_build_dir),
+    rebase_path(babel, root_build_dir),
+    is_mac,
+    rebase_path("//prebuilts", root_build_dir),
+    rebase_path(buildfile_native_min, root_build_dir),
+    rebase_path(css_what, root_build_dir),
+    rebase_path(js_framework_mock_generate, root_build_dir),
+  ]
+
+  inputs = [
+    # app
+    "runtime/main/app/App.ts",
+    "runtime/main/app/bundle.ts",
+    "runtime/main/app/helper.ts",
+    "runtime/main/app/index.ts",
+    "runtime/main/app/map.ts",
+
+    # plugin
+    "runtime/main/extend/dpi/Dpi.ts",
+    "runtime/main/extend/dpi/index.ts",
+    "runtime/main/extend/i18n/I18n.ts",
+    "runtime/main/extend/i18n/index.ts",
+    "runtime/main/extend/mediaquery/mediaQuery.ts",
+    "runtime/main/extend/mediaquery/pluginMediaQuery.ts",
+    "runtime/main/extend/mediaquery/plugins.ts",
+
+    # manage event
+    "runtime/main/manage/event/bridge.ts",
+    "runtime/main/manage/event/callbackIntercept.ts",
+    "runtime/main/manage/event/CallbackManager.ts",
+    "runtime/main/manage/event/TaskCenter.ts",
+
+    # manage instance
+    "runtime/main/manage/instance/life.ts",
+    "runtime/main/manage/instance/misc.ts",
+    "runtime/main/manage/instance/register.ts",
+
+    # vdom
+    "runtime/main/model/compiler.ts",
+    "runtime/main/model/directive.ts",
+    "runtime/main/model/domHelper.ts",
+    "runtime/main/model/events.ts",
+    "runtime/main/model/index.ts",
+    "runtime/main/model/pageLife.ts",
+    "runtime/main/model/selector.ts",
+    "runtime/main/model/vmOptions.ts",
+
+    # page
+    "runtime/main/page/api/Differ.ts",
+    "runtime/main/page/api/index.ts",
+    "runtime/main/page/api/misc.ts",
+    "runtime/main/page/entry/bundle.ts",
+    "runtime/main/page/entry/init.ts",
+    "runtime/main/page/Image.ts",
+    "runtime/main/page/index.ts",
+    "runtime/main/page/Page.ts",
+    "runtime/main/page/register.ts",
+
+    # third reactivity
+    "runtime/main/reactivity/array.js",
+    "runtime/main/reactivity/dep.js",
+    "runtime/main/reactivity/object.js",
+    "runtime/main/reactivity/observer.js",
+    "runtime/main/reactivity/state.js",
+    "runtime/main/reactivity/watcher.js",
+
+    # third util
+    "runtime/main/util/index.js",
+    "runtime/main/util/props.js",
+    "runtime/main/util/shared.js",
+
+    # framework expose
+    "runtime/main/config.ts",
+    "runtime/main/index.ts",
+
+    # preparation of init framework
+    "runtime/preparation/index.ts",
+    "runtime/preparation/init.ts",
+    "runtime/preparation/methods.ts",
+    "runtime/preparation/service.ts",
+
+    # utils
+    "runtime/utils/index.ts",
+    "runtime/utils/utils.ts",
+
+    # vdom
+    "runtime/vdom/Comment.ts",
+    "runtime/vdom/Document.ts",
+    "runtime/vdom/DocumentElement.ts",
+    "runtime/vdom/Element.ts",
+    "runtime/vdom/index.ts",
+    "runtime/vdom/NativeElementClassFactory.ts",
+    "runtime/vdom/Node.ts",
+
+    # global
+    "runtime/lib.d.ts",
+
+    # config of compiler
+    ".babelrc",
+    ".eslintrc",
+    "build_jsmock_system_plugin.js",
+    "build_strip_native_min.js",
+    "tsconfig.json",
+    "tslint.json",
+  ]
+  outputs = [
+    prebuilt_js_path,
+    prebuilt_js_api_mock_path,
+  ]
+}
+
+if (!is_standard_system && !is_cross_platform_build) {
+  import("$v8_root/gni/snapshot_toolchain.gni")
+
+  v8_snapshot_bin_path = get_label_info(":v8_snapshot_bin", "target_out_dir") +
+                         "/strip.native.min.js.bin"
+  v8_snapshot_obj_path = get_label_info(":v8_snapshot_bin", "target_out_dir") +
+                         "/strip.native.min.js.o"
+
+  action("gen_snapshot_bin") {
+    visibility = [ ":*" ]  # Only targets in this file can depend on this.
+
+    deps = [ ":gen_snapshot" ]
+    deps += [ "$v8_root:mksnapshot($v8_snapshot_toolchain)" ]
+
+    script = "$v8_root/tools/run.sh"
+
+    args = [
+      rebase_path("${aosp_libs_dir}/ndk/libcxx/linux_x86") + ":" +
+          rebase_path("${aosp_libs_dir}/ndk/libcxx/linux_x86_64"),
+      rebase_path(
+          get_label_info("$v8_root:mksnapshot($v8_snapshot_toolchain)",
+                         "root_out_dir") + "/arkui/ace_engine_full/mksnapshot"),
+      rebase_path(prebuilt_js_path),
+      "--startup_blob=" + rebase_path(v8_snapshot_bin_path),
+      "--turbo_instruction_scheduling",
+    ]
+
+    inputs = [ prebuilt_js_path ]
+    outputs = [ v8_snapshot_bin_path ]
+  }
+
+  ohos_prebuilt_etc("v8_snapshot_bin") {
+    deps = [ ":gen_snapshot_bin" ]
+    source = v8_snapshot_bin_path
+    part_name = "ace_engine_full"
+  }
+
+  action("gen_snapshot_obj") {
+    visibility = [ ":*" ]  # Only targets in this file can depend on this.
+
+    if (use_mingw_win) {
+      objcopy_tool = objcopy_mingw
+      script = "$flutter_root/engine/flutter/sky/tools/objcopy_pc_mac.py"
+    } else if (use_mac) {
+      objcopy_tool = objcopy_clang
+      script = "$flutter_root/engine/flutter/sky/tools/objcopy_pc_mac.py"
+    } else if (target_cpu == "x86_64") {
+      objcopy_tool = objcopy_x86_64
+      script = "$flutter_root/engine/flutter/sky/tools/objcopy.py"
+    } else {
+      objcopy_tool = objcopy_aarch64
+      script = "$flutter_root/engine/flutter/sky/tools/objcopy.py"
+    }
+
+    args = [
+      "--objcopy",
+      rebase_path(objcopy_tool),
+      "--input",
+      rebase_path(v8_snapshot_bin_path),
+      "--output",
+      rebase_path(v8_snapshot_obj_path),
+      "--arch",
+      current_cpu,
+    ]
+
+    deps = [ ":gen_snapshot_bin" ]
+
+    inputs = [ v8_snapshot_bin_path ]
+    outputs = [ v8_snapshot_obj_path ]
+  }
+
+  source_set("v8_snapshot_obj") {
+    sources = [ v8_snapshot_obj_path ]
+    deps = [ ":gen_snapshot_obj" ]
+  }
+}
+
+import("//arkcompiler/ets_frontend/ts2panda/ts2abc_config.gni")
+ark_abc_path =
+    get_label_info(":ark_build", "target_out_dir") + "/strip.native.min.abc"
+
+ts2abc_gen_abc("ark_jsf") {
+  extra_visibility = [ ":*" ]  # Only targets in this file can depend on this
+  extra_dependencies = [ ":gen_snapshot" ]
+
+  src_js = rebase_path(prebuilt_js_path)
+  dst_file = rebase_path(ark_abc_path)
+
+  in_puts = [ prebuilt_js_path ]
+  out_puts = [ ark_abc_path ]
+}
+
+ohos_prebuilt_etc("ark_build") {
+  deps = [ ":ark_jsf" ]
+  source = ark_abc_path
+  if (!is_cross_platform_build) {
+    part_name = "ace_engine"
+  }
+}
