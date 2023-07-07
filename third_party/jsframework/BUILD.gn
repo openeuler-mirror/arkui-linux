@@ -33,6 +33,7 @@ action("gen_node_modules") {
 
 action("gen_snapshot") {
   script = "//third_party/jsframework/js_framework_build.sh"
+  deps = [ ":gen_node_modules" ]
 
   js_framework = "//third_party/jsframework/runtime"
   js_framework_mock_generate = "//third_party/jsframework/mock-generate"

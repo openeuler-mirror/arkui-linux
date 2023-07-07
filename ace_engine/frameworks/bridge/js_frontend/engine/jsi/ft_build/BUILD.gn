@@ -28,9 +28,8 @@ ts2abc_gen_abc("gen_strip_native_min_abc") {
   in_puts =
       [ "$root_out_dir/obj/third_party/jsframework/dist/strip.native.min.js" ]
   out_puts = [ base_output_path + "/strip.native.min.abc" ]
-  
-  #extra_dependencies = [ "//third_party/jsframework:gen_node_modules" ]
-  extra_dependencies = [ "//third_party/jsframework:gen_snapshot" ]
+
+  extra_dependencies = [ "//third_party/jsframework:gen_snapshot", ]
 }
 
 gen_obj("abc_strip_native_min") {
