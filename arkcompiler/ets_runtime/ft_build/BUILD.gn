@@ -179,7 +179,7 @@ config("ark_jsruntime_public_config") {
     "$ark_root/libpandabase/ft_build:arkbase_public_config",
     "$ark_root/libpandafile/ft_build:arkfile_public_config",
     #"$ark_third_party_root/icu/icu4c:icu_config",
-    sdk_libc_secshared_config,
+    # sdk_libc_secshared_config,
   ]
 
   defines = []
