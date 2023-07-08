@@ -32,7 +32,7 @@ source_set("libarkziparchive_static") {
     ":arkziparchive_config",
     "$ark_root/ft_build:ark_config",
     "$ark_root/libpandabase/ft_build:arkbase_public_config",
-    sdk_libc_secshared_config,
+    # sdk_libc_secshared_config,
   ]
 
   deps = [
@@ -69,7 +69,7 @@ source_set("libarkziparchive_frontend_set_static") {
     ":arkziparchive_config",
     "$ark_root/ft_build:ark_config",
     "$ark_root/libpandabase/ft_build:arkbase_public_config",
-    sdk_libc_secshared_config,
+    # sdk_libc_secshared_config,
   ]
 
   deps = [
