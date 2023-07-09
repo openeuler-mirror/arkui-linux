@@ -68,7 +68,7 @@ build/prebuilts_download.sh --skip-ssl
 echo -e "\e[36m[-] Prepare system packages...\e[0m"
 
 # Check & Install required system packages
-python3 ${PROJECT_DIR}/build/builder.py check --install-packages $*
+python3 ${PROJECT_DIR}/build/builder.py check --install-packages
 
 # =============================================================================
 # Prebuild
@@ -136,9 +136,9 @@ if [ ! -d /usr/include/ft/wm ]; then
     echo "start build ft_engine"
     cd ${PROJECT_DIR}/third_party/ft_engine
     if [ ! -d ${PROJECT_DIR}/third_party/ft_engine/third_party ]; then
-        ./build/prebuild.sh
+        ./build/prebuild.sh  $*
     fi
-    ./build.sh -i
+    ./build.sh $*
     cd ${PROJECT_DIR}
 fi
 
@@ -146,7 +146,7 @@ if [ ! -e /usr/lib64/libace_skia_fangtian.so ]; then
     echo "start build libace_skia_fangtian.so"
     cd ${PROJECT_DIR}/third_party/flutter
     ./project_build/prebuild.sh
-    ./build.sh -i
+    ./build.sh $*
     cd ${PROJECT_DIR}
 fi
 
