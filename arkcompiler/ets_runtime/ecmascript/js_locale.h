@@ -21,7 +21,7 @@
 #include "ecmascript/js_object.h"
 #include "ecmascript/mem/c_containers.h"
 
-#include "ohos/init_data.h"
+// #include "ohos/init_data.h"
 #include "unicode/basictz.h"
 #include "unicode/brkiter.h"
 #include "unicode/calendar.h"

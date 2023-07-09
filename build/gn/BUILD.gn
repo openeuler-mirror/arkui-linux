@@ -21,6 +21,7 @@ group("arkui") {
     "//ace_engine/ft_build/build:libace_static_fangtian",
     "//ace_engine/adapter/fangtian/ft_build:libace_engine",
     "//ace_engine/adapter/fangtian/entrance/samples:hap_executor",
+    "//arkcompiler/ets_runtime/ft_build:libark_jsruntime",
   ]
 }
 
