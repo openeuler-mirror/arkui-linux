@@ -36,6 +36,13 @@ constexpr char FILE_NAME[] = "InspectorTree.txt";
 constexpr char ACE_VERSION_2[] = "2.0";
 constexpr char MODEL_STAGE[] = "stage";
 constexpr char MAX_ARGS_COUNT = 2;
+#ifdef WINDOWS_PLATFORM
+constexpr char DELIMITER[] = "\\";
+constexpr char ASSET_PATH_SHARE_STAGE[] = "resources\\base\\profile";
+#else
+constexpr char DELIMITER[] = "/";
+constexpr char ASSET_PATH_SHARE_STAGE[] = "resources/base/profile";
+#endif
 
 auto&& renderCallback = [](const void*, const size_t bufferSize, const int32_t width, const int32_t height) -> bool {
     return true;
@@ -104,6 +111,7 @@ bool GetAceRunArgs(int argc, const char* argv[], OHOS::Ace::Platform::AceRunArgs
         return false;
     }
     std::cout << "hap path: " << realPath << std::endl;
+    std::string hapRealPath = realPath;
 
     std::string faConfigPath = happath + "/config.json";
     std::string stageModulePath = happath + "/module.json";
@@ -119,30 +127,19 @@ bool GetAceRunArgs(int argc, const char* argv[], OHOS::Ace::Platform::AceRunArgs
         return false;
     }
 
-    std::string appResourcesPath = "/home/ubuntu/demo/preview/js/AppResources";
-    std::string appResourcesPathStage = "/home/ubuntu/demo/preview/js/default_stage";
-    std::string systemResourcesPath = "/home/ubuntu/demo/preview/js/SystemResources";
-
-    args.assetPath = happath;
-    args.systemResourcesPath = systemResourcesPath;
-    args.appResourcesPath = happath;
-    args.deviceConfig.orientation = OHOS::Ace::DeviceOrientation::LANDSCAPE;
-    args.deviceConfig.density = 1;
-    args.deviceConfig.deviceType = OHOS::Ace::DeviceType::TABLET;
-    args.windowTitle = "Demo";
-    args.deviceWidth = 1920;
-    args.deviceHeight = 1080;
-    args.viewWidth = 1920;
-    args.viewHeight = 1080;
-    args.onRender = std::move(renderCallback);
-
+    std::string assetPath;
+    std::string appResourcesPath;
+    std::string systemResourcesPath = happath;
     bool stageModel = args.projectModel == OHOS::Ace::Platform::ProjectModel::STAGE;
-    auto context = OHOS::Ace::Context::CreateContext(stageModel, args.appResourcesPath);
-    CHECK_NULL_RETURN(context, false);
     if (stageModel) {
         args.aceVersion = OHOS::Ace::Platform::AceVersion::ACE_2_0;
         std::cout << "GetSrcLanguage: ets" << std::endl;
+        assetPath = hapRealPath + DELIMITER + "ets";
+        appResourcesPath = hapRealPath;
+        systemResourcesPath = hapRealPath;
     } else {
+        auto context = OHOS::Ace::Context::CreateContext(stageModel, hapRealPath);
+        CHECK_NULL_RETURN(context, false);
         auto faContext = OHOS::Ace::AceType::DynamicCast<OHOS::Ace::FaContext>(context);
         CHECK_NULL_RETURN(faContext, false);
         auto hapModuleInfo = faContext->GetHapModuleInfo();
@@ -155,7 +152,28 @@ bool GetAceRunArgs(int argc, const char* argv[], OHOS::Ace::Platform::AceRunArgs
             args.aceVersion = OHOS::Ace::Platform::AceVersion::ACE_1_0;
             std::cout << "GetSrcLanguage: js" << std::endl;
         }
+        std::cout << "GetSrcLanguage: js" << std::endl;
+        assetPath = hapRealPath + DELIMITER + "assets" + DELIMITER + "js" + DELIMITER + "MainAbility";
+        appResourcesPath = hapRealPath; // unused
+        systemResourcesPath = hapRealPath + DELIMITER + "assets" + DELIMITER + "entry";
     }
+
+    args.assetPath = assetPath;
+    args.systemResourcesPath = systemResourcesPath;
+    args.appResourcesPath = hapRealPath;
+    args.deviceConfig.orientation = OHOS::Ace::DeviceOrientation::LANDSCAPE;
+    args.deviceConfig.density = 1;
+    args.deviceConfig.deviceType = OHOS::Ace::DeviceType::TABLET;
+    args.windowTitle = "Demo";
+    args.deviceWidth = 1920;
+    args.deviceHeight = 1080;
+    args.viewWidth = 1920;
+    args.viewHeight = 1080;
+    args.onRender = std::move(renderCallback);
+
+    std::cout << "args.assetPath : " << args.assetPath << std::endl;
+    std::cout << "args.appResourcesPath : " << args.appResourcesPath << std::endl;
+    std::cout << "args.systemResourcesPath : " << args.systemResourcesPath << std::endl;
 
     return true;
 }
