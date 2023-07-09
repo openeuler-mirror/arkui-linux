@@ -152,7 +152,6 @@ bool GetAceRunArgs(int argc, const char* argv[], OHOS::Ace::Platform::AceRunArgs
             args.aceVersion = OHOS::Ace::Platform::AceVersion::ACE_1_0;
             std::cout << "GetSrcLanguage: js" << std::endl;
         }
-        std::cout << "GetSrcLanguage: js" << std::endl;
         assetPath = hapRealPath + DELIMITER + "assets" + DELIMITER + "js" + DELIMITER + "MainAbility";
         appResourcesPath = hapRealPath; // unused
         systemResourcesPath = hapRealPath + DELIMITER + "assets" + DELIMITER + "entry";
