@@ -15,10 +15,10 @@
 
 #include "core/components_ng/render/adapter/skia_canvas.h"
 
-#include "third_party/skia/include/core/SkCanvas.h"
-#include "third_party/skia/include/core/SkMatrix.h"
-#include "third_party/skia/include/core/SkRRect.h"
-#include "third_party/skia/include/core/SkRect.h"
+#include "core/SkCanvas.h"
+#include "core/SkMatrix.h"
+#include "core/SkRRect.h"
+#include "core/SkRect.h"
 
 #include "base/utils/utils.h"
 #include "core/components_ng/render/adapter/skia_canvas_image.h"

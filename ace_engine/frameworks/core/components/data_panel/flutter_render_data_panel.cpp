@@ -16,11 +16,11 @@
 #include "core/components/data_panel/flutter_render_data_panel.h"
 
 #include "flutter/lib/ui/ui_dart_state.h"
-#include "third_party/skia/include/core/SkMaskFilter.h"
-#include "third_party/skia/include/core/SkShader.h"
-#include "third_party/skia/include/effects/Sk1DPathEffect.h"
-#include "third_party/skia/include/effects/SkDashPathEffect.h"
-#include "third_party/skia/include/effects/SkGradientShader.h"
+#include "core/SkMaskFilter.h"
+#include "core/SkShader.h"
+#include "effects/Sk1DPathEffect.h"
+#include "effects/SkDashPathEffect.h"
+#include "effects/SkGradientShader.h"
 
 namespace OHOS::Ace {
 namespace {

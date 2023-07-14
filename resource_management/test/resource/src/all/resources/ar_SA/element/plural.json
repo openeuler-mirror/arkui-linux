@@ -1,0 +1,34 @@
+{
+  "plural":[
+    {
+      "name":"eat_apple",
+      "value":[
+        {
+          "quantity":"zero",
+          "value":"zero-0"
+        },
+        {
+          "quantity":"one",
+          "value":"one-1"
+        },
+        {
+          "quantity":"two",
+          "value":"two-2"
+        },
+        {
+          "quantity":"few",
+          "value":"few-%d"
+        },
+        {
+          "quantity":"many",
+          "value":"many-%d"
+        },
+        {
+          "quantity":"other",
+          "value":"other-%d"
+        }
+      ]
+    }
+  ]
+}
+

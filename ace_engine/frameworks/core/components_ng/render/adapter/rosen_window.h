@@ -56,7 +56,10 @@ public:
 
     bool FlushCustomAnimation(uint64_t timeStamp) override
     {
-        return rsUIDirector_->RunningCustomAnimation(timeStamp);
+        // Fangtian TODO
+        // return rsUIDirector_->RunningCustomAnimation(timeStamp);
+        LOGW("RosenWindow::FlushCustomAnimation not implemented.");
+        return false;
     }
 
     void OnShow() override;

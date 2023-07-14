@@ -1,0 +1,266 @@
+# Copyright (c) 2023 Huawei Technologies Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+config("c_utils_config") {
+  visibility = [ ":*" ]
+
+  include_dirs = [ "${sys_inc}/c_utils" ]
+  libs = [ "utils", "sec_shared" ]
+}
+
+config("ipc_core_config") {
+  visibility = [ ":*" ]
+
+  include_dirs = [ "${sys_inc}/ipc_core" ]
+  libs = [ "ipc_core" ]
+}
+
+config("hilog_config") {
+  visibility = [ ":*" ]
+
+  include_dirs = [ "${sys_inc}/hilog" ]
+  libs = [ "hilog" ]
+}
+
+config("hitrace_meter_config") {
+  visibility = [ ":*" ]
+
+  include_dirs = [ "${sys_inc}/hitrace_meter" ]
+  libs = [ "hitrace_meter" ]
+}
+
+config("eventhandler_config") {
+  visibility = [ ":*" ]
+
+  include_dirs = [ "${sys_inc}/eventhandler" ]
+  libs = [ "eventhandler" ]
+}
+
+config("skia_config") {
+  visibility = [ ":*" ]
+
+  include_dirs = [
+    "${sys_inc}/skia",
+    "${sys_inc}/skia/include",
+    "${sys_inc}/skia/include/core"
+  ]
+  libs = [ "ace_skia_fangtian" ]
+}
+
+config("samgr_config") {
+  visibility = [ ":*" ]
+
+  include_dirs = [ "${sys_inc}/samgr" ]
+  libs = [ "samgr_proxy" ]
+}
+
+config("image_config") {
+  visibility = [ ":*" ]
+
+  include_dirs = [ "${sys_inc}/image" ]
+  libs = [ "image_native" ]
+}
+
+config("mmi_config") {
+  visibility = [ ":*" ]
+
+  include_dirs = [ "${sys_inc}/mmi" ]
+  libs = [ "mmi-client" ]
+}
+
+config("syspara_config") {
+  visibility = [ ":*" ]
+
+  include_dirs = [ "${sys_inc}/syspara" ]
+  libs = [ "beget_proxy", "begetutil" ]
+}
+
+config("safwk_config") {
+  visibility = [ ":*" ]
+
+  include_dirs = [ "${sys_inc}/safwk" ]
+  libs = [ "system_ability_fwk" ]
+}
+
+config("libz_config") {
+  visibility = [ ":*" ]
+
+  include_dirs = [ "${sys_inc}/libz" ]
+  libs = [ "shared_libz" ]
+}
+
+config("uv_config") {
+  visibility = [ ":*" ]
+  libs = [ "uv" ]
+}
+
+config("cjson_config") {
+  visibility = [ ":*" ]
+  libs = [ "cjson" ]
+  include_dirs = [ "${sys_inc}/cJSON" ]
+}
+
+config("icu_config") {
+  visibility = [ ":*" ]
+  libs = ["icui18n", "icuuc"]
+}
+
+config("harfbuzz_config") {
+  visibility = [ ":*" ]
+  include_dirs = [ "/usr/include/harfbuzz" ]
+  libs = ["harfbuzz"]
+}
+
+config("glfw_config") {
+  visibility = [ ":*" ]
+  include_dirs = [ "//third_party/flutter/glfw/include" ]
+  libs = ["glfw"]
+}
+
+# config("flutter_config") {
+#   visibility = [ ":*" ]
+#   include_dirs = [ 
+#     "${sys_inc}/flutter",
+#     "${sys_inc}/flutter/engine",
+#     "${sys_inc}/flutter/engine/flutter",
+#     "${sys_inc}/flutter/engine/flutter/third_party/txt/src",
+#     "/usr/include/harfbuzz",
+#   ]
+#   libs = [
+#     "third_party_flutter_engine_shared_fangtian",
+#   ]
+#   defines = []
+
+#   # flutter glfw
+#   include_dirs += [ 
+#     "${sys_inc}/flutter/engine/flutter/shell/platform/common/cpp/client_wrapper/include/flutter",
+#     "${sys_inc}/flutter/engine/flutter/shell/platform/common/cpp/public",
+#   ]
+#   libs += [
+#     "glfw",
+#   ]
+#   defines += ["USE_GLFW_WINDOW"]
+# }
+
+config("graphics_2d_config") {
+  visibility = [ ":*" ]
+  include_dirs = [ 
+    "${sys_inc}/graphic_2d/2d_engine",
+    "${sys_inc}/graphic_2d/2d_engine/rosen_text",
+    "${sys_inc}/graphic_2d/2d_graphics",
+    "${sys_inc}/graphic_2d/2d_graphics/src",
+    "${sys_inc}/graphic_2d/2d_graphics/src/drawing/engine_adapter",
+  ]
+}
+
+group("c_utils") {
+  public_configs = [ ":c_utils_config" ]
+}
+
+group("hilog") {
+  public_configs = [ ":hilog_config" ]
+}
+
+group("ipc_core") {
+  public_deps = [ ":c_utils" ]
+  public_configs = [ ":ipc_core_config" ]
+}
+
+group("eventhandler") {
+  public_deps = [
+    ":c_utils",
+    ":hilog",
+  ]
+  public_configs = [ ":eventhandler_config" ]
+}
+
+group("hitrace_meter") {
+  public_deps = [ ":c_utils" ]
+  public_configs = [ ":hitrace_meter_config" ]
+}
+
+group("samgr") {
+  public_deps = [ ":c_utils" ]
+  public_configs = [ ":samgr_config" ]
+}
+
+group("image") {
+  public_deps = [
+    ":hilog",
+    ":hitrace_meter",
+    ":c_utils",
+    ":ipc_core",
+  ]
+  public_configs = [ ":image_config" ]
+}
+
+group("mmi") {
+  public_deps = [
+    ":c_utils",
+    ":hilog",
+  ]
+  public_configs = [ ":mmi_config" ]
+}
+
+group("syspara") {
+  public_deps = [
+    ":c_utils",
+    ":hilog",
+  ]
+  public_configs = [ ":syspara_config" ]
+}
+
+group("skia") {
+  public_configs = [ ":skia_config" ]
+}
+
+group("safwk") {
+  public_deps = [
+    ":c_utils",
+    ":ipc_core",
+    ":samgr"
+  ]
+  public_configs = [ ":safwk_config" ]
+}
+
+group("libz") {
+  public_configs = [ ":libz_config" ]
+}
+
+group("libuv") {
+  public_configs = [ ":uv_config" ]
+}
+
+group("cjson") {
+  public_configs = [ ":cjson_config" ]
+}
+
+group("icu") {
+  public_configs = [ ":icu_config" ]
+}
+
+group("harfbuzz") {
+  public_configs = [ ":harfbuzz_config" ]
+}
+
+group("glfw") {
+  public_configs = [ ":glfw_config" ]
+}
+
+# group("flutter") {
+#   public_configs = [ ":flutter_config" ]
+# }
+
+group("graphics_2d") {
+  public_configs = [ ":graphics_2d_config" ]
+}

@@ -19,6 +19,7 @@
 #include <memory>
 #include <mutex>
 #include <unordered_map>
+#include <functional>
 
 #include "base/utils/macros.h"
 #include "base/utils/noncopyable.h"
