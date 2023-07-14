@@ -16,10 +16,10 @@
 #ifndef FOUNDATION_ACE_FRAMEWORKS_CORE_COMPONENTS_NG_RENDER_ADAPTER_SKIA_PAINT_H
 #define FOUNDATION_ACE_FRAMEWORKS_CORE_COMPONENTS_NG_RENDER_ADAPTER_SKIA_PAINT_H
 
-#include "third_party/skia/include/core/SkPaint.h"
+#include "core/SkPaint.h"
 
 #ifdef NG_BUILD
-#include "third_party/skia/include/core/SkSamplingOptions.h"
+#include "core/SkSamplingOptions.h"
 #endif
 
 #include "core/components/common/properties/color.h"

@@ -1,0 +1,26 @@
+{
+  "plural":[
+    {
+      "name":"eat_apple",
+      "value":[
+        {
+          "quantity":"one",
+          "value":"1 jabłko"
+        },
+        {
+          "quantity":"few",
+          "value":"%d jabłka"
+        },
+        {
+          "quantity":"many",
+          "value":"%d jabłek"
+        },
+        {
+          "quantity":"other",
+          "value":"%d jabłek"
+        }
+      ]
+    }
+  ]
+}
+

@@ -16,12 +16,12 @@
 #include "base/utils/utils.h"
 #include "core/common/anr_thread.h"
 
-#include "xcollie/watchdog.h"
+// #include "xcollie/watchdog.h"
 
 namespace OHOS::Ace {
 namespace  {
 const std::string ARKUI_WATCH_DOG("ArkUIWatchdog");
-constexpr uint64_t SECOND_TO_MILLISECOND = 1000;
+//constexpr uint64_t SECOND_TO_MILLISECOND = 1000;
 } // namespace
 
 void AnrThread::Start() {}
@@ -31,12 +31,14 @@ void AnrThread::Stop() {}
 bool AnrThread::PostTaskToTaskRunner(Task&& task, uint32_t delayTime)
 {
     CHECK_NULL_RETURN_NOLOG(task, false);
+    /* TODO
     if (delayTime > 0) {
         OHOS::HiviewDFX::Watchdog::GetInstance().RunOneShotTask(
             ARKUI_WATCH_DOG, std::move(task), delayTime * SECOND_TO_MILLISECOND);
     } else {
         OHOS::HiviewDFX::Watchdog::GetInstance().RunOneShotTask(ARKUI_WATCH_DOG, std::move(task));
     }
+    */
     return true;
 }
 } // namespace OHOS::Ace

@@ -1,0 +1,96 @@
+# Copyright (c) 2023 Huawei Technologies Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# wrapper of target `copy()`
+# 
+# parameters:
+# - sources(required): `copy()` built-in. the source files to copy.
+# - outputs(required): `copy()` built-in. the copy resulting files.
+# - testonly(optional): `copy()` built-in.
+# - deps(optional): `copy()` built-in.
+# - visibility(optional): `copy()` built-in.
+# - public_configs(optional): `copy()` built-in.
+# - subsystem_name(unused): subsystem name, default is "common"
+# - part_name(unused): part name, default is subsystem_name
+# - prebuilt(unused): bool, is prebuilt or not, default is false.
+template("ft_copy") {
+  assert(defined(invoker.sources),
+         "[GN ERROR] ${target_name} error: sources must be defined.")
+  assert(defined(invoker.outputs),
+         "[GN ERROR] ${target_name} error: outputs must be defined.")
+
+  # Handle testonly
+  _is_test_target = defined(invoker.testonly) && invoker.testonly
+
+  # Handle is_prebuilt
+  _is_prebuilt = defined(invoker.prebuilt) && invoker.prebuilt
+  assert(_is_prebuilt != "", "[GN ERROR] ${target_name} inner error: _is_prebuilt is empty.")  # Mark as used
+
+  # module_info generation is bypassed for prebuilt static library
+  _bypass_module_info_generation =
+      defined(invoker.bypass_module_info_generation) &&
+      invoker.bypass_module_info_generation
+  #_main_target_name = target_name
+  
+  # Handle subsystem_name and part_name
+  if (defined(invoker.subsystem_name) && defined(invoker.part_name)) {
+    _subsystem_name = invoker.subsystem_name
+    _part_name = invoker.part_name
+  } else if (defined(invoker.part_name)) {
+    assert(false, "[GN ERROR] ${target_name} error: part_name is defined but subsystem_name is not defined.") 
+  } else if (defined(invoker.subsystem_name)) {
+    _subsystem_name = invoker.subsystem_name
+    _part_name = _subsystem_name
+  } else {
+    _subsystem_name = "common"
+    _part_name = _subsystem_name
+  }
+  assert(_subsystem_name != "", "[GN ERROR] ${target_name} inner error: _subsystem_name is empty.")  # Mark as used
+  assert(_part_name != "", "[GN ERROR] ${target_name} inner error: _part_name is empty.")  # Mark as used
+
+  # Handle deps
+  _deps = []
+  if (defined(invoker.deps)) {
+    _deps += invoker.deps
+  }
+
+  if (!_is_test_target) {
+    # TODO: Gen notice file
+  }
+
+  if (defined(invoker.enable_strip) && invoker.enable_strip) {
+    # TODO: enable_strip
+    # TODO: generate module info
+    assert(false, "[GN ERROR] unsupported strip currently.")
+  } else {
+    copy(target_name) {
+      forward_variables_from(invoker,
+                             [
+                               "testonly",
+                               "visibility",
+                               "public_configs",
+                               "sources",
+                               "outputs",
+                             ])
+      deps = _deps
+
+      if (!_bypass_module_info_generation) {
+        # TODO: generate module info
+      }
+    }
+  }
+
+  if (!_bypass_module_info_generation){
+    # TODO: generate module info
+  }
+}

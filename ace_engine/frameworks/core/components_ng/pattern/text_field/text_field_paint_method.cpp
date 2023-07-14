@@ -14,7 +14,7 @@
  */
 #include "core/components_ng/pattern/text_field/text_field_paint_method.h"
 
-#include "foundation/graphic/graphic_2d/rosen/modules/2d_graphics/include/draw/path.h"
+#include "draw/path.h"
 
 #include "base/geometry/ng/offset_t.h"
 #include "base/geometry/ng/rect_t.h"

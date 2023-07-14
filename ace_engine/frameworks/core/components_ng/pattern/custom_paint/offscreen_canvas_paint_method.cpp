@@ -17,12 +17,12 @@
 
 #include "flutter/third_party/txt/src/txt/paragraph_builder.h"
 #include "flutter/third_party/txt/src/txt/paragraph_style.h"
-#include "third_party/skia/include/core/SkMaskFilter.h"
-#include "third_party/skia/include/effects/SkBlurImageFilter.h"
-#include "third_party/skia/include/encode/SkJpegEncoder.h"
-#include "third_party/skia/include/encode/SkPngEncoder.h"
-#include "third_party/skia/include/encode/SkWebpEncoder.h"
-#include "third_party/skia/include/utils/SkBase64.h"
+#include "core/SkMaskFilter.h"
+#include "effects/SkBlurImageFilter.h"
+#include "encode/SkJpegEncoder.h"
+#include "encode/SkPngEncoder.h"
+#include "encode/SkWebpEncoder.h"
+#include "utils/SkBase64.h"
 
 #include "base/geometry/ng/offset_t.h"
 #include "base/i18n/localization.h"

@@ -19,8 +19,8 @@
 #include "experimental/svg/model/SkSVGDOM.h"
 #include "flutter/lib/ui/painting/path.h"
 #include "flutter/third_party/txt/src/txt/paragraph.h"
-#include "third_party/skia/include/core/SkCanvas.h"
-#include "third_party/skia/include/core/SkPath.h"
+#include "core/SkCanvas.h"
+#include "core/SkPath.h"
 
 #include "core/components/custom_paint/offscreen_canvas.h"
 #include "core/components/custom_paint/render_custom_paint.h"

@@ -20,11 +20,17 @@
 namespace OHOS::Ace {
 double MeasureUtil::MeasureText(const MeasureContext& context)
 {
-    return RenderCustomPaint::PaintMeasureText(context);
+    // Fangtian TODO
+    // return RenderCustomPaint::PaintMeasureText(context);
+    LOGW("MeasureUtil::MeasureText not implemented.");
+    return 0.0;
 }
 
 Size MeasureUtil::MeasureTextSize(const MeasureContext& context)
 {
-    return RenderCustomPaint::MeasureTextSize(context);
+    // Fangtian TODO
+    // return RenderCustomPaint::MeasureTextSize(context);
+    LOGW("MeasureUtil::MeasureTextSize not implemented.");
+    return {0,0};
 }
 } // namespace OHOS::Ace

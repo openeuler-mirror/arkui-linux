@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2021-2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,109 +13,102 @@
  * limitations under the License.
  */
 
-#ifndef FOUNDATION_ACE_ACE_ENGINE_ADAPTER_OHOS_CPP_ACE_ABILITY_H
-#define FOUNDATION_ACE_ACE_ENGINE_ADAPTER_OHOS_CPP_ACE_ABILITY_H
+#ifndef FOUNDATION_ACE_ADAPTER_PREVIEW_ACE_ABILITY_H
+#define FOUNDATION_ACE_ADAPTER_PREVIEW_ACE_ABILITY_H
 
-#include <string>
-#include <vector>
+#include <atomic>
 
-#include "ability.h"
-#include "ability_loader.h"
-#include "core/common/window_animation_config.h"
+#include "flutter/shell/platform/glfw/public/flutter_glfw.h"
+#ifdef ENABLE_ROSEN_BACKEND
+#include "glfw_render_context.h"
+#endif
+
+#include "adapter/fangtian/entrance/ace_run_args.h"
+#include "base/utils/macros.h"
+#include "core/event/key_event.h"
 #include "core/event/touch_event.h"
-#include "want.h"
-#include "wm/window.h"
 
-namespace OHOS::Ace {
-class AceAbility;
-class AceWindowListener : public OHOS::Rosen::IWindowDragListener,
-                          public OHOS::Rosen::IWindowChangeListener,
-                          public OHOS::Rosen::IOccupiedAreaChangeListener,
-                          public OHOS::Rosen::IAceAbilityHandler,
-                          public OHOS::Rosen::IInputEventConsumer {
-public:
-    explicit AceWindowListener(std::shared_ptr<AceAbility> owner) : callbackOwner_(owner) {}
-    ~AceWindowListener() = default;
-    // override Rosen::IWindowDragListener virtual callback function
-    void OnDrag(int32_t x, int32_t y, OHOS::Rosen::DragEvent event) override;
+namespace OHOS::Ace::Platform {
 
-    // override Rosen::IOccupiedAreaChangeListener virtual callback function
-    void OnSizeChange(const sptr<OHOS::Rosen::OccupiedAreaChangeInfo>& info) override;
 
-    // override Rosen::IAceAbilityHandler virtual callback function
-    void SetBackgroundColor(uint32_t color) override;
-    uint32_t GetBackgroundColor() override;
-
-    // override Rosen::IWindowChangeListener virtual callback function
-    void OnSizeChange(OHOS::Rosen::Rect rect, OHOS::Rosen::WindowSizeChangeReason reason) override;
-    void OnModeChange(OHOS::Rosen::WindowMode mode) override;
-
-    // override Rosen::IInputEventConsumer virtual callback function
-    bool OnInputEvent(const std::shared_ptr<MMI::KeyEvent>& keyEvent) const override;
-    bool OnInputEvent(const std::shared_ptr<MMI::PointerEvent>& pointerEvent) const override;
-    bool OnInputEvent(const std::shared_ptr<MMI::AxisEvent>& axisEvent) const override;
-private:
-    std::shared_ptr<AceAbility> callbackOwner_;
+struct ConfigChanges {
+    bool watchLocale = false;
+    bool watchLayout = false;
+    bool watchFontSize = false;
+    bool watchOrientation = false;
+    bool watchDensity = false;
 };
 
-class AceAbility final : public OHOS::AppExecFwk::Ability {
-public:
-    AceAbility();
-    ~AceAbility() override = default;
-
-    void OnStart(const OHOS::AAFwk::Want& want) override;
-    void OnStop() override;
-    void OnActive() override;
-    void OnInactive() override;
-    void OnForeground(const OHOS::AAFwk::Want& want) override;
-    void OnBackground() override;
-    void OnBackPressed() override;
-    void OnNewWant(const OHOS::AAFwk::Want& want) override;
-    void OnRestoreAbilityState(const OHOS::AppExecFwk::PacMap& inState) override;
-    void OnSaveAbilityState(OHOS::AppExecFwk::PacMap& outState) override;
-    void OnConfigurationUpdated(const OHOS::AppExecFwk::Configuration& configuration) override;
-    void OnAbilityResult(int requestCode, int resultCode, const OHOS::AAFwk::Want& resultData) override;
-
-    bool OnStartContinuation() override;
-    bool OnSaveData(OHOS::AAFwk::WantParams& saveData) override;
-    bool OnRestoreData(OHOS::AAFwk::WantParams& restoreData) override;
-    void OnCompleteContinuation(int result) override;
-    void OnRemoteTerminated() override;
-
-    // handle window Rosen::IWindowDragListener
-    void OnDrag(int32_t x, int32_t y, OHOS::Rosen::DragEvent event);
-
-    // handle window Rosen::IWindowChangeListener
-    void OnSizeChange(const OHOS::Rosen::Rect& rect, OHOS::Rosen::WindowSizeChangeReason reason);
-    void OnModeChange(OHOS::Rosen::WindowMode mode);
-
-    // handle window Rosen::IOccupiedAreaChangeListener
-    void OnSizeChange(const sptr<OHOS::Rosen::OccupiedAreaChangeInfo>& info);
-
-    // handle window Rosen::IInputEventConsumer
-    bool OnInputEvent(const std::shared_ptr<MMI::KeyEvent>& keyEvent) const;
-    bool OnInputEvent(const std::shared_ptr<MMI::PointerEvent>& pointerEvent) const;
-    bool OnInputEvent(const std::shared_ptr<MMI::AxisEvent>& axisEvent) const;
-
-    // handle window Rosen::IAceAbilityHandler
-    void SetBackgroundColor(uint32_t color);
-    uint32_t GetBackgroundColor();
-
-    void Dump(const std::vector<std::string>& params, std::vector<std::string>& info) override;
-
-private:
-    static const std::string START_PARAMS_KEY;
-    static const std::string PAGE_URI;
-    static const std::string CONTINUE_PARAMS_KEY;
-
-    int32_t abilityId_ = -1;
-    float density_ = 1.0f;
-    std::string remotePageUrl_;
-    std::string remoteData_;
-    std::string pageUrl_;
-    bool isFirstActive_ = true;
+struct SystemParams {
+    int32_t deviceWidth { 0 };
+    int32_t deviceHeight { 0 };
+    bool isRound = false;
+    double density { 1.0 };
+    std::string language = "zh";
+    std::string region = "CN";
+    std::string script = "";
+    OHOS::Ace::DeviceType deviceType { DeviceType::PHONE };
+    OHOS::Ace::ColorMode colorMode { ColorMode::LIGHT };
+    OHOS::Ace::DeviceOrientation orientation { DeviceOrientation::PORTRAIT };
 };
 
-} // namespace OHOS::Ace
+#ifndef ENABLE_ROSEN_BACKEND
+using GlfwController = FlutterDesktopWindowControllerRef;
+#else
+using GlfwController = std::shared_ptr<OHOS::Rosen::GlfwRenderContext>;
+#endif
 
-#endif // FOUNDATION_ACE_ACE_ENGINE_ADAPTER_OHOS_CPP_ACE_ABILITY_H
+class ACE_FORCE_EXPORT_WITH_PREVIEW AceAbility {
+public:
+    explicit AceAbility(const AceRunArgs& runArgs);
+    ~AceAbility();
+
+    // Be called in Previewer frontend thread, which is not ACE platform thread.    
+    static std::unique_ptr<AceAbility> CreateInstance(AceRunArgs& runArgs);    
+    void InitEnv();    
+    void Start();
+    static void Stop();
+    void OnConfigurationChanged(const DeviceConfig& newConfig);
+    void SurfaceChanged(
+        const DeviceOrientation& orientation, const double& resolution, int32_t& width, int32_t& height);
+    void ReplacePage(const std::string& url, const std::string& params);
+    void LoadDocument(const std::string& url, const std::string& componentName, SystemParams& systemParams);
+
+    std::string GetJSONTree();
+    std::string GetDefaultJSONTree();
+    bool OperateComponent(const std::string& attrsJson);
+    GlfwController GetGlfwWindowController()
+    {
+        return controller_;
+    }
+
+private:
+    void RunEventLoop();
+
+    void SetConfigChanges(const std::string& configChanges);
+
+    void SetGlfwWindowController(const GlfwController &controller)
+    {
+        controller_ = controller;
+    }
+
+#ifndef ENABLE_ROSEN_BACKEND
+    void SetFlutterWindowControllerRef(const FlutterDesktopWindowControllerRef &controller)
+    {
+        windowControllerRef_ = controller;
+    }
+
+    FlutterDesktopWindowControllerRef windowControllerRef_ = nullptr;
+#endif
+
+    // flag indicating if the glfw message loop should be running.
+    static std::atomic<bool> loopRunning_;
+
+    AceRunArgs runArgs_;
+    ConfigChanges configChanges_;
+    GlfwController controller_ = nullptr;
+};
+
+} // namespace OHOS::Ace::Platform
+
+#endif // FOUNDATION_ACE_ADAPTER_PREVIEW_ACE_ABILITY_H

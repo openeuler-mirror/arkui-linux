@@ -16,8 +16,9 @@
 #define FOUNDATION_ACE_ACE_ENGINE_ADAPTER_OHOS_CAPABILITY_PERFERENCE_STORAGE_IMPL_H
 
 #include "base/thread/task_executor.h"
-#include "preferences.h"
-#include "preferences_helper.h"
+// Fangtian TODO 
+// #include "preferences.h"
+// #include "preferences_helper.h"
 #include "base/utils/string_utils.h"
 #include "core/common/storage/storage_interface.h"
 #include "core/common/container.h"

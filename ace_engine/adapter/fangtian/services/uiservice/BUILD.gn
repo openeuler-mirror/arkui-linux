@@ -11,13 +11,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import("//build/ohos.gni")
+#import("//build/ohos.gni")
+import("//build/gn/fangtian.gni")
 import("//foundation/arkui/ace_engine/ace_config.gni")
 import(
     "//foundation/arkui/ace_engine/adapter/ohos/services/uiservice/uiservicems.gni")
 
-ohos_prebuilt_etc("ui_service.cfg") {
-  relative_install_dir = "init"
+prebuilt_etc("ui_service.cfg") {
+  #relative_install_dir = "init"
   source = "ui_service.cfg"
   part_name = ace_engine_part
   subsystem_name = ace_engine_subsystem
@@ -27,11 +28,11 @@ group("uiservice_target") {
   deps = [ ":uiservice" ]
 }
 
-group("unittest") {
-  testonly = true
-
-  deps = [ "test:unittest" ]
-}
+#group("unittest") {
+#  testonly = true
+#
+#  deps = [ "test:unittest" ]
+#}
 
 config("uiservicems_config") {
   include_dirs = [
@@ -51,9 +52,10 @@ config("uiservicems_config") {
 template("uiservice_static") {
   forward_variables_from(invoker, "*")
 
-  ohos_source_set(target_name) {
+  ft_source_set(target_name) {
     subsystem_name = ace_engine_subsystem
     part_name = ace_engine_part
+    print("uiservice", target_name)
     defines += invoker.defines
     cflags_cc += invoker.cflags_cc
 
@@ -65,19 +67,19 @@ template("uiservice_static") {
 
     deps = [ "//foundation/systemabilitymgr/safwk/interfaces/innerkits/safwk:system_ability_fwk" ]
 
-    external_deps = [
-      "ability_base:want",
-      "c_utils:utils",
-      "eventhandler:libeventhandler",
-      "hiviewdfx_hilog_native:libhilog",
-      "ipc:ipc_core",
-    ]
+    #external_deps = [
+    #  "ability_base:want",
+    #  "c_utils:utils",
+    #  "eventhandler:libeventhandler",
+    #  "hiviewdfx_hilog_native:libhilog",
+    #  "ipc:ipc_core",
+    #]
   }
 }
 
 foreach(item, ace_platforms) {
   platform = item.name
-  if (platform == "ohos") {
+  if (platform == "fangtian") {
     # generate uiservice_static lib
     uiservice_static("uiservice_static_" + item.name) {
       defines = []
@@ -99,8 +101,8 @@ foreach(item, ace_platforms) {
   }
 }
 
-ohos_shared_library("uiservice") {
-  deps = [ ":uiservice_static_ohos" ]
+ft_shared_library("uiservice") {
+  deps = [ ":uiservice_static_linux" ]
   part_name = ace_engine_part
   subsystem_name = ace_engine_subsystem
 }

@@ -1,0 +1,12 @@
+{
+  "boolean":[
+    {
+      "name":"boolean_1",
+      "value":true
+    },
+    {
+      "name":"same_name",
+      "value":false
+    }
+  ]
+}

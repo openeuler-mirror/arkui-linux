@@ -19,7 +19,7 @@
 #include <string>
 #include <unistd.h>
 
-#include "hisysevent.h"
+//#include "hisysevent.h"
 
 #include "base/json/json_util.h"
 #include "core/common/ace_application_info.h"
@@ -60,10 +60,12 @@ void EventReport::SendEvent(const EventInfo& eventInfo)
     if (packageName.size() > MAX_PACKAGE_NAME_LENGTH) {
         StrTrim(packageName);
     }
+    /*
     OHOS::HiviewDFX::HiSysEvent::Write(OHOS::HiviewDFX::HiSysEvent::Domain::ACE, eventInfo.eventType,
         OHOS::HiviewDFX::HiSysEvent::EventType::FAULT,
         EVENT_KEY_ERROR_TYPE, eventInfo.errorType,
         EVENT_KEY_PACKAGE_NAME, packageName);
+    */
 }
 
 void EventReport::SendJsCardRenderTimeEvent(
@@ -71,10 +73,12 @@ void EventReport::SendJsCardRenderTimeEvent(
     const std::string& timeType,
     uint64_t timeDelay)
 {
+    /*
     OHOS::HiviewDFX::HiSysEvent::Write(OHOS::HiviewDFX::HiSysEvent::Domain::ACE, timeType,
         OHOS::HiviewDFX::HiSysEvent::EventType::STATISTIC,
         EVENT_KEY_SESSIONID, sessionID,
         STATISTIC_DURATION, timeDelay);
+        */
 }
 
 void EventReport::SendAppStartException(AppStartExcepType type)
@@ -199,16 +203,19 @@ void EventReport::JsEventReport(int32_t eventType, const std::string& jsonStr)
 void EventReport::JsErrReport(
     const std::string& packageName, const std::string& reason, const std::string& summary)
 {
+    /*
     OHOS::HiviewDFX::HiSysEvent::Write(OHOS::HiviewDFX::HiSysEvent::Domain::ACE, EVENT_NAME_JS_ERROR,
         OHOS::HiviewDFX::HiSysEvent::EventType::FAULT,
         EVENT_KEY_PACKAGE_NAME, packageName,
         EVENT_KEY_REASON, reason,
         EVENT_KEY_SUMMARY, summary);
+        */
 }
 
 void EventReport::ANRRawReport(RawEventType type, int32_t uid, const std::string& packageName,
     const std::string& processName, const std::string& msg)
 {
+    /*
     int32_t pid = getpid();
     std::string cmd = " ";
     std::string eventName = "";
@@ -229,11 +236,13 @@ void EventReport::ANRRawReport(RawEventType type, int32_t uid, const std::string
         EVENT_KEY_PROCESS_NAME, processName,
         EVENT_KEY_MESSAGE, msg,
         EVENT_KEY_CMD, cmd);
+        */
 }
 
 void EventReport::ANRShowDialog(int32_t uid, const std::string& packageName,
     const std::string& processName, const std::string& msg)
 {
+    /*
     int32_t pid = getpid();
     std::string eventName = "UI_BLOCK_DIALOG";
     std::string uidStr = std::to_string(uid);
@@ -245,16 +254,19 @@ void EventReport::ANRShowDialog(int32_t uid, const std::string& packageName,
         EVENT_KEY_PACKAGE_NAME, packageName,
         EVENT_KEY_PROCESS_NAME, processName,
         EVENT_KEY_MESSAGE, msg);
+        */
 }
 
 void EventReport::SendEventInner(const EventInfo& eventInfo)
 {
+    /*
     auto packageName = AceApplicationInfo::GetInstance().GetPackageName();
     StrTrim(packageName);
     OHOS::HiviewDFX::HiSysEvent::Write(OHOS::HiviewDFX::HiSysEvent::Domain::ACE, eventInfo.eventType,
             OHOS::HiviewDFX::HiSysEvent::EventType::FAULT,
             EVENT_KEY_ERROR_TYPE, eventInfo.errorType,
             EVENT_KEY_PACKAGE_NAME, packageName);
+            */
 }
 
 } // namespace OHOS::Ace

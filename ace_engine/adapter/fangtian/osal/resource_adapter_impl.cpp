@@ -13,13 +13,13 @@
  * limitations under the License.
  */
 
-#include "adapter/ohos/osal/resource_adapter_impl.h"
+#include "adapter/fangtian/osal/resource_adapter_impl.h"
 
 #include <dirent.h>
 
-#include "adapter/ohos/entrance/ace_container.h"
-#include "adapter/ohos/osal/resource_convertor.h"
-#include "adapter/ohos/osal/resource_theme_style.h"
+#include "adapter/fangtian/entrance/ace_container.h"
+#include "adapter/fangtian/osal/resource_convertor.h"
+#include "adapter/fangtian/osal/resource_theme_style.h"
 #include "base/utils/system_properties.h"
 #include "base/utils/utils.h"
 #include "core/components/theme/theme_attributes.h"
@@ -581,6 +581,7 @@ void ResourceAdapterImpl::UpdateResourceManager(const std::string& bundleName, c
         CHECK_NULL_VOID(container);
         auto aceContainer = AceType::DynamicCast<Platform::AceContainer>(container);
         CHECK_NULL_VOID(aceContainer);
+        /*
         auto context = aceContainer->GetAbilityContextByModule(bundleName, moduleName);
         CHECK_NULL_VOID(context);
         resourceManagers_[{ bundleName, moduleName }] = context->GetResourceManager();
@@ -588,6 +589,7 @@ void ResourceAdapterImpl::UpdateResourceManager(const std::string& bundleName, c
         if (resourceManager_) {
             resourceManager_->UpdateResConfig(*resConfig_);
         }
+        */
     }
 }
 

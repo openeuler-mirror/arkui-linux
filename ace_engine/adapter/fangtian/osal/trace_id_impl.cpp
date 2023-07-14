@@ -15,34 +15,9 @@
 
 #include "frameworks/base/log/trace_id.h"
 
-#include "hitrace/trace.h"
-
 namespace OHOS::Ace {
 
-class TraceIdImpl : public TraceId {
-public:
-    TraceIdImpl()
-    {
-        traceId_ = std::make_unique<OHOS::HiviewDFX::HiTraceId>(OHOS::HiviewDFX::HiTraceChain::GetId());
-    }
-
-    ~TraceIdImpl() = default;
-
-    void SetTraceId() override
-    {
-        if (traceId_ && traceId_->IsValid()) {
-            OHOS::HiviewDFX::HiTraceChain::SetId(*(traceId_.get()));
-        }
-    }
-
-    void ClearTraceId() override
-    {
-        OHOS::HiviewDFX::HiTraceChain::ClearId();
-    }
-
-private:
-    std::unique_ptr<OHOS::HiviewDFX::HiTraceId> traceId_;
-};
+class TraceIdImpl : public TraceId {};
 
 TraceId* TraceId::CreateTraceId()
 {
