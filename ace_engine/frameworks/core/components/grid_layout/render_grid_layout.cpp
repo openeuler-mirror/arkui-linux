@@ -3468,7 +3468,7 @@ std::vector<double> RenderGridLayout::ParseArgsWithAutoFill(const std::string& a
     if (!NearZero(sizeRepeat)) {
         count = LessOrEqual(sizeLeft / sizeRepeat, 1) ? 1 : floor(sizeLeft / sizeRepeat);
     } else {
-        if (GetChildren().size() >= countNonRepeat && retTemplates.size() > 0) {
+        if (static_cast<int>(GetChildren().size()) >= countNonRepeat && retTemplates.size() > 0) {
             count = ceil((GetChildren().size() - countNonRepeat) * 1.0 / (retTemplates.size() - countNonRepeat));
         }
     }

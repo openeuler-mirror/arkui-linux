@@ -51,7 +51,12 @@ void FlutterFontLoader::LoadFromNetwork(const OHOS::Ace::RefPtr<OHOS::Ace::Pipel
             return;
         }
         std::vector<uint8_t> fontData;
-        if (!DownloadManager::GetInstance().Download(fontLoader->familySrc_, fontData) || fontData.empty()) {
+        // Fangtian TODO
+        LOGW("DownloadManager not implemented.");
+        // if (!DownloadManager::GetInstance().Download(fontLoader->familySrc_, fontData) || fontData.empty()) {
+        //     return;
+        // }
+        if (fontData.empty()) {
             return;
         }
         context->GetTaskExecutor()->PostTask([fontData, weak] {

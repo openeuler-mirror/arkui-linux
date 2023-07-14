@@ -19,45 +19,50 @@
 #include "frameworks/bridge/js_frontend/engine/common/js_engine.h"
 
 #include "frameworks/bridge/js_frontend/engine/common/runtime_constants.h"
-#include "native_engine/native_engine.h"
+// Fangtian TODO
+// #include "native_engine/native_engine.h"
 
 namespace OHOS::Ace::Framework {
 
 void JsEngine::RunNativeEngineLoop()
 {
-    if (nativeEngine_ != nullptr) {
-        nativeEngine_->Loop(LOOP_NOWAIT, false);
-    }
+    // Fangtian TODO
+    LOGW("RunNativeEngineLoop not implemented.");
+    // if (nativeEngine_ != nullptr) {
+    //     nativeEngine_->Loop(LOOP_NOWAIT, false);
+    // }
 }
 
 #if !defined(PREVIEW)
 PixelMapNapiEntry JsEngine::GetPixelMapNapiEntry()
 {
     static PixelMapNapiEntry pixelMapNapiEntry_ = nullptr;
-    if (!pixelMapNapiEntry_) {
-#if defined(_ARM64_) || defined(SIMULATOR_64)
-        std::string prefix = "/system/lib64/module/";
-#else
-        std::string prefix = "/system/lib/module/";
-#endif
-#ifdef OHOS_STANDARD_SYSTEM
-        std::string napiPluginName = "multimedia/libimage.z.so";
-#else
-        std::string napiPluginName = "multimedia/libimage_napi.z.so";
-#endif
-        auto napiPluginPath = prefix.append(napiPluginName);
-        void* handle = dlopen(napiPluginPath.c_str(), RTLD_LAZY);
-        if (handle == nullptr) {
-            LOGE("Failed to open shared library %{public}s, reason: %{public}s", napiPluginPath.c_str(), dlerror());
-            return nullptr;
-        }
-        pixelMapNapiEntry_ = reinterpret_cast<PixelMapNapiEntry>(dlsym(handle, "OHOS_MEDIA_GetPixelMap"));
-        if (pixelMapNapiEntry_ == nullptr) {
-            dlclose(handle);
-            LOGE("Failed to get symbol OHOS_MEDIA_GetPixelMap in %{public}s", napiPluginPath.c_str());
-            return nullptr;
-        }
-    }
+    // Fangtian TODO
+    LOGW("GetPixelMapNapiEntry not implemented.");
+//     if (!pixelMapNapiEntry_) {
+// #if defined(_ARM64_) || defined(SIMULATOR_64)
+//         std::string prefix = "/system/lib64/module/";
+// #else
+//         std::string prefix = "/system/lib/module/";
+// #endif
+// #ifdef OHOS_STANDARD_SYSTEM
+//         std::string napiPluginName = "multimedia/libimage.z.so";
+// #else
+//         std::string napiPluginName = "multimedia/libimage_napi.z.so";
+// #endif
+//         auto napiPluginPath = prefix.append(napiPluginName);
+//         void* handle = dlopen(napiPluginPath.c_str(), RTLD_LAZY);
+//         if (handle == nullptr) {
+//             LOGE("Failed to open shared library %{public}s, reason: %{public}s", napiPluginPath.c_str(), dlerror());
+//             return nullptr;
+//         }
+//         pixelMapNapiEntry_ = reinterpret_cast<PixelMapNapiEntry>(dlsym(handle, "OHOS_MEDIA_GetPixelMap"));
+//         if (pixelMapNapiEntry_ == nullptr) {
+//             dlclose(handle);
+//             LOGE("Failed to get symbol OHOS_MEDIA_GetPixelMap in %{public}s", napiPluginPath.c_str());
+//             return nullptr;
+//         }
+//     }
     return pixelMapNapiEntry_;
 }
 #endif

@@ -18,12 +18,12 @@ vendor_configs = {
 check_file_script = "//build/ohos/file_exists.py"
 check_file_args = [
   "--filename",
-  rebase_path("//foundation/arkui/ace_engine_ext/build/config.gni"),
+  rebase_path("//ace_engine_ext/build/config.gni"),
 ]
 
 if (exec_script(check_file_script, check_file_args, "string") == "True") {
   vendor_configs = {
-    import("//foundation/arkui/ace_engine_ext/build/config.gni")
+    import("//ace_engine_ext/build/config.gni")
   }
 }
 

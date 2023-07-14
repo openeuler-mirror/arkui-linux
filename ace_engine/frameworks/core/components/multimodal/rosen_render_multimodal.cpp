@@ -20,9 +20,9 @@
 #include "flutter/third_party/txt/src/txt/paragraph_builder.h"
 #include "flutter/third_party/txt/src/txt/paragraph_style.h"
 
-#include "third_party/skia/include/core/SkPaint.h"
-#include "third_party/skia/include/core/SkPoint.h"
-#include "third_party/skia/include/core/SkRRect.h"
+#include "core/SkPaint.h"
+#include "core/SkPoint.h"
+#include "core/SkRRect.h"
 
 #include "base/i18n/localization.h"
 #include "base/utils/string_utils.h"

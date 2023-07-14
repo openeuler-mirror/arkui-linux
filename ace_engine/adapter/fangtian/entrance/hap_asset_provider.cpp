@@ -42,12 +42,6 @@ bool HapAssetProvider::IsValid() const
     return true;
 }
 
-void HapAssetProvider::Reload()
-{
-    LOGI("Reload runtimeExtractor");
-    runtimeExtractor_ = AbilityRuntime::RuntimeExtractor::Create(hapPath_);
-}
-
 class HapAssetMapping : public fml::Mapping {
 public:
     explicit HapAssetMapping(const std::ostringstream& ostream)

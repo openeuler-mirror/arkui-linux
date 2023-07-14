@@ -13,26 +13,17 @@
  * limitations under the License.
  */
 
-#ifndef FOUNDATION_ACE_ADAPTER_COMMON_CPP_ACE_APPLICATION_INFO_H
-#define FOUNDATION_ACE_ADAPTER_COMMON_CPP_ACE_APPLICATION_INFO_H
-
-#include <map>
-#include <memory>
-#include <string>
-#include <vector>
+#ifndef FOUNDATION_ACE_ADAPTER_PREVIEW_ACE_APPLICATION_INFO_H
+#define FOUNDATION_ACE_ADAPTER_PREVIEW_ACE_APPLICATION_INFO_H
 
 #include "resource_manager.h"
 
-#include "base/utils/noncopyable.h"
 #include "core/common/ace_application_info.h"
 
 namespace OHOS::Ace::Platform {
 
-class ACE_FORCE_EXPORT AceApplicationInfoImpl : public AceApplicationInfo {
+class AceApplicationInfoImpl : public AceApplicationInfo {
 public:
-    AceApplicationInfoImpl();
-    ~AceApplicationInfoImpl() override;
-
     static AceApplicationInfoImpl& GetInstance();
 
     void SetLocale(const std::string& language, const std::string& countryOrRegion, const std::string& script,
@@ -40,30 +31,21 @@ public:
     void ChangeLocale(const std::string& language, const std::string& countryOrRegion) override;
 
     bool GetBundleInfo(const std::string& packageName, AceBundleInfo& bundleInfo) override;
-
-    double GetLifeTime() const override
-    {
-        return 0.0;
-    }
-    std::string GetJsEngineParam(const std::string& key) const override;
-
-    void SetJsEngineParam(const std::string& key, const std::string& value);
+    double GetLifeTime() const override;
 
     void SetResourceManager(std::shared_ptr<Global::Resource::ResourceManager>& resourceManager)
     {
         resourceManager_ = resourceManager;
     }
 
-    void SetDebug(bool isDebugVersion, bool needDebugBreakpoint) override
-    {
-        AceApplicationInfoImpl::GetInstance().isDebugVersion_ = isDebugVersion;
-        AceApplicationInfoImpl::GetInstance().needDebugBreakpoint_ = needDebugBreakpoint;
-    }
+    void SetDebug(bool isDebugVersion, bool needDebugBreakpoint) override;
+
+    std::string GetJsEngineParam(const std::string& key) const override;
 
 private:
-    std::map<std::string, std::string> jsEngineParams_;
     std::shared_ptr<Global::Resource::ResourceManager> resourceManager_;
 };
+
 } // namespace OHOS::Ace::Platform
 
-#endif // FOUNDATION_ACE_ADAPTER_COMMON_CPP_ACE_APPLICATION_INFO_H
+#endif // #ifndef FOUNDATION_ACE_ADAPTER_PREVIEW_ACE_APPLICATION_INFO_H

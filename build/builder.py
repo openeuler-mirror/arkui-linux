@@ -101,7 +101,7 @@ class FtBuilder:
         format_parser.add_argument('--gn-path',
                                 type=str,
                                 default=os.path.join(self.default_project_dir, 'prebuilts/build-tools/linux-x64/bin/gn'),
-                                help='Show all format lines.')
+                                help='Specify path of gn.')
         format_parser.add_argument('-v', '--verbose',
                                 action='store_true',
                                 help='Show all format lines.')

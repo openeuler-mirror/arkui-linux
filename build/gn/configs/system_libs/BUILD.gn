@@ -94,7 +94,73 @@ config("safwk_config") {
 
 config("libz_config") {
   visibility = [ ":*" ]
+
+  include_dirs = [ "${sys_inc}/libz" ]
   libs = [ "shared_libz" ]
+}
+
+config("uv_config") {
+  visibility = [ ":*" ]
+  libs = [ "uv" ]
+}
+
+config("cjson_config") {
+  visibility = [ ":*" ]
+  libs = [ "cjson" ]
+  include_dirs = [ "${sys_inc}/cJSON" ]
+}
+
+config("icu_config") {
+  visibility = [ ":*" ]
+  libs = ["icui18n", "icuuc"]
+}
+
+config("harfbuzz_config") {
+  visibility = [ ":*" ]
+  include_dirs = [ "/usr/include/harfbuzz" ]
+  libs = ["harfbuzz"]
+}
+
+config("glfw_config") {
+  visibility = [ ":*" ]
+  include_dirs = [ "//third_party/flutter/glfw/include" ]
+  libs = ["glfw"]
+}
+
+# config("flutter_config") {
+#   visibility = [ ":*" ]
+#   include_dirs = [ 
+#     "${sys_inc}/flutter",
+#     "${sys_inc}/flutter/engine",
+#     "${sys_inc}/flutter/engine/flutter",
+#     "${sys_inc}/flutter/engine/flutter/third_party/txt/src",
+#     "/usr/include/harfbuzz",
+#   ]
+#   libs = [
+#     "third_party_flutter_engine_shared_fangtian",
+#   ]
+#   defines = []
+
+#   # flutter glfw
+#   include_dirs += [ 
+#     "${sys_inc}/flutter/engine/flutter/shell/platform/common/cpp/client_wrapper/include/flutter",
+#     "${sys_inc}/flutter/engine/flutter/shell/platform/common/cpp/public",
+#   ]
+#   libs += [
+#     "glfw",
+#   ]
+#   defines += ["USE_GLFW_WINDOW"]
+# }
+
+config("graphics_2d_config") {
+  visibility = [ ":*" ]
+  include_dirs = [ 
+    "${sys_inc}/graphic_2d/2d_engine",
+    "${sys_inc}/graphic_2d/2d_engine/rosen_text",
+    "${sys_inc}/graphic_2d/2d_graphics",
+    "${sys_inc}/graphic_2d/2d_graphics/src",
+    "${sys_inc}/graphic_2d/2d_graphics/src/drawing/engine_adapter",
+  ]
 }
 
 group("c_utils") {
@@ -169,4 +235,32 @@ group("safwk") {
 
 group("libz") {
   public_configs = [ ":libz_config" ]
+}
+
+group("libuv") {
+  public_configs = [ ":uv_config" ]
+}
+
+group("cjson") {
+  public_configs = [ ":cjson_config" ]
+}
+
+group("icu") {
+  public_configs = [ ":icu_config" ]
+}
+
+group("harfbuzz") {
+  public_configs = [ ":harfbuzz_config" ]
+}
+
+group("glfw") {
+  public_configs = [ ":glfw_config" ]
+}
+
+# group("flutter") {
+#   public_configs = [ ":flutter_config" ]
+# }
+
+group("graphics_2d") {
+  public_configs = [ ":graphics_2d_config" ]
 }

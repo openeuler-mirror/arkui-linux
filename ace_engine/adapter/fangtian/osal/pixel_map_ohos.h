@@ -16,8 +16,8 @@
 #ifndef FOUNDATION_ACE_ADAPTER_OHOS_OSAL_PIXEL_MAP_OHOS_H
 #define FOUNDATION_ACE_ADAPTER_OHOS_OSAL_PIXEL_MAP_OHOS_H
 
-#include "pixel_map.h"
-#include "pixel_map_manager.h"
+// TODO #include "pixel_map.h"
+// TODO #include "pixel_map_manager.h"
 
 #include "base/image/pixel_map.h"
 

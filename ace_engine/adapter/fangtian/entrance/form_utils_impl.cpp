@@ -63,7 +63,6 @@ int32_t FormUtilsImpl::RouterEvent(
             child = child->GetNext();
         }
     }
-    want.SetParam("params", params->ToString());
     return AppExecFwk::FormMgr::GetInstance().RouterEvent(formId, want, token_);
 }
 
@@ -106,7 +105,6 @@ int32_t FormUtilsImpl::BackgroundEvent(
             child = child->GetNext();
         }
     }
-    want.SetParam("params", params->ToString());
     return AppExecFwk::FormMgr::GetInstance().BackgroundEvent(formId, want, token);
 }
 } // namespace OHOS::Ace

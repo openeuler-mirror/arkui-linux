@@ -15,6 +15,7 @@ config("compiler") {
     "-fno-short-enums",
     "-ferror-limit=10"
   ]
+  cflags_cc = [ "-Wno-c++11-narrowing" ]
   defines = [
     # The NDK has these things, but doesn't define the constants to say that it
     # does. Define them here instead.

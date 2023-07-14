@@ -285,7 +285,7 @@ bool RenderSplitContainer::HandleMouseEvent(const MouseEvent& event)
     info.SetScreenLocation(event.GetScreenOffset());
     info.SetTimeStamp(event.time);
     if (splitType_ == SplitType::ROW_SPLIT) {
-        for (int32_t i = 0; i < splitRects_.size() - 1; i++) {
+        for (size_t i = 0; i < splitRects_.size() - 1; i++) {
             auto lowBound = splitRects_[i].GetOffset().GetX();
             auto upBound = splitRects_[i].GetOffset().GetX() + DEFAULT_SPLIT_HEIGHT;
             if (info.GetLocalLocation().GetX() >= lowBound && info.GetLocalLocation().GetX() <= upBound) {

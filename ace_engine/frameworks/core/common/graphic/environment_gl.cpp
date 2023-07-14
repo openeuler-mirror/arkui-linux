@@ -16,7 +16,7 @@
 #include "core/common/graphic/environment_gl.h"
 
 #include <EGL/egl.h>
-#include "third_party/skia/include/gpu/GrContext.h"
+#include "gpu/GrContext.h"
 #include "third_party/skia/tools/gpu/GrContextFactory.h"
 
 #include "base/log/ace_trace.h"

@@ -24,7 +24,7 @@
 #else
 #include "flutter/lib/ui/painting/image.h"
 #endif
-#include "third_party/skia/include/codec/SkCodec.h"
+#include "codec/SkCodec.h"
 
 #include "base/memory/ace_type.h"
 #include "core/animation/animator.h"

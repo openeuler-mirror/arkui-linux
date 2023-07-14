@@ -16,11 +16,11 @@
 #include "core/components/image/flutter_render_image.h"
 
 #include "flutter/common/task_runners.h"
-#include "third_party/skia/include/core/SkClipOp.h"
-#include "third_party/skia/include/core/SkColorFilter.h"
-#include "third_party/skia/include/core/SkRect.h"
-#include "third_party/skia/include/core/SkShader.h"
-#include "third_party/skia/include/effects/SkImageFilters.h"
+#include "core/SkClipOp.h"
+#include "core/SkColorFilter.h"
+#include "core/SkRect.h"
+#include "core/SkShader.h"
+#include "effects/SkImageFilters.h"
 
 #include "base/image/pixel_map.h"
 #include "base/utils/utils.h"

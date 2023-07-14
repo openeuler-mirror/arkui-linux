@@ -1,0 +1,20 @@
+{
+  "color": [
+    {
+      "name": "base_light",
+      "value": "#22222222"
+    },
+    {
+      "name": "base_light_dark",
+      "value": "#22222222"
+    },
+    {
+      "name": "base_light_phone",
+      "value": "#22222222"
+    },
+    {
+      "name": "base_light_ldpi",
+      "value": "#22222222"
+    }
+  ]
+}

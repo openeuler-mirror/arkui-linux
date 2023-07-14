@@ -16,14 +16,15 @@
 #include "base/log/exception_handler.h"
 #include "base/utils/utils.h"
 
-#include "app_mgr_client.h"
-#include "application_data_manager.h"
+//#include "app_mgr_client.h"
+//#include "application_data_manager.h"
 
 #include "core/common/ace_application_info.h"
 
 namespace OHOS::Ace {
 static void KillApplicationByUid()
 {
+    /*
     auto appMgrClient = std::make_unique<AppExecFwk::AppMgrClient>();
     CHECK_NULL_VOID(appMgrClient);
     auto result = appMgrClient->ConnectAppMgrService();
@@ -36,13 +37,16 @@ static void KillApplicationByUid()
         LOGE("Fail to kill application by uid. %{public}d", ret);
         return;
     }
+    */
 }
 
 void ExceptionHandler::HandleJsException(const std::string& exceptionMsg)
 {
+    /*
     auto hasErrorObserver = AppExecFwk::ApplicationDataManager::GetInstance().NotifyUnhandledException(exceptionMsg);
     if (!hasErrorObserver) {
         KillApplicationByUid();
     }
+    */
 }
 } // namespace OHOS::Ace

@@ -17,7 +17,7 @@
 
 #include "base/log/log_wrapper.h"
 #include "base/utils/utils.h"
-#include "napi_common_want.h"
+//#include "napi_common_want.h"
 
 namespace OHOS::Ace {
 
