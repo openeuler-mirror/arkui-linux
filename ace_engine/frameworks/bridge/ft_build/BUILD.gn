@@ -1,0 +1,72 @@
+# Copyright (c) 2023 Huawei Technologies Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/gn/fangtian.gni")
+import("//ace_engine/ft_build/ace_config.gni")
+
+# build framework bridge
+template("framework_bridge") {
+  forward_variables_from(invoker, "*")
+
+  ft_source_set(target_name) {
+    configs = [ "$ace_root/ft_build:ace_config" ]
+
+    deps = [
+      "../declarative_frontend/ft_build:declarative_frontend_$platform",
+
+      # bridge source
+      "../card_frontend/ft_build:card_frontend_$platform",
+      "../codec/ft_build:data_codec",
+      "../common/ft_build:bridge_common_$platform",
+      "../common/accessibility/ft_build:bridge_accessibility_$platform",
+      "../js_frontend/ft_build:js_frontend_$platform",
+      "../plugin_frontend/ft_build:plugin_frontend_$platform",
+    ]
+
+    if (defined(config.js_pa_support) && config.js_pa_support) {
+        deps += [ "$ace_root/${config.pa_engine_path}:pa_backend_$platform" ]
+    }
+  }
+}
+
+# build ng framework bridge
+template("framework_bridge_ng") {
+  forward_variables_from(invoker, "*")
+
+  ft_source_set(target_name) {
+    configs = [ "$ace_root/ft_build:ace_config" ]
+
+    deps = [
+      "../codec/ft_build:data_codec",
+      "../common/ft_build:bridge_common_ng_$platform",
+      "../common/accessibility/ft_build:bridge_accessibility_$platform",
+      "../declarative_frontend/ft_build:declarative_frontend_$platform",
+    ]
+  }
+}
+
+foreach(item, ace_platforms) {
+  framework_bridge("framework_bridge_" + item.name) {
+    platform = item.name
+    config = {
+    }
+
+    if (defined(item.config)) {
+      config = item.config
+    }
+  }
+
+  framework_bridge_ng("framework_bridge_ng_" + item.name) {
+    platform = item.name
+  }
+}

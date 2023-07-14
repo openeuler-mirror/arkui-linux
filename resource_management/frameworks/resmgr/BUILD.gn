@@ -1,0 +1,260 @@
+# Copyright (c) 2021-2022 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//base/global/resource_management/resmgr.gni")
+import("//build/ohos.gni")
+
+# source code for win.
+is_win = "${current_os}_${current_cpu}" == "mingw_x86_64"
+
+# source code for linux.
+is_linux = "${current_os}_${current_cpu}" == "linux_x64"
+
+# source code for mac.
+is_mac = "${current_os}_${current_cpu}" == "mac_x64" ||
+         "${current_os}_${host_cpu}" == "mac_arm64"
+
+config("resmgr_config") {
+  include_dirs = [
+    "include",
+    "//third_party/zlib/contrib/minizip",
+    "//base/global/resource_management/interfaces/inner_api/include",
+    "//third_party/bounds_checking_function/include",
+  ]
+
+  if (resource_management_support_icu) {
+    include_dirs += [
+      "//third_party/icu/icu4c/source",
+      "//third_party/icu/icu4c/source/common",
+      "//third_party/icu/icu4c/source/i18n",
+    ]
+    defines = [ "SUPPORT_GRAPHICS" ]
+  }
+}
+
+manager_sources = [
+  "src/hap_manager.cpp",
+  "src/hap_resource.cpp",
+  "src/locale_matcher.cpp",
+  "src/lock.cpp",
+  "src/res_config_impl.cpp",
+  "src/res_desc.cpp",
+  "src/res_locale.cpp",
+  "src/resource_manager_impl.cpp",
+  "src/utils/hap_parser.cpp",
+  "src/utils/psue_manager.cpp",
+  "src/utils/string_utils.cpp",
+  "src/utils/utils.cpp",
+]
+
+config("resmgr_public_config") {
+  visibility = [ ":*" ]
+
+  include_dirs =
+      [ "//base/global/resource_management/interfaces/inner_api/include" ]
+
+  if (resource_management_support_icu) {
+    include_dirs += [ "//third_party/icu/icu4c/source/common" ]
+    defines = [ "SUPPORT_GRAPHICS" ]
+  }
+}
+
+config("global_resmgr_all_deps_config") {
+  include_dirs =
+      [ "//base/global/resource_management/interfaces/inner_api/include" ]
+}
+
+ohos_shared_library("global_resmgr") {
+  sources = manager_sources
+
+  sources += [ "//base/global/resource_management/dfx/hisysevent_adapter/hisysevent_adapter.cpp" ]
+
+  defines = [ "CONFIG_HILOG" ]
+
+  configs = [ ":resmgr_config" ]
+
+  version_script = "libresmgr.versionscript"
+
+  include_dirs = [ "//base/global/resource_management/dfx/hisysevent_adapter" ]
+
+  public_configs = [ ":resmgr_public_config" ]
+
+  all_dependent_configs = [ ":global_resmgr_all_deps_config" ]
+
+  deps = [
+    "//third_party/bounds_checking_function:libsec_shared",
+    "//third_party/zlib:shared_libz",
+  ]
+
+  if (resource_management_support_icu) {
+    deps += [
+      "//third_party/icu/icu4c:shared_icui18n",
+      "//third_party/icu/icu4c:shared_icuuc",
+    ]
+    defines += [ "SUPPORT_GRAPHICS" ]
+  }
+
+  external_deps = [
+    "hisysevent_native:libhisysevent",
+    "hitrace_native:hitrace_meter",
+    "hiviewdfx_hilog_native:libhilog",
+  ]
+
+  subsystem_name = "global"
+  part_name = "resource_management"
+}
+
+ohos_shared_library("global_resmgr_win") {
+  if (resource_management_support_icu) {
+    defines = [
+      "__WINNT__",
+      "__EXPORT_MGR__",
+      "__IDE_PREVIEW__",
+    ]
+    cflags = [
+      "-std=c++17",
+      "-Wno-ignored-attributes",
+    ]
+
+    sources = manager_sources
+
+    configs = [ ":resmgr_config" ]
+
+    public_configs = [ ":resmgr_public_config" ]
+
+    deps = [
+      "//third_party/icu/icu4c:static_icui18n",
+      "//third_party/icu/icu4c:static_icuuc",
+      "//third_party/zlib:libz",
+    ]
+
+    libs = [ "shlwapi" ]
+  }
+  subsystem_name = "global"
+  part_name = "resource_management"
+}
+
+group("win_resmgr") {
+  if (resource_management_support_icu && is_win) {
+    deps = [ ":global_resmgr_win" ]
+  }
+}
+
+ohos_shared_library("global_resmgr_mac") {
+  if (resource_management_support_icu) {
+    defines = [ "__IDE_PREVIEW__" ]
+    cflags = [
+      "-std=c++17",
+      "-Wno-ignored-attributes",
+    ]
+
+    sources = manager_sources
+
+    configs = [ ":resmgr_config" ]
+
+    public_configs = [ ":resmgr_public_config" ]
+
+    if (host_os == "mac") {
+      deps = [
+        "//third_party/bounds_checking_function:libsec_static",
+        "//third_party/icu/icu4c:static_icui18n",
+        "//third_party/icu/icu4c:static_icuuc",
+        "//third_party/zlib:libz",
+      ]
+    }
+  }
+  subsystem_name = "global"
+  part_name = "resource_management"
+}
+
+group("mac_resmgr") {
+  if (resource_management_support_icu && is_mac) {
+    deps = [ ":global_resmgr_mac" ]
+  }
+}
+
+ohos_shared_library("global_resmgr_linux") {
+  if (resource_management_support_icu) {
+    defines = [
+      "__IDE_PREVIEW__",
+      "__LINUX__",
+    ]
+    cflags = [
+      "-std=c++17",
+      "-Wno-ignored-attributes",
+    ]
+
+    sources = manager_sources
+
+    configs = [ ":resmgr_config" ]
+
+    public_configs = [ ":resmgr_public_config" ]
+
+    deps = [
+      "//third_party/bounds_checking_function:libsec_shared",
+      "//third_party/icu/icu4c:shared_icui18n",
+      "//third_party/icu/icu4c:shared_icuuc",
+      "//third_party/zlib:shared_libz",
+    ]
+  }
+  subsystem_name = "global"
+  part_name = "resource_management"
+}
+
+group("linux_resmgr") {
+  if (resource_management_support_icu && is_linux) {
+    deps = [ ":global_resmgr_linux" ]
+  }
+}
+
+ohos_shared_library("librawfile") {
+  output_name = "rawfile"
+  sources = [ "src/raw_file_manager.cpp" ]
+
+  include_dirs = [
+    "//base/global/resource_management/frameworks/resmgr/include",
+    "//base/global/resource_management/interfaces/native/resource/include",
+    "//base/global/resource_management/interfaces/inner_api/include",
+    "//base/global/resource_management/interfaces/js/innerkits/core/include",
+    "//third_party/node/src",
+  ]
+
+  if (resource_management_support_icu) {
+    include_dirs += [ "//third_party/icu/icu4c/source/i18n" ]
+  }
+
+  cflags = [ "-Wno-error=inconsistent-missing-override" ]
+
+  deps = [ "//base/global/resource_management/interfaces/native/resource:librawfile_ndk" ]
+
+  public_deps = [
+    "//base/global/resource_management/frameworks/resmgr:global_resmgr",
+    "//foundation/arkui/napi:ace_napi",
+  ]
+
+  external_deps = [
+    "ability_base:configuration",
+    "bundle_framework:appexecfwk_base",
+    "c_utils:utils",
+    "hiviewdfx_hilog_native:libhilog",
+  ]
+
+  version_script = get_label_info(
+                       "//base/global/resource_management/interfaces/native/resource:librawfile_ndk",
+                       "target_gen_dir") + "/" + get_label_info(
+                       "//base/global/resource_management/interfaces/native/resource:librawfile_ndk",
+                       "name") + version_script_suffix
+
+  subsystem_name = "global"
+  part_name = "resource_management"
+}

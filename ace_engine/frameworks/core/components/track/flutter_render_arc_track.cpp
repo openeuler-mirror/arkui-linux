@@ -20,7 +20,7 @@
 #include "flutter/lib/ui/painting/path.h"
 #include "flutter/lib/ui/text/paragraph_builder.h"
 #include "flutter/third_party/txt/src/txt/paragraph_txt.h"
-#include "third_party/skia/include/core/SkClipOp.h"
+#include "core/SkClipOp.h"
 
 namespace OHOS::Ace {
 namespace {

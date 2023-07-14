@@ -20,8 +20,8 @@
 #include <string>
 
 #include "flutter/third_party/txt/src/txt/paragraph_txt.h"
-#include "third_party/skia/include/core/SkBitmap.h"
-#include "third_party/skia/include/core/SkCanvas.h"
+#include "core/SkBitmap.h"
+#include "core/SkCanvas.h"
 
 #include "core/components/common/properties/decoration.h"
 #include "core/components/text_field/render_text_field.h"

@@ -15,9 +15,9 @@
 
 #include "core/components/select_popup/rosen_render_select_popup.h"
 
-#include "third_party/skia/include/core/SkMaskFilter.h"
-#include "third_party/skia/include/core/SkRect.h"
-#include "third_party/skia/include/effects/SkGradientShader.h"
+#include "core/SkMaskFilter.h"
+#include "core/SkRect.h"
+#include "effects/SkGradientShader.h"
 
 #include "core/components/common/painter/rosen_decoration_painter.h"
 #include "core/components/common/properties/shadow_config.h"

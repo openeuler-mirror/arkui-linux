@@ -18,10 +18,10 @@
 
 #include "experimental/svg/model/SkSVGDOM.h"
 #include "flutter/third_party/txt/src/txt/paragraph.h"
-#include "third_party/skia/include/core/SkBitmap.h"
-#include "third_party/skia/include/core/SkCanvas.h"
-#include "third_party/skia/include/core/SkPaint.h"
-#include "third_party/skia/include/core/SkPath.h"
+#include "core/SkBitmap.h"
+#include "core/SkCanvas.h"
+#include "core/SkPaint.h"
+#include "core/SkPath.h"
 
 #include "base/utils/measure_util.h"
 #include "core/components/custom_paint/offscreen_canvas.h"

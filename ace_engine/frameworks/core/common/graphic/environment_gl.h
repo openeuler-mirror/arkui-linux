@@ -19,7 +19,7 @@
 #include <memory>
 #include <thread>
 
-#include "third_party/skia/include/core/SkRefCnt.h"
+#include "core/SkRefCnt.h"
 
 #include "base/memory/referenced.h"
 #include "base/utils/macros.h"

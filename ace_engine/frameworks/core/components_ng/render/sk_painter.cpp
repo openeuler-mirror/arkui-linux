@@ -28,23 +28,25 @@
 namespace OHOS::Ace::NG {
 void SkPainter::DrawPath(RSCanvas& canvas, const std::string& commands, const ShapePaintProperty& shapePaintProperty)
 {
-    auto rsCanvas = canvas.GetImpl<RSSkCanvas>();
-    CHECK_NULL_VOID_NOLOG(rsCanvas);
-    auto skCanvas = rsCanvas->ExportSkCanvas();
-    CHECK_NULL_VOID_NOLOG(skCanvas);
-    SkPaint skPen;
-    SkPaint skBrush;
-    SkPath skPath;
-    bool ret = SkParsePath::FromSVGString(commands.c_str(), &skPath);
-    if (!ret) {
-        return;
-    }
-    // do brush first then do pen
-    SetBrush(skBrush, shapePaintProperty);
-    skCanvas->drawPath(skPath, skBrush);
-    if (SetPen(skPen, shapePaintProperty)) {
-        skCanvas->drawPath(skPath, skPen);
-    }
+    // Fangtian TODO
+    LOGW("SkPainter::DrawPath not implemented.");
+    // auto rsCanvas = canvas.GetImpl<RSSkCanvas>();
+    // CHECK_NULL_VOID_NOLOG(rsCanvas);
+    // auto skCanvas = rsCanvas->ExportSkCanvas();
+    // CHECK_NULL_VOID_NOLOG(skCanvas);
+    // SkPaint skPen;
+    // SkPaint skBrush;
+    // SkPath skPath;
+    // bool ret = SkParsePath::FromSVGString(commands.c_str(), &skPath);
+    // if (!ret) {
+    //     return;
+    // }
+    // // do brush first then do pen
+    // SetBrush(skBrush, shapePaintProperty);
+    // skCanvas->drawPath(skPath, skBrush);
+    // if (SetPen(skPen, shapePaintProperty)) {
+    //     skCanvas->drawPath(skPath, skPen);
+    // }
 }
 
 bool SkPainter::SetPen(SkPaint& skPaint, const ShapePaintProperty& shapePaintProperty)

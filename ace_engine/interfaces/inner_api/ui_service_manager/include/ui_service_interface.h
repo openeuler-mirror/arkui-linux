@@ -16,7 +16,8 @@
 #define OHOS_AAFWK_UI_SERVICE_INTERFACE_H
 
 #include <iremote_broker.h>
-#include "want.h"
+/* Fangtian TODO */
+// #include "want.h"
 
 #include "base/utils/macros.h"
 

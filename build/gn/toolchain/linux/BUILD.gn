@@ -1,0 +1,61 @@
+# Copyright (c) 2023 Huawei Technologies Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#  A toolchain is a set of commands and build flags used to compile the source
+#  code. The toolchain() function defines these commands.
+
+import("//build/gn/toolchain/toolchain.gni")
+
+clang_toolchain("clang_arm64") {
+  toolchain_args = {
+    current_cpu = ""
+    current_os = ""
+  }
+}
+
+clang_toolchain("clang_x64") {
+  toolchain_args = {
+    current_cpu = ""
+    current_os = ""
+  }
+
+  if (use_musl) {
+    if (use_musl_oh) {
+      # TODO: musl_oh
+      assert(false, "[GN ERROR] Unsupport musl_oh for toolchain currently.")
+    }
+
+    libc_dir = rebase_path("/usr/musl/lib", root_build_dir)
+    # gcc_dir = rebase_path("/usr/lib/gcc/x86_64-linux-gnu/10.3.1", root_build_dir)
+    clang_lib_dir = rebase_path("/usr/lib64/clang/12.0.1/lib", root_build_dir)
+
+    # CRT files
+    common_prefix = "${libc_dir}/crti.o" # _init and _fini
+    common_prefix += " ${clang_lib_dir}/clang_rt.crtbegin-x86_64.o" # impl _init for C++
+    # common_prefix += " ${gcc_dir}/crtbeginS.o"
+
+    common_suffix = "${libc_dir}/crtn.o" # _init and _fini
+    common_suffix += " ${clang_lib_dir}/clang_rt.crtend-x86_64.o" # impl _fini for C++
+    # common_suffix += " ${gcc_dir}/crtendS.o"
+
+    link_libs_section_prefix = "${libc_dir}/Scrt1.o" # _start, for PIEs
+    link_libs_section_prefix += " " + common_prefix
+
+    link_libs_section_suffix = common_suffix
+    link_libs_section_suffix += " -Wl,-dynamic-linker /lib/ld-musl.so.1" # dynamic linker
+
+    solink_libs_section_prefix = common_prefix
+
+    solink_libs_section_suffix = common_suffix
+  }
+}

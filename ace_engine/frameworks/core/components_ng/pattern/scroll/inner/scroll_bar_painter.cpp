@@ -19,6 +19,7 @@
 
 #include "base/utils/utils.h"
 #include "core/components_ng/render/drawing_prop_convertor.h"
+#include "core/SkScalar.h"
 
 namespace OHOS::Ace::NG {
 namespace {

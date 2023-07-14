@@ -28,8 +28,8 @@
 #else
 #include "flutter/lib/ui/painting/image.h"
 #endif
-#include "third_party/skia/include/codec/SkCodec.h"
-#include "third_party/skia/include/core/SkGraphics.h"
+#include "codec/SkCodec.h"
+#include "core/SkGraphics.h"
 
 #include "core/common/container.h"
 #include "core/common/container_scope.h"

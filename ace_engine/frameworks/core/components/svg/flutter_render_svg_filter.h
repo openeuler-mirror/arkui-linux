@@ -19,8 +19,8 @@
 #include "frameworks/core/components/svg/render_svg_fe.h"
 #include "frameworks/core/components/svg/render_svg_filter.h"
 
-#include "third_party/skia/include/core/SkImageFilter.h"
-#include "third_party/skia/include/core/SkPaint.h"
+#include "core/SkImageFilter.h"
+#include "core/SkPaint.h"
 
 namespace OHOS::Ace {
 

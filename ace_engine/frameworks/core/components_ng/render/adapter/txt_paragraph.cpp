@@ -155,10 +155,12 @@ size_t TxtParagraph::GetLineCount()
 
 void TxtParagraph::Paint(const RSCanvas& canvas, float x, float y)
 {
-    CHECK_NULL_VOID(paragraph_);
-    SkCanvas* skCanvas = canvas.GetImpl<RSSkCanvas>()->ExportSkCanvas();
-    CHECK_NULL_VOID(skCanvas);
-    paragraph_->Paint(skCanvas, x, y);
+    // Fangtian TODO
+    // CHECK_NULL_VOID(paragraph_);
+    // SkCanvas* skCanvas = canvas.GetImpl<RSSkCanvas>()->ExportSkCanvas();
+    // CHECK_NULL_VOID(skCanvas);
+    // paragraph_->Paint(skCanvas, x, y);
+    LOGW("TxtParagraph::Paint not implemented.");
 }
 
 int32_t TxtParagraph::GetHandlePositionForClick(const Offset& offset)

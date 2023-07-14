@@ -207,7 +207,8 @@ RefPtr<DOMNode> DOMDocument::CreateNodeWithId(const std::string& tag, NodeId nod
         { DOM_NODE_TAG_POPUP, &DOMNodeCreator<DOMPopup> },
 #endif
         { DOM_NODE_TAG_PROGRESS, &DOMNodeCreator<DOMProgress> },
-        { DOM_NODE_TAG_QRCODE, &DOMNodeCreator<DOMQrcode> },
+        // Fangtian TODO
+        // { DOM_NODE_TAG_QRCODE, &DOMNodeCreator<DOMQrcode> },
 #ifndef WEARABLE_PRODUCT
         { DOM_NODE_TAG_RATING, &DOMNodeCreator<DOMRating> },
 #endif
