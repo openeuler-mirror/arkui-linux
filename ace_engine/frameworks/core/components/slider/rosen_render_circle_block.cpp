@@ -15,9 +15,9 @@
 
 #include "core/components/slider/rosen_render_circle_block.h"
 
-#include "third_party/skia/include/core/SkMaskFilter.h"
-#include "third_party/skia/include/core/SkPath.h"
-#include "third_party/skia/include/core/SkRRect.h"
+#include "core/SkMaskFilter.h"
+#include "core/SkPath.h"
+#include "core/SkRRect.h"
 
 #include "base/utils/system_properties.h"
 #include "core/components/common/painter/rosen_decoration_painter.h"

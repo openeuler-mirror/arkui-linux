@@ -21,8 +21,8 @@
 #include "core/pipeline/layers/offset_layer.h"
 #include "core/pipeline/layers/scene_builder.h"
 #include "experimental/svg/model/SkSVGDOM.h"
-#include "third_party/skia/include/core/SkPaint.h"
-#include "third_party/skia/include/core/SkData.h"
+#include "core/SkPaint.h"
+#include "core/SkData.h"
 
 namespace OHOS::Ace::Flutter {
 

@@ -15,7 +15,7 @@
 
 #include "core/components_ng/render/adapter/skia_canvas_image.h"
 
-#include "third_party/skia/include/core/SkColorFilter.h"
+#include "core/SkColorFilter.h"
 
 #include "base/image/pixel_map.h"
 #include "core/components_ng/render/drawing.h"

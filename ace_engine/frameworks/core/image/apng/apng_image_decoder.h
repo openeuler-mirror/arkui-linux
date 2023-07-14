@@ -19,8 +19,8 @@
 #include "base/geometry/size.h"
 #include "base/memory/ace_type.h"
 
-#include "third_party/skia/include/core/SkStream.h"
-#include "third_party/skia/include/core/SkImage.h"
+#include "core/SkStream.h"
+#include "core/SkImage.h"
 
 namespace OHOS::Ace {
 /*

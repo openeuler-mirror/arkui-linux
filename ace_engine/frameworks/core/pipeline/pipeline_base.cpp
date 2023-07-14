@@ -30,7 +30,8 @@
 #include "core/common/window.h"
 #include "core/components/custom_paint/render_custom_paint.h"
 #include "core/components_ng/render/animation_utils.h"
-#include "core/image/image_provider.h"
+/* Fangtian TODO */
+// #include "core/image/image_provider.h"
 
 namespace OHOS::Ace {
 
@@ -296,7 +297,9 @@ void PipelineBase::onRouterChange(const std::string& url)
 
 void PipelineBase::TryLoadImageInfo(const std::string& src, std::function<void(bool, int32_t, int32_t)>&& loadCallback)
 {
-    ImageProvider::TryLoadImageInfo(AceType::Claim(this), src, std::move(loadCallback));
+    /* Fangtian TODO */
+    LOGW("PipelineBase::TryLoadImageInfo not implemented.");
+    // ImageProvider::TryLoadImageInfo(AceType::Claim(this), src, std::move(loadCallback));
 }
 
 RefPtr<OffscreenCanvas> PipelineBase::CreateOffscreenCanvas(int32_t width, int32_t height)

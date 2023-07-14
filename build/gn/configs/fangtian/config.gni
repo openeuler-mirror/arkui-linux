@@ -1,0 +1,18 @@
+# Copyright 2014 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+if (is_ft) {
+  import("abi.gni")
+
+  # Tips: same as `musl_target_triple` in //third_party/musl/musl_config.gni
+  if (current_cpu == "arm") {
+    abi_target = "arm-linux-fangtian"
+  } else if (current_cpu == "arm64") {
+    abi_target = "arm64-linux-fangtian"
+  } else if (current_cpu == "x64" || current_cpu == "x86_64") {
+    abi_target = "x64-linux-fangtian"
+  } else {
+    assert(false, "[GN ERROR] Not support cpu architecture.")
+  }
+}

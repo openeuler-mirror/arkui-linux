@@ -1,0 +1,63 @@
+# Copyright (c) 2023 Huawei Technologies Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("ft_copy.gni")
+
+# Copy file to target output dir.
+# 
+# parameters:
+# - source(required): str.
+# - output(optional): str, default is `$target_out_dir/$source`.
+# - testonly(optional)
+# - deps(optional)
+# - visibility(optional) 
+# - public_configs(optional)
+# - subsystem_name(unused): subsystem name, default is "common".
+# - part_name(unused): part name, default is subsystem_name.
+template("ft_prebuilt_etc") {
+    assert(defined(invoker.source), "[GN ERROR] ${target_name} error: source must be defined.")
+
+    if (defined(invoker.output)) {
+        _copy_out_dir = "${target_out_dir}/${invoker.output}"
+    } else {
+        _copy_out_dir = "${target_out_dir}/${invoker.source}"
+    }
+
+    ft_copy(target_name) {
+        forward_variables_from(invoker,
+                            [
+                                "testonly",
+                                "visibility",
+
+                                "deps",
+                                "public_configs",
+                                "subsystem_name",
+                                "part_name",
+
+                                # TODO: generate module info
+                                # "install_images",
+                                # "module_install_dir",
+                                # "relative_install_dir",
+                                # "symlink_target_name",
+                            ])
+        sources = [ invoker.source ]
+        outputs = [ _copy_out_dir ]
+        # TODO: generate module info
+        # module_type = "etc"
+        prebuilt = true
+        # install_enable = true
+        # if (defined(invoker.install_enable)) {
+        #     install_enable = invoker.install_enable
+        # }
+    }
+}

@@ -19,7 +19,7 @@
 #include "flutter/third_party/txt/src/txt/text_baseline.h"
 #include "flutter/third_party/txt/src/txt/text_decoration.h"
 #include "flutter/third_party/txt/src/txt/text_style.h"
-#include "third_party/skia/include/core/SkColor.h"
+#include "core/SkColor.h"
 
 #include "core/components/common/properties/text_style.h"
 #include "core/pipeline/pipeline_base.h"

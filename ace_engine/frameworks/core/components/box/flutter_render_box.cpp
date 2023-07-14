@@ -20,12 +20,12 @@
 #include "flutter/common/task_runners.h"
 #include "flutter/lib/ui/ui_dart_state.h"
 
-#include "third_party/skia/include/core/SkGraphics.h"
-#include "third_party/skia/include/core/SkMaskFilter.h"
-#include "third_party/skia/include/effects/Sk1DPathEffect.h"
-#include "third_party/skia/include/effects/SkDashPathEffect.h"
-#include "third_party/skia/include/effects/SkGradientShader.h"
-#include "third_party/skia/include/utils/SkParsePath.h"
+#include "core/SkGraphics.h"
+#include "core/SkMaskFilter.h"
+#include "effects/Sk1DPathEffect.h"
+#include "effects/SkDashPathEffect.h"
+#include "effects/SkGradientShader.h"
+#include "utils/SkParsePath.h"
 
 #include "base/geometry/offset.h"
 #include "core/common/frontend.h"

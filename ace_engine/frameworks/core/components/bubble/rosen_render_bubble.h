@@ -14,7 +14,7 @@
  */
 
 #include "flutter/lib/ui/ui_dart_state.h"
-#include "third_party/skia/include/core/SkCanvas.h"
+#include "core/SkCanvas.h"
 
 #include "core/components/bubble/render_bubble.h"
 #include "core/pipeline/base/rosen_render_context.h"
