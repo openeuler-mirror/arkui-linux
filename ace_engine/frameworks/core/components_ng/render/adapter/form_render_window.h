@@ -20,8 +20,9 @@
 
 #ifdef ENABLE_ROSEN_BACKEND
 #include <mutex>
-#include "render_service_client/core/ui/rs_ui_director.h"
-#include "vsync_receiver.h"
+// Fangtian TODO
+// #include "render_service_client/core/ui/rs_ui_director.h"
+// #include "vsync_receiver.h"
 #endif
 
 #include "base/thread/task_executor.h"

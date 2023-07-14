@@ -11,8 +11,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-group("ace_engine") {
+group("base") {
+  deps = [ "//resource_management/frameworks/resmgr/ft_build:global_resmgr_linux" ]
 }
 
-group("napi") {
+group("arkui") {
+  deps = [
+    "//ace_engine/frameworks/core/ft_build:ace_core_fangtian",
+    "//ace_engine/ft_build/build:libace_static_fangtian",
+    "//ace_engine/adapter/fangtian/ft_build:libace_engine",
+  ]
+}
+
+group("flutter") {
+  deps = [
+    "//third_party/flutter/ace_build:third_party_flutter_engine_fangtian",
+    "//third_party/flutter/ace_build/glfw:flutter_glfw_fangtian",
+  ]
 }

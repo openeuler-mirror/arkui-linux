@@ -17,7 +17,7 @@
 #define FOUNDATION_ACE_FRAMEWORKS_CORE_COMPONENTS_NG_RENDER_ADAPTER_FLUTTER_CANVAS_IMAGE_H
 
 #include "flutter/flow/skia_gpu_object.h"
-#include "third_party/skia/include/core/SkImage.h"
+#include "core/SkImage.h"
 
 #include "core/components_ng/render/adapter/skia_canvas_image.h"
 

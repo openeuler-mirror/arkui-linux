@@ -22,7 +22,7 @@
 #include "base/geometry/offset.h"
 #include "base/geometry/rect.h"
 #include "core/components/chart/render_chart.h"
-#include "third_party/skia/include/core/SkPath.h"
+#include "core/SkPath.h"
 
 namespace OHOS::Ace {
 

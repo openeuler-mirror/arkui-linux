@@ -16,7 +16,7 @@
 #include "core/components/progress/flutter_render_bubble_progress.h"
 
 #include "flutter/lib/ui/ui_dart_state.h"
-#include "third_party/skia/include/core/SkMaskFilter.h"
+#include "core/SkMaskFilter.h"
 
 #include "core/pipeline/base/scoped_canvas_state.h"
 #include "core/pipeline/layers/offset_layer.h"

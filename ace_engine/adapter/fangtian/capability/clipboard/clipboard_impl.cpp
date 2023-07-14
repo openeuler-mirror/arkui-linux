@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-#include "adapter/ohos/capability/clipboard/clipboard_impl.h"
-#include "adapter/ohos/osal/pixel_map_ohos.h"
+#include "adapter/fangtian/capability/clipboard/clipboard_impl.h"
+#include "adapter/fangtian/osal/pixel_map_fangtian.h"
 #include "base/utils/utils.h"
 
 #ifdef SYSTEM_CLIPBOARD_SUPPORTED

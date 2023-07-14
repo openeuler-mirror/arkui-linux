@@ -15,10 +15,10 @@
 
 #include "core/components/shadow/rosen_render_shadow.h"
 
-#include "third_party/skia/include/core/SkCanvas.h"
-#include "third_party/skia/include/core/SkColor.h"
-#include "third_party/skia/include/core/SkMaskFilter.h"
-#include "third_party/skia/include/core/SkRRect.h"
+#include "core/SkCanvas.h"
+#include "core/SkColor.h"
+#include "core/SkMaskFilter.h"
+#include "core/SkRRect.h"
 
 #include "core/pipeline/base/rosen_render_context.h"
 

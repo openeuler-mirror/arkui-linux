@@ -68,7 +68,7 @@ python3 ${PROJECT_DIR}/build/builder.py check --install-packages $*
 #
 # download prebuild files
 
-# install prebuild library
+# Install prebuild librarys
 if [ ! -d ${PROJECT_DIR}/prebuilts/libs ]; then
 git clone https://gitee.com/yanansong/ft_engine_prebuild.git -b rpms ${PROJECT_DIR}/prebuilts/libs
 fi
@@ -81,18 +81,17 @@ sudo ./installRPM
 cd ${PROJECT_DIR}
 rm -fr ${PROJECT_DIR}/prebuilts/libs
 
-# install prebuild include. delete download files
+# Install prebuild include files.
 if [ ! -d ${PROJECT_DIR}/prebuilts/inc ]; then
 git clone https://gitee.com/yanansong/devel_inc.git ${PROJECT_DIR}/prebuilts/inc
 fi
-
-# copy include files to /usr/include. delete download files
+# copy include files to /usr/include. & delete download files
 cd ${PROJECT_DIR}/prebuilts/inc
 sudo cp -fr * /usr/local/include
 cd ${PROJECT_DIR}
 rm -fr ${PROJECT_DIR}/prebuilts/inc
 
-# install ft_surface_wrapper
+# Install ft_surface_wrapper
 if [ ! -d ${PROJECT_DIR}/prebuilts/rpm/ft_surface_wrapper ]; then
     git clone https://gitee.com/ShaoboFeng/ft_surface_wrapper.git ${PROJECT_DIR}/prebuilts/rpm/ft_surface_wrapper
 fi
@@ -108,21 +107,12 @@ sudo make install
 rm -fr ${PROJECT_DIR}/prebuilts/rpm/ft_surface_wrapper
 cd ${PROJECT_DIR}
 
-# install mesa_fangtian
+# Install mesa_fangtian
 if [ ! -d ${PROJECT_DIR}/prebuilts/rpm/binary ]; then
     git clone https://gitee.com/ShaoboFeng/rpm-fangtian.git ${PROJECT_DIR}/prebuilts/rpm/binary
 fi
 cd ${PROJECT_DIR}/prebuilts/rpm/binary
 ./install.sh
 cd ${PROJECT_DIR}
-
-# copy FT sa file to /usr/local/share/ft/
-sudo mkdir -p /usr/local/share/ft
-sudo cp -fr ${PROJECT_DIR}/etc/ft.xml /usr/local/share/ft/
-
-# copy config files to /usr/local/share/ft/window_manager
-sudo mkdir -p /usr/local/share/ft/window_manager
-sudo cp ${PROJECT_DIR}/window_manager/resources/config/other/display_manager_config.xml /usr/local/share/ft/window_manager
-sudo cp ${PROJECT_DIR}/window_manager/resources/config/other/window_manager_config.xml /usr/local/share/ft/window_manager
 
 echo -e "\033[32m[*] Pre-build Done. You need exec 'build.sh'.\033[0m"

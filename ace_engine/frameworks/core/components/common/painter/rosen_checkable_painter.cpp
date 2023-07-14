@@ -15,7 +15,7 @@
 
 #include "core/components/common/painter/rosen_checkable_painter.h"
 
-#include "third_party/skia/include/core/SkPaint.h"
+#include "core/SkPaint.h"
 
 namespace OHOS::Ace {
 namespace {

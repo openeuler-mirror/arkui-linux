@@ -1,0 +1,16 @@
+{
+  "integer": [
+    {
+      "name": "integer_1",
+      "value": 101
+    },
+    {
+      "name": "integer_ref",
+      "value": "$integer:integer_1"
+    },
+    {
+      "name":"same_name",
+      "value":999
+    }
+  ]
+}

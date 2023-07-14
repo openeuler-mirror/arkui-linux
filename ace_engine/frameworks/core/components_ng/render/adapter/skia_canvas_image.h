@@ -18,7 +18,7 @@
 
 #ifdef NG_BUILD
 #include "flutter/flow/skia_gpu_object.h"
-#include "third_party/skia/include/core/SkImage.h"
+#include "core/SkImage.h"
 #else
 #include "flutter/lib/ui/painting/image.h"
 #endif

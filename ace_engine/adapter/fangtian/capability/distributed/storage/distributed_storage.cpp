@@ -15,8 +15,8 @@
 
 #include "adapter/ohos/capability/distributed/storage/distributed_storage.h"
 
-#include "distributed_object.h"
-#include "distributed_objectstore.h"
+// TODO #include "distributed_object.h"
+// TODO #include "distributed_objectstore.h"
 #include "objectstore_errors.h"
 
 #include "base/log/log.h"

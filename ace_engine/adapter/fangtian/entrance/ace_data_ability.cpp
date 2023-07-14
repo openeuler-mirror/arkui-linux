@@ -13,15 +13,15 @@
  * limitations under the License.
  */
 
-#include "adapter/ohos/entrance/ace_data_ability.h"
+#include "adapter/fangtian/entrance/ace_data_ability.h"
 
 #include "res_config.h"
 #include "resource_manager.h"
 
-#include "adapter/ohos/entrance/pa_container.h"
-#include "adapter/ohos/entrance/pa_engine/pa_backend.h"
-#include "adapter/ohos/entrance/platform_event_callback.h"
-#include "adapter/ohos/entrance/utils.h"
+#include "adapter/fangtian/entrance/pa_container.h"
+#include "adapter/fangtian/entrance/pa_engine/pa_backend.h"
+#include "adapter/fangtian/entrance/platform_event_callback.h"
+#include "adapter/fangtian/entrance/utils.h"
 #include "base/log/log.h"
 #include "base/utils/utils.h"
 #include "core/common/ace_engine.h"

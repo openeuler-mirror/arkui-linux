@@ -17,13 +17,13 @@
 
 #include <cmath>
 
-#include "third_party/skia/include/core/SkCanvas.h"
-#include "third_party/skia/include/core/SkColor.h"
-#include "third_party/skia/include/core/SkMaskFilter.h"
-#include "third_party/skia/include/core/SkPath.h"
-#include "third_party/skia/include/core/SkPoint.h"
-#include "third_party/skia/include/effects/SkDashPathEffect.h"
-#include "third_party/skia/include/effects/SkGradientShader.h"
+#include "core/SkCanvas.h"
+#include "core/SkColor.h"
+#include "core/SkMaskFilter.h"
+#include "core/SkPath.h"
+#include "core/SkPoint.h"
+#include "effects/SkDashPathEffect.h"
+#include "effects/SkGradientShader.h"
 
 #include "base/utils/system_properties.h"
 #include "core/pipeline/base/scoped_canvas_state.h"

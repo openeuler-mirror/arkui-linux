@@ -1,0 +1,95 @@
+{
+    "name": "@ohos/global_resource_management",
+    "version": "",
+    "description": "根据当前configuration（语言，区域，横竖屏，mccmnc）和device capability（设备类型，分辨率）获取应用资源信息读取接口",
+    "homePage": "https://gitee.com/openharmony",
+    "license": "Apache V2",
+    "repository": "https://gitee.com/openharmony/global_resource_management",
+    "domain": "os",
+    "language": "",
+    "publishAs": "code-segment",
+    "private": false,
+    "scripts": {},
+    "tags": [
+        "base"
+    ],
+    "keywords": [
+        "global",
+        "resmgr",
+        "standard"
+    ],
+    "envs": [],
+    "dirs": [],
+    "author": {
+        "name": "",
+        "email": "",
+        "url": ""
+    },
+    "contributors": [
+        {
+            "name": "",
+            "email": "",
+            "url": ""
+        }
+    ],
+    "segment": {
+        "destPath": "base/global/resource_management"
+    },
+    "component": {
+        "name": "resource_management",
+        "subsystem": "global",
+        "syscap": [ "SystemCapability.Global.ResourceManager" ],
+        "features": ["resource_management_support_icu"],
+        "adapted_system_type": [
+            "standard"
+        ],
+        "hisysevent_config": [
+          "//base/global/resource_management/hisysevent.yaml"
+        ],
+        "rom": "",
+        "ram": "",
+        "deps": {
+            "components": [
+              "ability_base",
+              "ability_runtime"
+            ],
+            "third_party": []
+        },
+        "build": {
+            "sub_component": [
+              "//base/global/resource_management/interfaces/js/kits:resourcemanager",
+              "//base/global/resource_management/frameworks/resmgr:global_resmgr",
+              "//base/global/resource_management/frameworks/resmgr:librawfile",
+              "//base/global/resource_management/frameworks/resmgr:win_resmgr",
+              "//base/global/resource_management/frameworks/resmgr:linux_resmgr",
+              "//base/global/resource_management/frameworks/resmgr:mac_resmgr"
+            ],
+            "inner_kits": [
+              {
+                "header": {
+                  "header_base": "//base/global/resource_management/interfaces/inner_api/include/",
+                  "header_files": [
+                    "res_common.h",
+                    "res_config.h",
+                    "resource_manager.h",
+                    "rstate.h"
+                  ]
+                },
+                "name": "//base/global/resource_management/frameworks/resmgr:global_resmgr"
+              },
+              {
+                "header": {
+                  "header_base": "//base/global/resource_management/interfaces/js/innerkits/core/include/",
+                  "header_files": [
+                    "resource_manager_addon.h"
+                  ]
+                },
+                "name": "//base/global/resource_management/interfaces/js/innerkits/core:resmgr_napi_core"
+              }
+            ],
+            "test": [
+              "//base/global/resource_management/frameworks/resmgr/test:unittest"
+            ]
+        }
+    }
+}

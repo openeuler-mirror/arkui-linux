@@ -19,7 +19,7 @@
 #include <dlfcn.h>
 #include <unistd.h>
 
-#include <frame_collector.h>
+//#include <frame_collector.h>
 
 #include "base/log/log_wrapper.h"
 #include "base/utils/utils.h"
@@ -101,7 +101,7 @@ int FrameReport::GetFrameReportEnable()
 
 void FrameReport::BeginFlushAnimation()
 {
-    Rosen::FrameCollector::GetInstance().MarkFrameEvent(Rosen::FrameEventType::AnimateStart);
+    //Rosen::FrameCollector::GetInstance().MarkFrameEvent(Rosen::FrameEventType::AnimateStart);
     if (GetFrameReportEnable() == 0) {
         return;
     }
@@ -112,7 +112,7 @@ void FrameReport::BeginFlushAnimation()
 
 void FrameReport::EndFlushAnimation()
 {
-    Rosen::FrameCollector::GetInstance().MarkFrameEvent(Rosen::FrameEventType::AnimateEnd);
+    //Rosen::FrameCollector::GetInstance().MarkFrameEvent(Rosen::FrameEventType::AnimateEnd);
     if (GetFrameReportEnable() == 0) {
         return;
     }
@@ -123,7 +123,7 @@ void FrameReport::EndFlushAnimation()
 
 void FrameReport::BeginFlushBuild()
 {
-    Rosen::FrameCollector::GetInstance().MarkFrameEvent(Rosen::FrameEventType::BuildStart);
+    //Rosen::FrameCollector::GetInstance().MarkFrameEvent(Rosen::FrameEventType::BuildStart);
     if (GetFrameReportEnable() == 0) {
         return;
     }
@@ -134,7 +134,7 @@ void FrameReport::BeginFlushBuild()
 
 void FrameReport::EndFlushBuild()
 {
-    Rosen::FrameCollector::GetInstance().MarkFrameEvent(Rosen::FrameEventType::BuildEnd);
+    //Rosen::FrameCollector::GetInstance().MarkFrameEvent(Rosen::FrameEventType::BuildEnd);
     if (GetFrameReportEnable() == 0) {
         return;
     }
@@ -145,7 +145,7 @@ void FrameReport::EndFlushBuild()
 
 void FrameReport::BeginFlushLayout()
 {
-    Rosen::FrameCollector::GetInstance().MarkFrameEvent(Rosen::FrameEventType::LayoutStart);
+    //Rosen::FrameCollector::GetInstance().MarkFrameEvent(Rosen::FrameEventType::LayoutStart);
     if (GetFrameReportEnable() == 0) {
         return;
     }
@@ -156,7 +156,7 @@ void FrameReport::BeginFlushLayout()
 
 void FrameReport::EndFlushLayout()
 {
-    Rosen::FrameCollector::GetInstance().MarkFrameEvent(Rosen::FrameEventType::LayoutEnd);
+    //Rosen::FrameCollector::GetInstance().MarkFrameEvent(Rosen::FrameEventType::LayoutEnd);
     if (GetFrameReportEnable() == 0) {
         return;
     }
@@ -167,7 +167,7 @@ void FrameReport::EndFlushLayout()
 
 void FrameReport::BeginFlushRender()
 {
-    Rosen::FrameCollector::GetInstance().MarkFrameEvent(Rosen::FrameEventType::DrawStart);
+    //Rosen::FrameCollector::GetInstance().MarkFrameEvent(Rosen::FrameEventType::DrawStart);
     if (GetFrameReportEnable() == 0) {
         return;
     }
@@ -198,7 +198,7 @@ void FrameReport::BeginFlushRenderFinish()
 
 void FrameReport::EndFlushRenderFinish()
 {
-    Rosen::FrameCollector::GetInstance().MarkFrameEvent(Rosen::FrameEventType::DrawEnd);
+    //Rosen::FrameCollector::GetInstance().MarkFrameEvent(Rosen::FrameEventType::DrawEnd);
     if (GetFrameReportEnable() == 0) {
         return;
     }

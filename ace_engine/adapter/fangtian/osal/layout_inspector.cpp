@@ -17,9 +17,9 @@
 
 #include <string>
 
-#include "third_party/skia/include/core/SkString.h"
-#include "third_party/skia/include/utils/SkBase64.h"
-#include "wm/window.h"
+//#include "third_party/skia/include/core/SkString.h"
+//#include "third_party/skia/include/utils/SkBase64.h"
+//#include "wm/window.h"
 
 #include "base/thread/background_task_executor.h"
 #include "base/utils/utils.h"
@@ -29,7 +29,7 @@
 #include "core/common/container_scope.h"
 #include "core/components_ng/base/inspector.h"
 #include "core/components_v2/inspector/inspector.h"
-#include "foundation/ability/ability_runtime/frameworks/native/runtime/connect_server_manager.h"
+//#include "foundation/ability/ability_runtime/frameworks/native/runtime/connect_server_manager.h"
 
 namespace OHOS::Ace {
 
@@ -53,9 +53,9 @@ void LayoutInspector::SupportInspector()
 
     auto sendTask = [treeJsonStr, jsonSnapshotStr = message->ToString(), container]() {
         if (container->IsUseStageModel()) {
-            OHOS::AbilityRuntime::ConnectServerManager::Get().SendInspector(treeJsonStr, jsonSnapshotStr);
+            //OHOS::AbilityRuntime::ConnectServerManager::Get().SendInspector(treeJsonStr, jsonSnapshotStr);
         } else {
-            OHOS::Ace::ConnectServerManager::Get().SendInspector(treeJsonStr, jsonSnapshotStr);
+            //OHOS::Ace::ConnectServerManager::Get().SendInspector(treeJsonStr, jsonSnapshotStr);
         }
     };
     BackgroundTaskExecutor::GetInstance().PostTask(std::move(sendTask));
@@ -71,6 +71,7 @@ void LayoutInspector::SetCallback(int32_t instanceId)
     LOGI("SetCallback start");
     auto container = AceEngine::Get().GetContainer(instanceId);
     CHECK_NULL_VOID_NOLOG(container);
+    /*
     if (container->IsUseStageModel()) {
         OHOS::AbilityRuntime::ConnectServerManager::Get().SetLayoutInspectorCallback(
             [](int32_t containerId) { return CreateLayoutInfo(containerId); },
@@ -80,6 +81,7 @@ void LayoutInspector::SetCallback(int32_t instanceId)
             [](int32_t containerId) { return CreateLayoutInfo(containerId); },
             [](bool status) { return SetStatus(status); });
     }
+    */
 }
 
 void LayoutInspector::CreateLayoutInfo(int32_t containerId)
@@ -95,11 +97,13 @@ void LayoutInspector::CreateLayoutInfo(int32_t containerId)
     CHECK_NULL_VOID(message);
 
     auto sendTask = [treeJsonStr, jsonSnapshotStr = message->ToString(), container]() {
+        /*
         if (container->IsUseStageModel()) {
             OHOS::AbilityRuntime::ConnectServerManager::Get().SendInspector(treeJsonStr, jsonSnapshotStr);
         } else {
             OHOS::Ace::ConnectServerManager::Get().SendInspector(treeJsonStr, jsonSnapshotStr);
         }
+        */
     };
     BackgroundTaskExecutor::GetInstance().PostTask(std::move(sendTask));
 }
@@ -123,6 +127,7 @@ void LayoutInspector::GetSnapshotJson(int32_t containerId, std::unique_ptr<JsonV
     auto container = AceEngine::Get().GetContainer(containerId);
     CHECK_NULL_VOID_NOLOG(container);
 
+    /*
     OHOS::sptr<OHOS::Rosen::Window> window = OHOS::Rosen::Window::GetTopWindowWithId(container->GetWindowId());
     CHECK_NULL_VOID_NOLOG(window);
     auto pixelMap = window->Snapshot();
@@ -140,6 +145,7 @@ void LayoutInspector::GetSnapshotJson(int32_t containerId, std::unique_ptr<JsonV
     SkString info(encodeLength);
     SkBase64::Encode(data, height * stride, info.writable_str());
     message->Put("pixelMapBase64", info.c_str());
+    */
 }
 
 } // namespace OHOS::Ace

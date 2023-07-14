@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2021-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,46 +13,27 @@
  * limitations under the License.
  */
 
-#include "adapter/ohos/entrance/ace_application_info.h"
+#include "adapter/preview/entrance/ace_application_info.h"
 
-#include <dirent.h>
-#include <iostream>
-#include <sys/stat.h>
-
-#include "contrib/minizip/unzip.h"
-#include "init_data.h"
 #include "unicode/locid.h"
+
+#ifdef WINDOWS_PLATFORM
+#include <windows.h>
+#else
+#include <dirent.h>
+#include <sys/types.h>
+#endif
 
 #include "base/i18n/localization.h"
 #include "base/log/ace_trace.h"
 #include "base/log/log.h"
 #include "base/resource/ace_res_config.h"
 #include "base/resource/ace_res_data_struct.h"
-#include "base/utils/utils.h"
 #include "core/common/ace_engine.h"
 
 namespace OHOS::Ace::Platform {
 
-AceApplicationInfoImpl::AceApplicationInfoImpl() {}
-
-AceApplicationInfoImpl::~AceApplicationInfoImpl() = default;
-
-void AceApplicationInfoImpl::SetJsEngineParam(const std::string& key, const std::string& value)
-{
-    jsEngineParams_[key] = value;
-}
-
-std::string AceApplicationInfoImpl::GetJsEngineParam(const std::string& key) const
-{
-    std::string value;
-    auto iter = jsEngineParams_.find(key);
-    if (iter != jsEngineParams_.end()) {
-        value = iter->second;
-    }
-    return value;
-}
-
-void AceApplicationInfoImpl::ChangeLocale(const std::string& language, const std::string& countryOrRegion)
+void AceApplicationInfoImpl::ChangeLocale(const std::string& language, const std::string& countryOrRegion) 
 {
     std::string languageLower = language;
     std::transform(language.begin(), language.end(), languageLower.begin(), ::tolower);
@@ -64,7 +45,11 @@ void AceApplicationInfoImpl::ChangeLocale(const std::string& language, const std
     resourceManager_->GetResConfig(*resConfig);
 
     auto localeInfo = resConfig->GetLocaleInfo();
-    CHECK_NULL_VOID(localeInfo);
+    if (localeInfo == nullptr) {
+        LOGE("get local info failed");
+        return;
+    }
+
     auto script = Localization::ComputeScript(language, countryOrRegion);
     resConfig->SetLocaleInfo(languageLower.c_str(), script.c_str(), countryOrRegionUpper.c_str());
     resourceManager_->UpdateResConfig(*resConfig);
@@ -92,12 +77,8 @@ void AceApplicationInfoImpl::SetLocale(const std::string& language, const std::s
     isRightToLeft_ = locale.isRightToLeft();
 
     auto languageList = Localization::GetLanguageList(language_);
-    if (languageList.size() == 1) {
-        Localization::SetLocale(language_, countryOrRegion_, script, languageList.front(), keywordsAndValues_);
-    } else {
-        auto selectLanguage = AceResConfig::GetLocaleFallback(localeTag_, languageList);
-        Localization::SetLocale(language_, countryOrRegion_, script, selectLanguage.front(), keywordsAndValues_);
-    }
+    Localization::SetLocale(
+        language_, countryOrRegion_, script, languageList.front(), keywordsAndValues_);
 }
 
 bool AceApplicationInfoImpl::GetBundleInfo(const std::string& packageName, AceBundleInfo& bundleInfo)
@@ -105,10 +86,24 @@ bool AceApplicationInfoImpl::GetBundleInfo(const std::string& packageName, AceBu
     return false;
 }
 
+double AceApplicationInfoImpl::GetLifeTime() const
+{
+    return 0;
+}
+
+std::string AceApplicationInfoImpl::GetJsEngineParam(const std::string& key) const
+{
+    return "";
+}
+
 AceApplicationInfoImpl& AceApplicationInfoImpl::GetInstance()
 {
     static AceApplicationInfoImpl instance;
     return instance;
+}
+
+void AceApplicationInfoImpl::SetDebug(bool isDebugVersion, bool needDebugBreakpoint)
+{
 }
 
 } // namespace OHOS::Ace::Platform

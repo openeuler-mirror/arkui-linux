@@ -1,0 +1,12 @@
+{
+  "intarray":[
+    {
+      "name":"intarray_1",
+      "value":[
+        100,
+        200,
+        "$integer:integer_1"
+      ]
+    }
+  ]
+}

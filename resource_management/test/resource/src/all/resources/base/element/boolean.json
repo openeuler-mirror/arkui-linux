@@ -1,0 +1,16 @@
+{
+  "boolean":[
+    {
+      "name":"boolean_1",
+      "value":true
+    },
+    {
+      "name":"boolean_ref",
+      "value":"$boolean:boolean_1"
+    },
+    {
+      "name":"same_name",
+      "value":false
+    }
+  ]
+}

@@ -47,7 +47,6 @@
 #include "adapter/ohos/entrance/utils.h"
 #include "adapter/ohos/osal/page_url_checker_ohos.h"
 #include "base/geometry/rect.h"
-#include "base/i18n/localization.h"
 #include "base/log/ace_trace.h"
 #include "base/log/log.h"
 #include "base/subwindow/subwindow_manager.h"
@@ -252,7 +251,6 @@ UIContentImpl::UIContentImpl(OHOS::AbilityRuntime::Context* context,
     CHECK_NULL_VOID(applicationInfo);
     minCompatibleVersionCode_ = applicationInfo->minCompatibleVersionCode;
     isBundle_ = (hapModuleInfo->compileMode == AppExecFwk::CompileMode::JS_BUNDLE);
-    SetConfiguration(context->GetConfiguration());
     const auto& obj = context->GetBindingObject();
     CHECK_NULL_VOID(obj);
     auto ref = obj->Get<NativeReference>();
@@ -401,8 +399,9 @@ void UIContentImpl::CommonInitializeForm(OHOS::Rosen::Window* window,
         LOGI("UIContent: deviceWidth: %{public}d, deviceHeight: %{public}d, default density: %{public}f", deviceWidth,
             deviceHeight, density);
     }
-
     SystemProperties::InitDeviceInfo(deviceWidth, deviceHeight, deviceHeight >= deviceWidth ? 0 : 1, density, false);
+    SystemProperties::SetColorMode(ColorMode::LIGHT);
+
     std::unique_ptr<Global::Resource::ResConfig> resConfig(Global::Resource::CreateResConfig());
     if (context) {
         auto resourceManager = context->GetResourceManager();
@@ -427,6 +426,12 @@ void UIContentImpl::CommonInitializeForm(OHOS::Rosen::Window* window,
             SystemProperties::SetDeviceAccess(
                 resConfig->GetInputDevice() == Global::Resource::InputDevice::INPUTDEVICE_POINTINGDEVICE);
         }
+    } else {
+        LOGI("Context is nullptr, set localeInfo to default");
+        UErrorCode status = U_ZERO_ERROR;
+        icu::Locale locale = icu::Locale::forLanguageTag(Global::I18n::LocaleConfig::GetSystemLanguage(), status);
+        AceApplicationInfo::GetInstance().SetLocale(locale.getLanguage(), locale.getCountry(), locale.getScript(), "");
+        SystemProperties::SetColorMode(ColorMode::LIGHT);
     }
 
     auto abilityContext = OHOS::AbilityRuntime::Context::ConvertTo<OHOS::AbilityRuntime::AbilityContext>(context);
@@ -786,48 +791,6 @@ void UIContentImpl::CommonInitializeForm(OHOS::Rosen::Window* window,
     LayoutInspector::SetCallback(instanceId_);
 }
 
-void UIContentImpl::SetConfiguration(const std::shared_ptr<OHOS::AppExecFwk::Configuration>& config)
-{
-    if (config == nullptr) {
-        LOGI("config is nullptr, set localeInfo to default");
-        UErrorCode status = U_ZERO_ERROR;
-        icu::Locale locale = icu::Locale::forLanguageTag(Global::I18n::LocaleConfig::GetSystemLanguage(), status);
-        AceApplicationInfo::GetInstance().SetLocale(locale.getLanguage(), locale.getCountry(), locale.getScript(), "");
-        SystemProperties::SetColorMode(ColorMode::LIGHT);
-        return;
-    }
-
-    LOGI("SetConfiguration");
-    auto colorMode = config->GetItem(OHOS::AAFwk::GlobalConfigurationKey::SYSTEM_COLORMODE);
-    auto deviceAccess = config->GetItem(OHOS::AAFwk::GlobalConfigurationKey::INPUT_POINTER_DEVICE);
-    auto languageTag = config->GetItem(OHOS::AAFwk::GlobalConfigurationKey::SYSTEM_LANGUAGE);
-    if (!colorMode.empty()) {
-        LOGI("SetConfiguration colorMode: %{public}s", colorMode.c_str());
-        if (colorMode == "dark") {
-            SystemProperties::SetColorMode(ColorMode::DARK);
-        } else {
-            SystemProperties::SetColorMode(ColorMode::LIGHT);
-        }
-    }
-
-    if (!deviceAccess.empty()) {
-        // Event of accessing mouse or keyboard
-        LOGI("SetConfiguration deviceAccess: %{public}s", deviceAccess.c_str());
-        SystemProperties::SetDeviceAccess(deviceAccess == "true");
-    }
-
-    if (!languageTag.empty()) {
-        LOGI("SetConfiguration languageTag: %{public}s", languageTag.c_str());
-        std::string language;
-        std::string script;
-        std::string region;
-        Localization::ParseLocaleTag(languageTag, language, script, region, false);
-        if (!language.empty() || !script.empty() || !region.empty()) {
-            AceApplicationInfo::GetInstance().SetLocale(language, region, script, "");
-        }
-    }
-}
-
 std::shared_ptr<Rosen::RSSurfaceNode> UIContentImpl::GetFormRootNode()
 {
     return Platform::AceContainer::GetFormSurfaceNode(instanceId_);
@@ -1144,8 +1107,6 @@ void UIContentImpl::CommonInitialize(OHOS::Rosen::Window* window, const std::str
     container->SetAssetManager(flutterAssetManager);
     container->SetBundlePath(context->GetBundleCodeDir());
     container->SetFilesDataPath(context->GetFilesDir());
-    container->SetModuleName(hapModuleInfo->moduleName);
-    container->SetIsModule(hapModuleInfo->compileMode == AppExecFwk::CompileMode::ES_MODULE);
     // for atomic service
     container->SetInstallationFree(hapModuleInfo && hapModuleInfo->installationFree);
     if (hapModuleInfo->installationFree) {
@@ -1261,10 +1222,7 @@ void UIContentImpl::ReloadForm()
     LOGI("ReloadForm startUrl = %{public}s", startUrl_.c_str());
     auto container = Platform::AceContainer::GetContainer(instanceId_);
     auto flutterAssetManager = AceType::DynamicCast<FlutterAssetManager>(container->GetAssetManager());
-    flutterAssetManager->ReloadProvider();
     Platform::AceContainer::ClearEngineCache(instanceId_);
-    Platform::AceContainer::RunPage(instanceId_, Platform::AceContainer::GetContainer(instanceId_)->GeneratePageId(),
-        startUrl_, "");
 }
 
 void UIContentImpl::Focus()

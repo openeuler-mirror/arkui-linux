@@ -19,9 +19,9 @@
 #include <vector>
 
 #include "base/utils/macros.h"
-#ifdef LINUX_PLATFORM
+// #ifdef LINUX_PLATFORM
 #include <cstdint>
-#endif
+// #endif
 namespace OHOS::Ace {
 /**
  * @brief Least square method of four parametres.

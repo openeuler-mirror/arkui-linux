@@ -16,8 +16,8 @@
 #include "frameworks/core/components_ng/svg/parse/svg_graphic.h"
 
 #include "include/core/SkScalar.h"
-#include "third_party/flutter/skia/include/effects/SkDashPathEffect.h"
-#include "third_party/flutter/skia/include/effects/SkGradientShader.h"
+#include "effects/SkDashPathEffect.h"
+#include "effects/SkGradientShader.h"
 
 #include "base/utils/utils.h"
 

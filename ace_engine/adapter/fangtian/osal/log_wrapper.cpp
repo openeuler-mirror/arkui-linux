@@ -17,19 +17,44 @@
 
 #include <cstring>
 
-#include "hilog/log.h"
-
 #ifdef ACE_INSTANCE_LOG
 #include "core/common/container.h"
 #endif
 
+
 extern "C" {
-int HiLogPrintArgs(LogType type, LogLevel level, unsigned int domain, const char* tag, const char* fmt, va_list ap);
+
+typedef enum {
+    /** Third-party application logs */
+    LOG_TYPE_MIN = 0,
+    LOG_APP = 0,
+    LOG_INIT = 1,
+    // Used by core service, framework.
+    LOG_CORE = 3,
+    LOG_KMSG = 4,
+    LOG_TYPE_MAX
+} LogType;
+
+typedef enum {
+    LOG_LEVEL_MIN = 0,
+    LOG_DEBUG = 3,
+    LOG_INFO = 4,
+    LOG_WARN = 5,
+    LOG_ERROR = 6,
+    LOG_FATAL = 7,
+    LOG_LEVEL_MAX,
+} LogLevel;
+
+int HiLogPrintArgs(LogType type, LogLevel level, unsigned int domain, const char* tag, const char* fmt, va_list ap) {
+    vprintf(fmt, ap);
+    return 0;
+}
 }
 
 namespace OHOS::Ace {
 
 namespace {
+
 
 const ::LogLevel LOG_LEVELS[] = {
     LOG_DEBUG,
@@ -66,15 +91,10 @@ char LogWrapper::GetSeparatorCharacter()
 
 void LogWrapper::PrintLog(LogDomain domain, LogLevel level, const char* fmt, va_list args)
 {
-#ifdef ACE_PRIVATE_LOG
     std::string newFmt(fmt);
-    ReplaceFormatString("{private}", "{public}", newFmt);
+    ReplaceFormatString("{private}", "", newFmt);
     HiLogPrintArgs(LOG_TYPES[static_cast<uint32_t>(domain)], LOG_LEVELS[static_cast<uint32_t>(level)],
         LOG_DOMAINS[static_cast<uint32_t>(domain)], LOG_TAGS[static_cast<uint32_t>(domain)], newFmt.c_str(), args);
-#else
-    HiLogPrintArgs(LOG_TYPES[static_cast<uint32_t>(domain)], LOG_LEVELS[static_cast<uint32_t>(level)],
-        LOG_DOMAINS[static_cast<uint32_t>(domain)], LOG_TAGS[static_cast<uint32_t>(domain)], fmt, args);
-#endif
 }
 
 int32_t LogWrapper::GetId()

@@ -18,11 +18,15 @@
 
 #include "base/want/want_wrap.h"
 
-#include "napi/native_api.h"
-#include "native_engine/native_engine.h"
-#include "want.h"
+//#include "napi/native_api.h"
+//#include "native_engine/native_engine.h"
+//#include "want.h"
 
 namespace OHOS::Ace {
+
+class NativeValue {
+
+};
 
 class WantWrapOhos : public WantWrap {
     DECLARE_ACE_TYPE(WantWrapOhos, WantWrap)
@@ -33,7 +37,7 @@ public:
     void SetWantParamsFromWantWrap(void* want) override;
     std::string ToString() const override;
 private:
-    AAFwk::Want want_;
+    //AAFwk::Want want_;
 };
 
 } // namespace OHOS::Ace

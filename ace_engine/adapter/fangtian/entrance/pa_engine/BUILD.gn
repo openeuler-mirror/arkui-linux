@@ -11,13 +11,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import("//build/ohos.gni")
+#import("//build/ohos.gni")
+import("//build/gn/fangtian.gni")
 import("//foundation/arkui/ace_engine/ace_config.gni")
 
 template("pa_backend") {
   forward_variables_from(invoker, "*")
 
-  ohos_source_set(target_name) {
+  ft_source_set(target_name) {
     subsystem_name = ace_engine_subsystem
     part_name = ace_engine_part
     configs = [ "$ace_root:ace_config" ]
@@ -34,27 +35,27 @@ template("pa_backend") {
       "$ability_runtime_napi_path/inner/napi_common",
     ]
     deps = [
-      "$ability_runtime_napi_path/inner/napi_common:napi_common",
-      "$ability_runtime_path/frameworks/native/ability/native:abilitykit_native",
-      "$ability_runtime_path/frameworks/native/appkit:appkit_native",
-      "//foundation/arkui/napi:ace_napi",
+#"$ability_runtime_napi_path/inner/napi_common:napi_common",
+#"$ability_runtime_path/frameworks/native/ability/native:abilitykit_native",
+#     "$ability_runtime_path/frameworks/native/appkit:appkit_native",
+#"//foundation/arkui/napi:ace_napi",
       "//foundation/systemabilitymgr/safwk/interfaces/innerkits/safwk:system_ability_fwk",
       "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy:samgr_proxy",
     ]
-    external_deps = [
-      "ability_base:want",
-      "ability_base:zuri",
-      "bundle_framework:appexecfwk_base",
-      "bundle_framework:appexecfwk_core",
-      "c_utils:utils",
-      "eventhandler:libeventhandler",
-      "hiviewdfx_hilog_native:libhilog",
-      "ipc:ipc_core",
-      "ipc_js:rpc",
-      "napi:ace_napi",
-      "relational_store:native_dataability",
-      "relational_store:native_rdb",
-      "samgr:samgr_proxy",
+    deps += [
+#"ability_base:want",
+#     "ability_base:zuri",
+#     "bundle_framework:appexecfwk_base",
+#"bundle_framework:appexecfwk_core",
+      "//commonlibrary/c_utils/base:utils",
+#"eventhandler:libeventhandler",
+      "//base/hiviewdfx/hilog/interfaces/native/innerkits:libhilog",
+      "//foundation/communication/ipc/interfaces/innerkits/ipc_core:ipc_core",
+#"//foundation/communication/ipc/interfaces/innerkits/kits/js/napi:rpc",
+#"napi:ace_napi",
+#"relational_store:native_dataability",
+#"relational_store:native_rdb",
+      "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy:samgr_proxy",
     ]
 
     sources = [

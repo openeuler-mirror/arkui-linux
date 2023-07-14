@@ -17,8 +17,8 @@
 
 #include <string>
 
-#include "third_party/skia/include/core/SkString.h"
-#include "third_party/skia/include/utils/SkBase64.h"
+#include "core/SkString.h"
+#include "utils/SkBase64.h"
 #include "wm/window.h"
 
 #include "base/thread/background_task_executor.h"

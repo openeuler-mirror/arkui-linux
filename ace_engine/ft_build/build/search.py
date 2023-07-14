@@ -34,7 +34,7 @@ def main():
         if not os.path.isdir(os.path.join(base_dir, item)):
             continue
 
-        file_path = os.path.join(base_dir, item, "build", "platform.gni")
+        file_path = os.path.join(base_dir, item, "ft_build", "platform.gni")
         if not os.path.isfile(file_path):
             continue
 

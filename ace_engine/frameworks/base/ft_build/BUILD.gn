@@ -1,0 +1,105 @@
+# Copyright (c) 2023 Huawei Technologies Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/gn/fangtian.gni")
+import("//ace_engine/ft_build/ace_config.gni")
+
+template("ace_base_source_set") {
+  forward_variables_from(invoker, "*")
+
+  ft_source_set(target_name) {
+    defines += invoker.defines
+    public_deps = [
+        "../base64/ft_build:ace_base_base64_$platform",
+        "../i18n/ft_build:ace_base_i18n_$platform",
+        "../resource/ft_build:ace_resource",
+    ]
+
+    configs = [ "$ace_root/ft_build:ace_config" ]
+
+    # add base source file here
+    sources = [
+        "../geometry/animatable_dimension.cpp",
+        "../geometry/animatable_matrix4.cpp",
+        "../geometry/dimension.cpp",
+        "../geometry/least_square_impl.cpp",
+        "../geometry/matrix3.cpp",
+        "../geometry/matrix4.cpp",
+        "../geometry/quaternion.cpp",
+        "../geometry/transform_util.cpp",
+        "../image/pixel_map.cpp",
+        "../json/json_util.cpp",
+        "../log/ace_scoring_log.cpp",
+        "../log/ace_trace.cpp",
+        "../log/ace_tracker.cpp",
+        "../log/dump_log.cpp",
+        "../memory/memory_monitor.cpp",
+        "../ressched/ressched_report.cpp",
+        "../subwindow/subwindow_manager.cpp",
+        "../thread/background_task_executor.cpp",
+        "../utils/base_id.cpp",
+        "../utils/date_util.cpp",
+        "../utils/measure_util.cpp",
+        "../utils/resource_configuration.cpp",
+        "../utils/string_expression.cpp",
+        "../utils/string_utils.cpp",
+        "../utils/time_util.cpp",
+    ]
+
+    if (platform != "windows") {
+      public_deps += [ "//build/gn/configs/system_libs:c_utils" ]
+    }
+
+    # Fangtian TODO: enable curl download manager
+    if (defined(config.use_curl_download) && config.use_curl_download) {
+      #configs += [ "//third_party/curl:curl_config" ]
+      sources += [ "$ace_root/frameworks/base/network/download_manager.cpp" ]
+      public_deps += [ "$ace_root/frameworks/base/network/ft_build:cacert.pem" ]
+      if (is_cross_platform_build) {
+        public_deps += [ "//third_party/curl:curl" ]
+      } else {
+        # public_deps += [ "//third_party/curl:curl_shared" ]
+      }
+    }
+
+    if (is_fangtian_build) {
+      public_deps += [ "//build/gn/configs/system_libs:cjson" ]
+    }
+
+    cflags_cc += invoker.cflags_cc
+    cflags_cc += ["-Wno-unused-const-variable"]
+    public_deps += [ "//build/gn/configs/system_libs:icu" ]
+  }
+}
+
+foreach(item, ace_platforms) {
+  ace_base_source_set("ace_base_" + item.name) {
+    platform = item.name
+    defines = []
+    cflags_cc = []
+    config = {
+    }
+
+    if (defined(item.config)) {
+      config = item.config
+    }
+
+    if (defined(config.defines)) {
+      defines = config.defines
+    }
+
+    if (defined(config.cflags_cc)) {
+      cflags_cc = config.cflags_cc
+    }
+  }
+}

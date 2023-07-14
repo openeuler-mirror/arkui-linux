@@ -15,8 +15,8 @@
 
 #define private public
 #define protected public
-#include "third_party/skia/include/core/SkBitmap.h"
-#include "third_party/skia/include/core/SkPictureRecorder.h"
+#include "core/SkBitmap.h"
+#include "core/SkPictureRecorder.h"
 
 #include "frameworks/base/geometry/dimension.h"
 #include "frameworks/base/geometry/ng/offset_t.h"

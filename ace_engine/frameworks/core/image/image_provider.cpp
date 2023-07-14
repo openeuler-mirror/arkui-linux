@@ -19,8 +19,8 @@
 #include "experimental/svg/model/SkSVGDOM.h"
 #endif
 #include "image_compressor.h"
-#include "third_party/skia/include/core/SkGraphics.h"
-#include "third_party/skia/include/core/SkStream.h"
+#include "core/SkGraphics.h"
+#include "core/SkStream.h"
 
 #include "base/log/ace_trace.h"
 #include "base/thread/background_task_executor.h"
