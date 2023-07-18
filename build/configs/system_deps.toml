@@ -27,4 +27,5 @@ package_deps = [
     "python3",
     "cmake",
     "ninja-build",
+    "libcurl-devel",
 ]
