@@ -1,3 +1,4 @@
 .vscode/
 out/
 prebuilts/
+**/__pycache__
