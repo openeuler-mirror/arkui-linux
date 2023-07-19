@@ -152,17 +152,6 @@ config("glfw_config") {
 #   defines += ["USE_GLFW_WINDOW"]
 # }
 
-config("graphics_2d_config") {
-  visibility = [ ":*" ]
-  include_dirs = [ 
-    "${sys_inc}/graphic_2d/2d_engine",
-    "${sys_inc}/graphic_2d/2d_engine/rosen_text",
-    "${sys_inc}/graphic_2d/2d_graphics",
-    "${sys_inc}/graphic_2d/2d_graphics/src",
-    "${sys_inc}/graphic_2d/2d_graphics/src/drawing/engine_adapter",
-  ]
-}
-
 group("c_utils") {
   public_configs = [ ":c_utils_config" ]
 }
@@ -261,6 +250,3 @@ group("glfw") {
 #   public_configs = [ ":flutter_config" ]
 # }
 
-group("graphics_2d") {
-  public_configs = [ ":graphics_2d_config" ]
-}
