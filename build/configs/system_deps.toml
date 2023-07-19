@@ -28,4 +28,6 @@ package_deps = [
     "cmake",
     "ninja-build",
     "libcurl-devel",
+    "harfbuzz-devel",
+    "cjson-devel",
 ]
