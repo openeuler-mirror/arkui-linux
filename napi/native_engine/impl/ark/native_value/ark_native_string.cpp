@@ -15,7 +15,7 @@
 
 #include "ark_native_string.h"
 #if !defined(PREVIEW) && !defined(IOS_PLATFORM)
-#include "ohos/init_data.h"
+// #include "ohos/init_data.h"
 #else
 #include "unicode/putil.h"
 #endif
