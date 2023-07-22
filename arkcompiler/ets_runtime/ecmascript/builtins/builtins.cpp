@@ -112,7 +112,7 @@
 #include "ecmascript/napi/include/jsnapi.h"
 #include "ecmascript/object_factory.h"
 
-#include "ohos/init_data.h"
+// #include "ohos/init_data.h"
 
 namespace panda::ecmascript {
 using Number = builtins::BuiltinsNumber;
