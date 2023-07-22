@@ -77,7 +77,7 @@
 #include "ecmascript/tagged_array.h"
 #include "ecmascript/regexp/regexp_parser.h"
 
-#include "ohos/init_data.h"
+// #include "ohos/init_data.h"
 
 #include "os/mutex.h"
 
