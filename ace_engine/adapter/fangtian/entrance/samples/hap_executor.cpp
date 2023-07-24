@@ -17,6 +17,7 @@
 #include <iostream>
 #include <sstream>
 #include <thread>
+#include <unistd.h>
 
 #include "adapter/fangtian/entrance/ace_ability.h"
 #include "adapter/fangtian/entrance/ace_run_args.h"
@@ -41,7 +42,6 @@ auto&& renderCallback = [](const void*, const size_t bufferSize, const int32_t w
 int main(int argc, const char* argv[])
 {
     OHOS::Ace::LogWrapper::SetLogLevel(OHOS::Ace::LogLevel::DEBUG);
-    LOGI("main nihao\n");
     std::string assetPathJs = "/home/zach/appications/test/default";
     std::string assetPathEts = "/home/zach/appications/test/default_2.0";
     std::string assetPathEtsStage = "/home/ubuntu/demo/preview/js/default_stage/ets";
@@ -51,15 +51,17 @@ int main(int argc, const char* argv[])
     std::string pageProfile = "main_page";
 
     OHOS::Ace::Platform::AceRunArgs args = {
-        .assetPath = assetPathJs,
+        .projectModel = OHOS::Ace::Platform::ProjectModel::STAGE,
+        .assetPath = assetPathEtsStage,
         .systemResourcesPath = systemResourcesPath,
-        .appResourcesPath = appResourcesPath,
+        .appResourcesPath = appResourcesPathStage,
         .deviceConfig.orientation = OHOS::Ace::DeviceOrientation::LANDSCAPE,
         .deviceConfig.density = 1,
         .deviceConfig.deviceType = OHOS::Ace::DeviceType::TABLET,
         .windowTitle = "Demo",
         .deviceWidth = 1920,
         .deviceHeight = 1080,
+        .aceVersion = OHOS::Ace::Platform::AceVersion::ACE_2_0,
         .onRender = std::move(renderCallback),
     };
 
@@ -85,12 +87,13 @@ int main(int argc, const char* argv[])
         std::cout << "create ability OK" << std::endl;
     }
 
-    OHOS::Ace::Platform::KeyInputHandler::InitialTextInputCallback(ability->GetGlfwWindowController());
-    OHOS::Ace::Platform::TouchEventHandler::InitialTouchEventCallback(ability->GetGlfwWindowController());
-
-    std::thread timer([&ability]() {
+    // TODO adaptor for fangtian mmi
+    // OHOS::Ace::Platform::KeyInputHandler::InitialTextInputCallback(ability->GetGlfwWindowController());
+    // OHOS::Ace::Platform::TouchEventHandler::InitialTouchEventCallback(ability->GetGlfwWindowController());
+    bool runFlag = true;
+    std::thread timer([&ability, &runFlag]() {
         int32_t getJSONTreeTimes = GET_INSPECTOR_TREE_TIMES;
-        while (getJSONTreeTimes--) {
+        while (getJSONTreeTimes-- && runFlag) {
             std::this_thread::sleep_for(std::chrono::milliseconds(GET_INSPECTOR_TREE_INTERVAL));
             std::string jsonTreeStr = ability->GetJSONTree();
             // clear all information
@@ -104,6 +107,8 @@ int main(int argc, const char* argv[])
     ability->InitEnv();
     std::cout << "Ace initialize done. run loop now" << std::endl;
     ability->Start();
-
+    runFlag = false;
+    timer.join();
+    std::cout << "hap executor exit" << std::endl;
     return 0;
 }
