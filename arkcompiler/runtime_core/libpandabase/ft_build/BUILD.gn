@@ -156,7 +156,7 @@ if (current_cpu == "arm64" && !is_mac && target_os != "ios") {
 }
 
 libarkbase_configs = [
-  sdk_libc_secshared_config,
+  # sdk_libc_secshared_config,
   ":arkbase_public_config",
   "$ark_root/ft_build:ark_config",
 ]
