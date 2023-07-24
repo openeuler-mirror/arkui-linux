@@ -19,11 +19,9 @@
 #include <atomic>
 
 #include "flutter/shell/platform/glfw/public/flutter_glfw.h"
-#ifdef ENABLE_ROSEN_BACKEND
 #include "glfw_render_context.h"
-#endif
-
 #include "adapter/fangtian/entrance/ace_run_args.h"
+#include "adapter/fangtian/entrance/rs_ace_view.h"
 #include "base/utils/macros.h"
 #include "core/event/key_event.h"
 #include "core/event/touch_event.h"
@@ -52,11 +50,7 @@ struct SystemParams {
     OHOS::Ace::DeviceOrientation orientation { DeviceOrientation::PORTRAIT };
 };
 
-#ifndef ENABLE_ROSEN_BACKEND
-using GlfwController = FlutterDesktopWindowControllerRef;
-#else
-using GlfwController = std::shared_ptr<OHOS::Rosen::GlfwRenderContext>;
-#endif
+using GlfwController = std::shared_ptr<FT::Rosen::GlfwRenderContext>;
 
 class ACE_FORCE_EXPORT_WITH_PREVIEW AceAbility {
 public:
