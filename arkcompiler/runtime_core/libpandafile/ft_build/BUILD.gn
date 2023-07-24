@@ -57,7 +57,7 @@ libarkfile_sources = [
 ]
 
 libarkfile_configs = [
-  sdk_libc_secshared_config,
+  # sdk_libc_secshared_config,
   "$ark_root/ft_build:ark_config",
   "$ark_root/libpandabase/ft_build:arkbase_public_config",
   ":arkfile_public_config",

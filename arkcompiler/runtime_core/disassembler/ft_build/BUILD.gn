@@ -26,7 +26,7 @@ arkdisassembler_sources = [
 ]
 
 arkdisassembler_configs = [
-  sdk_libc_secshared_config,
+  # sdk_libc_secshared_config,
   ":arkdisassembler_public_config",
   "$ark_root:ark_config",
   "$ark_root/libpandabase:arkbase_public_config",
@@ -122,7 +122,7 @@ ohos_executable("ark_disasm") {
   ]
 
   configs = [
-    sdk_libc_secshared_config,
+    # sdk_libc_secshared_config,
     "$ark_root:ark_config",
     "$ark_root/assembler:arkassembler_public_config",
     "$ark_root/libpandabase:arkbase_public_config",
