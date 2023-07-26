@@ -84,15 +84,6 @@ void EventDispatcher::Initialize()
     LOGI("Initialize event dispatcher");
     // Initial the proxy of Input method
     TextInputClientMgr::GetInstance().InitTextInputProxy();
-    // Register the idle event callback function.
-#ifndef ENABLE_ROSEN_BACKEND
-    IdleCallback idleNoticeCallback = [] (int64_t deadline) {
-        EventDispatcher::GetInstance().DispatchIdleEvent(deadline);
-    };
-    FlutterDesktopSetIdleCallback(controller_, idleNoticeCallback);
-#else
-    // rosen process idle
-#endif
 }
 
 void EventDispatcher::DispatchIdleEvent(int64_t deadline)

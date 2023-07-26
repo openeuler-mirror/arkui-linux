@@ -93,6 +93,8 @@ void LogWrapper::PrintLog(LogDomain domain, LogLevel level, const char* fmt, va_
 {
     std::string newFmt(fmt);
     ReplaceFormatString("{private}", "", newFmt);
+    ReplaceFormatString("{public}", "", newFmt);
+    newFmt += "\n";
     HiLogPrintArgs(LOG_TYPES[static_cast<uint32_t>(domain)], LOG_LEVELS[static_cast<uint32_t>(level)],
         LOG_DOMAINS[static_cast<uint32_t>(domain)], LOG_TAGS[static_cast<uint32_t>(domain)], newFmt.c_str(), args);
 }

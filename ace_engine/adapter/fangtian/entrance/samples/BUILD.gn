@@ -13,7 +13,6 @@
 
 import("//build/gn/fangtian.gni")
 import("//ace_engine/ft_build/ace_config.gni")
-# import("//ace_engine/interfaces/napi/kits/napi_lib.gni")
 
 config("ace_pc_preview_config") {
   cflags_cc = [
@@ -54,7 +53,7 @@ ft_executable("hap_executor") {
     defines += [ "USE_GLFW_WINDOW" ]
     configs = [ ":ace_pc_preview_config" ]
     # public_configs = [ "//third_party/flutter/build/fangtian/skia:skia_public_config" ]
-    output_dir = "$root_out_dir/common/samples"
+    # output_dir = "$root_out_dir/common/common"
     sources = [
       "hap_executor.cpp",
       "key_input_handler.cpp",
@@ -155,50 +154,18 @@ ft_copy("copy_linux_shared_library") {
 #   ]
 
     # Add dynamic libraries
-    ace_engine_path = get_label_info("$ace_root/adapter/fangtian/build::libace_engine",
-                         "root_out_dir") + "/common/common/libace_engine.so"
-    #resource_manager_path = get_label_info(
-    #                              "//resource_management/frameworks/resmgr/ft_build:global_resmgr_linux",
-    #                              "root_out_dir") + "/common/common/libglobal_resmgr_linux.so"
+
     glfw_path = get_label_info("//third_party/flutter/glfw:glfw",
                                     "root_out_dir") + "/graphic/graphic_standard/libglfw.so"
-
-  #  hitrace_path = get_label_info("//base/hiviewdfx/hitrace/interfaces/native/innerkits:hitrace_meter",
-  #                                 "root_out_dir") + "/hiviewdfx/hitrace_native/libhitrace_meter.so"
   #   utils_path = get_label_info("//commonlibrary/c_utils/base:utils",
   #                                 "root_out_dir") + "/commonlibrary/c_utils/libutils.so"
-  #   hilog_path = get_label_info("//base/hiviewdfx/hilog/interfaces/native/innerkits:libhilog",
-  #                                 "root_out_dir") + "/hiviewdfx/hilog_native/libhilog.so"
-  #   libbegetutil_path = get_label_info("//base/startup/init/interfaces/innerkits:libbegetutil",
-  #                                 "root_out_dir") + "/startup/init/libbegetutil.so"
-  #   mbedtls_path = get_label_info("//third_party/mbedtls:mbedtls",
-  #                                 "root_out_dir") + "/common/dsoftbus/libmbedtls.so"
-  #   ipc_core_path = get_label_info("//foundation/communication/ipc/interfaces/innerkits/ipc_core:ipc_core",
-  #                                 "root_out_dir") + "/communication/ipc/libipc_core.so"
-  #   libbeget_proxy_path = get_label_info("//base/startup/init/interfaces/innerkits:libbeget_proxy",
-  #                                 "root_out_dir") + "/startup/init/libbeget_proxy.so"
-  #   ipc_single_path = get_label_info("//foundation/communication/ipc/interfaces/innerkits/ipc_single:ipc_single",
-  #                                 "root_out_dir") + "/communication/ipc/libipc_single.so"
-  #   samgr_proxy_path = get_label_info("//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy:samgr_proxy",
-  #                                   "root_out_dir") + "/systemabilitymgr/samgr/libsamgr_proxy.so"
   #   skia_path = get_label_info("//third_party/flutter/build/fangtian/skia:ace_skia_fangtian",
   #                                   "root_out_dir") + "/thirdparty/flutter/libace_skia_fangtian.so"
 
     deps += [
         #"$ace_napi/fangtian:ace_napi_ark",
         #"//arkcompiler/ets_runtime:libark_jsruntime",
-        "$ace_root/adapter/fangtian/ft_build:libace_engine",
-        #"//base/global/resource_management/frameworks/resmgr:global_resmgr_linux",
-        #"//base/hiviewdfx/hitrace/interfaces/native/innerkits:hitrace_meter",
-        #"//third_party/bounds_checking_function:libsec_shared",
         #"//commonlibrary/c_utils/base:utils",
-        #"//base/hiviewdfx/hilog/interfaces/native/innerkits:libhilog",
-        #"//base/startup/init/interfaces/innerkits:libbegetutil",
-        #"//third_party/mbedtls:mbedtls",
-       # "//foundation/communication/ipc/interfaces/innerkits/ipc_core:ipc_core",
-        #"//base/startup/init/interfaces/innerkits:libbeget_proxy",
-        #"//foundation/communication/ipc/interfaces/innerkits/ipc_single:ipc_single",
-        #"//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy:samgr_proxy",
         "//third_party/flutter/glfw:glfw",
     ]
     deps += [
@@ -206,22 +173,12 @@ ft_copy("copy_linux_shared_library") {
     ]
     sources += [
         glfw_path,
-        # resource_manager_path,
-        ace_engine_path,
         # skia_path,
-        # hitrace_path,
         # utils_path,
-        # hilog_path,
-        # samgr_proxy_path,
-        # ipc_single_path,
-        # libbeget_proxy_path,
-        # ipc_core_path,
-        # mbedtls_path,
-        # libbegetutil_path,
     ]
 
     # Set the output directory for all dynamic libraries.
-    outputs = [ root_out_dir + "/common/samples/{{source_file_part}}" ]
+    outputs = [ root_out_dir + "/common/common/{{source_file_part}}" ]
 }
 
 group("arkui") {
