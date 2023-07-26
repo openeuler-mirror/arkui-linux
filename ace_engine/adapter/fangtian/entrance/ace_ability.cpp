@@ -199,7 +199,7 @@ std::unique_ptr<AceAbility> AceAbility::CreateInstance(AceRunArgs& runArgs)
     // EventDispatcher::GetInstance().SetGlfwWindowController(controller);
     EventDispatcher::GetInstance().Initialize();
     auto aceAbility = std::make_unique<AceAbility>(runArgs);
-    aceAbility->SetGlfwWindowController(controller);
+    // aceAbility->SetGlfwWindowController(controller);
     return aceAbility;
 }
 
