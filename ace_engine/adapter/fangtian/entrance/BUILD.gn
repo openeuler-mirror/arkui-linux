@@ -12,7 +12,7 @@
 # limitations under the License.
 
 import("//build/gn/fangtian.gni")
-import("///ace_engine/ft_build/ace_config.gni")
+import("//ace_engine/ft_build/ace_config.gni")
 
 ft_source_set("ace_entrance_fangtian") {
   defines = ["PREVIEW", "LINUX_PLATFORM"]
@@ -43,6 +43,7 @@ ft_source_set("ace_entrance_fangtian") {
 
   deps = [
     "$ace_root/frameworks/core/components/theme/ft_build:build_theme_code",
+    "//build/gn/configs/system_libs:ft_engine",
   ]
 
   #if (defined(config.enable_rosen_backend) && config.enable_rosen_backend) {
