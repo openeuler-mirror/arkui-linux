@@ -25,10 +25,10 @@ InputEventConsumer::InputEventConsumer(std::weak_ptr<GlfwRenderContext> context)
     context_ = context;
 }
 
-void InputEventConsumer::OnInputEvent(std::shared_ptr<OHOS::MMI::KeyEvent> keyEvent) const
+bool InputEventConsumer::OnInputEvent(const std::shared_ptr<OHOS::MMI::KeyEvent>& keyEvent) const
 {
     if (keyEvent == nullptr) {
-        return;
+        return false;
     }
     keyEvent->MarkProcessed();
 
@@ -36,26 +36,20 @@ void InputEventConsumer::OnInputEvent(std::shared_ptr<OHOS::MMI::KeyEvent> keyEv
     if (context != nullptr) {
         context->OnKey(keyEvent->GetKeyCode(), 0, keyEvent->GetKeyAction(), 0);
     }
+
+    return true;
 }
 
-void InputEventConsumer::OnInputEvent(std::shared_ptr<OHOS::MMI::AxisEvent> axisEvent) const
-{
-    if (axisEvent == nullptr) {
-        return;
-    }
-    axisEvent->MarkProcessed();
-}
-
-void InputEventConsumer::OnInputEvent(std::shared_ptr<OHOS::MMI::PointerEvent> pointerEvent) const
+bool InputEventConsumer::OnInputEvent(const std::shared_ptr<OHOS::MMI::PointerEvent>& pointerEvent) const
 {
     if (pointerEvent == nullptr) {
-        return;
+        return false;
     }
     pointerEvent->MarkProcessed();
 
     auto context = context_.lock();
     if (context == nullptr) {
-        return;
+        return false;
     }
 
     int32_t action = pointerEvent->GetPointerAction();
@@ -63,7 +57,7 @@ void InputEventConsumer::OnInputEvent(std::shared_ptr<OHOS::MMI::PointerEvent> p
         OHOS::MMI::PointerEvent::PointerItem pointerItem;
         if (!pointerEvent->GetPointerItem(pointerEvent->GetPointerId(), pointerItem)) {
             LOGI("Failed to GetPointerItem");
-            return;
+            return false;
         }
         context->OnCursorPos(pointerItem.GetDisplayX(), pointerItem.GetDisplayY());
     } else if (action == OHOS::MMI::PointerEvent::POINTER_ACTION_BUTTON_DOWN) {
@@ -71,6 +65,18 @@ void InputEventConsumer::OnInputEvent(std::shared_ptr<OHOS::MMI::PointerEvent> p
     } else if (action == OHOS::MMI::PointerEvent::POINTER_ACTION_BUTTON_UP) {
         context->OnMouseButton(pointerEvent->GetButtonId(), 0, 0);
     }
+
+    return true;
+}
+
+bool InputEventConsumer::OnInputEvent(const std::shared_ptr<OHOS::MMI::AxisEvent>& axisEvent) const
+{
+    if (axisEvent == nullptr) {
+        return false;
+    }
+    axisEvent->MarkProcessed();
+
+    return true;
 }
 
 std::shared_ptr<GlfwRenderContext> GlfwRenderContext::GetGlobal()
@@ -132,6 +138,9 @@ int GlfwRenderContext::CreateWindow(int32_t width, int32_t height, bool visible)
         LOGE("Failed to create window");
         return -1;
     }
+
+    auto listener = std::make_shared<InputEventConsumer>(shared_from_this());
+    window_->SetInputEventConsumer(listener);
 
     if (visible) {
         window_->Show();
