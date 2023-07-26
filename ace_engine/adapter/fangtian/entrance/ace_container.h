@@ -35,11 +35,11 @@
 #include "adapter/fangtian/external/ability/fa/fa_context.h"
 #include "adapter/fangtian/external/ability/stage/stage_context.h"
 
-#ifndef ENABLE_ROSEN_BACKEND
+//#ifndef ENABLE_ROSEN_BACKEND
 #include "adapter/fangtian/entrance/flutter_ace_view.h"
-#else
+//#else
 #include "adapter/fangtian/entrance/rs_ace_view.h"
-#endif
+//#endif
 
 namespace OHOS::Ace::Platform {
 
@@ -63,11 +63,7 @@ public:
     static void SetResourcesPathAndThemeStyle(int32_t instanceId, const std::string& systemResourcesPath,
         const std::string& appResourcesPath, const int32_t& themeId, const ColorMode& colorMode);
 
-#ifndef ENABLE_ROSEN_BACKEND
-    static void SetView(FlutterAceView* view, double density, int32_t width, int32_t height);
-#else
     static void SetView(RSAceView* view, double density, int32_t width, int32_t height, SendRenderDataCallback onRender);
-#endif
 
     static void InitDeviceInfo(int32_t instanceId, const AceRunArgs& runArgs);
     static bool RunPage(int32_t instanceId, int32_t pageId, const std::string& url, const std::string& params);

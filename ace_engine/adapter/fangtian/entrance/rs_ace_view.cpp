@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-#include "adapter/preview/entrance/rs_ace_view.h"
+#include "adapter/fangtian/entrance/rs_ace_view.h"
 
 #include <cinttypes>
 
