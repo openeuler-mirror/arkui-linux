@@ -24,21 +24,20 @@
 #include "window.h"
 #include "i_input_event_consumer.h"
 
-struct GLFWwindow;
 namespace FT::Rosen {
 class GlfwRenderContext;
-class InputEventConsumer : public OHOS::MMI::IInputEventConsumer {
+class InputEventConsumer : public OHOS::Rosen::IInputEventConsumer {
 public:
     InputEventConsumer(std::weak_ptr<GlfwRenderContext> context);
-    void OnInputEvent(std::shared_ptr<OHOS::MMI::KeyEvent> keyEvent) const override;
-    void OnInputEvent(std::shared_ptr<OHOS::MMI::AxisEvent> axisEvent) const override;
-    void OnInputEvent(std::shared_ptr<OHOS::MMI::PointerEvent> pointerEvent) const override;
+    bool OnInputEvent(const std::shared_ptr<OHOS::MMI::KeyEvent>& keyEvent) const override;
+    bool OnInputEvent(const std::shared_ptr<OHOS::MMI::PointerEvent>& pointerEvent) const override;
+    bool OnInputEvent(const std::shared_ptr<OHOS::MMI::AxisEvent>& axisEvent) const override;
 
 private:
     std::weak_ptr<GlfwRenderContext> context_;
 };
 
-class GlfwRenderContext {
+class GlfwRenderContext : public std::enable_shared_from_this<GlfwRenderContext> {
 public:
     using OnMouseButtonFunc = std::function<void(int button, bool pressed, int mods)>;
     using OnCursorPosFunc = std::function<void(double x, double y)>;
