@@ -240,11 +240,13 @@ void AceAbility::InitEnv()
 
     auto view = new RSAceView(ACE_INSTANCE_ID);
     if (runArgs_.aceVersion == AceVersion::ACE_2_0) {
-        AceContainer::SetView(view, runArgs_.deviceConfig.density, runArgs_.deviceWidth, runArgs_.deviceHeight, runArgs_.onRender);
+        AceContainer::SetView(view, runArgs_.deviceConfig.density, runArgs_.deviceWidth, runArgs_.deviceHeight,
+            controller_->GetWindow(), runArgs_.onRender);
         AceContainer::RunPage(ACE_INSTANCE_ID, UNUSED_PAGE_ID, runArgs_.url, "");
     } else {
         AceContainer::RunPage(ACE_INSTANCE_ID, UNUSED_PAGE_ID, runArgs_.url, "");
-        AceContainer::SetView(view, runArgs_.deviceConfig.density, runArgs_.deviceWidth, runArgs_.deviceHeight, runArgs_.onRender);
+        AceContainer::SetView(view, runArgs_.deviceConfig.density, runArgs_.deviceWidth, runArgs_.deviceHeight,
+            controller_->GetWindow(), runArgs_.onRender);
     }
     if (runArgs_.projectModel == ProjectModel::STAGE) {
         container->InitializeStageAppConfig(runArgs_.assetPath, runArgs_.formsEnabled);

@@ -778,15 +778,15 @@ void AceContainer::UpdateDeviceConfig(const DeviceConfig& deviceConfig)
         TaskExecutor::TaskType::UI);
 }
 
-void AceContainer::SetView(
-    RSAceView* view, double density, int32_t width, int32_t height, SendRenderDataCallback onRender)
+void AceContainer::SetView(RSAceView* view, double density, int32_t width, int32_t height,
+    OHOS::sptr<OHOS::Rosen::Window> ftWindow, SendRenderDataCallback onRender)
 {
     CHECK_NULL_VOID(view);
     auto container = AceType::DynamicCast<AceContainer>(AceEngine::Get().GetContainer(view->GetInstanceId()));
     CHECK_NULL_VOID(container);
     auto taskExecutor = container->GetTaskExecutor();
     CHECK_NULL_VOID(taskExecutor);
-    // TODO adaptor for fangtian window
+    // TODO adaptor for rs
     //auto rsWindow = new Rosen::Window(onRender);
     //auto window = std::make_unique<NG::RosenWindow>(rsWindow, taskExecutor, view->GetInstanceId());
     //container->AttachView(std::move(window), view, density, width, height, onRender);

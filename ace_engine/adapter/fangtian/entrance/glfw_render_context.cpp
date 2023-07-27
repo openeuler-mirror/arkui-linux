@@ -79,38 +79,14 @@ bool InputEventConsumer::OnInputEvent(const std::shared_ptr<OHOS::MMI::AxisEvent
     return true;
 }
 
-std::shared_ptr<GlfwRenderContext> GlfwRenderContext::GetGlobal()
-{
-    if (global_ == nullptr) {
-        static std::mutex mutex;
-        std::lock_guard lock(mutex);
-        if (global_ == nullptr) {
-            global_ = std::make_shared<GlfwRenderContext>();
-        }
-    }
-
-    return global_;
-}
-
 int GlfwRenderContext::Init()
 {
-    external_ = false;
     return true;
-}
-
-void GlfwRenderContext::InitFrom(void *glfwWindow)
-{
-    if (glfwWindow == nullptr) {
-        LOGE("InitFrom glfwWindow is nullptr");
-        return;
-    }
-    LOGI("InitFrom glfwWindow");
-
-    external_ = true;
 }
 
 void GlfwRenderContext::Terminate()
 {
+    DestroyWindow();
 }
 
 int GlfwRenderContext::CreateWindow(int32_t width, int32_t height, bool visible)
@@ -153,6 +129,7 @@ void GlfwRenderContext::DestroyWindow()
 {
     if (window_ != nullptr) {
         window_->Destroy();
+        window_ = nullptr;
     }
 }
 
@@ -163,10 +140,6 @@ int GlfwRenderContext::WindowShouldClose()
     }
 
     return 0;
-}
-
-void GlfwRenderContext::WaitForEvents()
-{
 }
 
 void GlfwRenderContext::PollEvents()
@@ -201,21 +174,9 @@ void GlfwRenderContext::SetWindowTitle(const std::string &title)
     }
 }
 
-std::string GlfwRenderContext::GetClipboardData()
+OHOS::sptr<OHOS::Rosen::Window> GlfwRenderContext::GetWindow()
 {
-    return "";
-}
-
-void GlfwRenderContext::SetClipboardData(const std::string &data)
-{
-}
-
-void GlfwRenderContext::MakeCurrent()
-{
-}
-
-void GlfwRenderContext::SwapBuffers()
-{
+    return window_;
 }
 
 void GlfwRenderContext::OnMouseButton(const OnMouseButtonFunc &onMouseBotton)
