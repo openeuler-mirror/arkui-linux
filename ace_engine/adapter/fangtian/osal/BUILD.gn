@@ -58,6 +58,8 @@ template("ace_osal_preview_source_set") {
 
     deps = [
       ":utilsecurec_source_$platform",
+      "//build/gn/configs/system_libs:mmi",
+      "//build/gn/configs/system_libs:eventhandler",
     ]
 
     libs = ["curl"]
@@ -68,7 +70,7 @@ template("ace_osal_preview_source_set") {
         "resource_adapter_impl_standard.cpp",
         "resource_convertor.cpp",
       ]
-      include_dirs = [ 
+      include_dirs = [
         # Fangtian build
         "//foundation/window/window_manager/previewer/mock",
         "//commonlibrary/c_utils/base/include"
