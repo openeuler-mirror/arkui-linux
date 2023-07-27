@@ -39,7 +39,7 @@
 #include "adapter/fangtian/entrance/flutter_ace_view.h"
 //#else
 #include "adapter/fangtian/entrance/rs_ace_view.h"
-#include "window.h"
+#include "wm/window.h"
 //#endif
 
 namespace OHOS::Ace::Platform {
