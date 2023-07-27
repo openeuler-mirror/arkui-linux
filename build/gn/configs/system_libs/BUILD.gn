@@ -129,7 +129,7 @@ config("glfw_config") {
 
 config("ft_engine_config") {
   visibility = [ ":*" ]
-  include_dirs = [ "//third_party/ft_engine/window_manager/interfaces/innerkits/wm" ]
+  include_dirs = [ "/usr/include/ftengine/wm" ]
   libs = [ "wm" ]
 }
 
