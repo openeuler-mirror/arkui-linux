@@ -127,9 +127,15 @@ config("glfw_config") {
   libs = ["glfw"]
 }
 
+config("ft_engine_config") {
+  visibility = [ ":*" ]
+  include_dirs = [ "/usr/include/ftengine/wm" ]
+  libs = [ "wm" ]
+}
+
 # config("flutter_config") {
 #   visibility = [ ":*" ]
-#   include_dirs = [ 
+#   include_dirs = [
 #     "${sys_inc}/flutter",
 #     "${sys_inc}/flutter/engine",
 #     "${sys_inc}/flutter/engine/flutter",
@@ -142,7 +148,7 @@ config("glfw_config") {
 #   defines = []
 
 #   # flutter glfw
-#   include_dirs += [ 
+#   include_dirs += [
 #     "${sys_inc}/flutter/engine/flutter/shell/platform/common/cpp/client_wrapper/include/flutter",
 #     "${sys_inc}/flutter/engine/flutter/shell/platform/common/cpp/public",
 #   ]
@@ -244,6 +250,15 @@ group("harfbuzz") {
 
 group("glfw") {
   public_configs = [ ":glfw_config" ]
+}
+
+group("ft_engine") {
+  public_deps = [
+    ":safwk",
+    ":mmi",
+    ":image",
+  ]
+  public_configs = [ ":ft_engine_config" ]
 }
 
 # group("flutter") {

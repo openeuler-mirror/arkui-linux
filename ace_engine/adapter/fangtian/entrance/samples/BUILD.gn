@@ -62,6 +62,7 @@ ft_executable("hap_executor") {
     deps = [
         #":copy_napi_modules_shared_library",
         ":copy_linux_shared_library",
+        "//build/gn/configs/system_libs:ft_engine",
     ]
     include_dirs = [ "//third_party/flutter/glfw/include" ]
     if (defined(platform_config.enable_rosen_backend) &&
@@ -117,7 +118,7 @@ ft_executable("hap_executor") {
 #   # Set the output directory for all dynamic libraries.
 #   outputs = [ root_out_dir + "/common/samples/module/{{source_file_part}}" ]
 # }
- 
+
   # All dynamic libraries to be copied to the path "/previewer/common/bin/",
   # which are related to the previewer, can be added to this script.
 ft_copy("copy_linux_shared_library") {

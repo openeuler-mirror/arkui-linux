@@ -185,22 +185,21 @@ std::unique_ptr<AceAbility> AceAbility::CreateInstance(AceRunArgs& runArgs)
     DumpAceRunArgs(runArgs);
     LOGI("Start create AceAbility instance");
 
-    // TODO Create Window
-    //bool initSucceeded = FlutterDesktopInit();
-    //if (!initSucceeded) {
-    //    LOGE("Could not create window; AceDesktopInit failed.");
-    //    return nullptr;
-    //}
     AceApplicationInfo::GetInstance().SetLocale(runArgs.language, runArgs.region, runArgs.script, "");
-
     SetFontMgrConfig(runArgs.containerSdkPath);
 
-    //auto controller = FlutterDesktopCreateWindow(
-    //    runArgs.deviceWidth, runArgs.deviceHeight, runArgs.windowTitle.c_str(), runArgs.onRender);
-    //EventDispatcher::GetInstance().SetGlfwWindowController(controller);
+    GlfwController controller = std::make_shared<FT::Rosen::GlfwRenderContext>();
+    if (controller == nullptr) {
+        LOGE("Failed to create GlfwController");
+        return nullptr;
+    }
+
+    controller->CreateWindow(runArgs.viewWidth, runArgs.viewHeight, true);
+
+    // EventDispatcher::GetInstance().SetGlfwWindowController(controller);
     EventDispatcher::GetInstance().Initialize();
     auto aceAbility = std::make_unique<AceAbility>(runArgs);
-    //aceAbility->SetGlfwWindowController(controller);
+    // aceAbility->SetGlfwWindowController(controller);
     return aceAbility;
 }
 
@@ -241,11 +240,13 @@ void AceAbility::InitEnv()
 
     auto view = new RSAceView(ACE_INSTANCE_ID);
     if (runArgs_.aceVersion == AceVersion::ACE_2_0) {
-        AceContainer::SetView(view, runArgs_.deviceConfig.density, runArgs_.deviceWidth, runArgs_.deviceHeight, runArgs_.onRender);
+        AceContainer::SetView(view, runArgs_.deviceConfig.density, runArgs_.deviceWidth, runArgs_.deviceHeight,
+            controller_->GetWindow(), runArgs_.onRender);
         AceContainer::RunPage(ACE_INSTANCE_ID, UNUSED_PAGE_ID, runArgs_.url, "");
     } else {
         AceContainer::RunPage(ACE_INSTANCE_ID, UNUSED_PAGE_ID, runArgs_.url, "");
-        AceContainer::SetView(view, runArgs_.deviceConfig.density, runArgs_.deviceWidth, runArgs_.deviceHeight, runArgs_.onRender);
+        AceContainer::SetView(view, runArgs_.deviceConfig.density, runArgs_.deviceWidth, runArgs_.deviceHeight,
+            controller_->GetWindow(), runArgs_.onRender);
     }
     if (runArgs_.projectModel == ProjectModel::STAGE) {
         container->InitializeStageAppConfig(runArgs_.assetPath, runArgs_.formsEnabled);

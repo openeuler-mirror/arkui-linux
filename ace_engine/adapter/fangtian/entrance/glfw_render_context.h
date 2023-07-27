@@ -18,43 +18,42 @@
 
 #include <functional>
 #include <memory>
-#include "base/log/log.h"
 #include <string>
 
-struct GLFWwindow;
+#include "base/log/log.h"
+#include "window.h"
+#include "i_input_event_consumer.h"
+
 namespace FT::Rosen {
-class GlfwRenderContext {
+class GlfwRenderContext;
+class InputEventConsumer : public OHOS::Rosen::IInputEventConsumer {
+public:
+    InputEventConsumer(std::weak_ptr<GlfwRenderContext> context);
+    bool OnInputEvent(const std::shared_ptr<OHOS::MMI::KeyEvent>& keyEvent) const override;
+    bool OnInputEvent(const std::shared_ptr<OHOS::MMI::PointerEvent>& pointerEvent) const override;
+    bool OnInputEvent(const std::shared_ptr<OHOS::MMI::AxisEvent>& axisEvent) const override;
+
+private:
+    std::weak_ptr<GlfwRenderContext> context_;
+};
+
+class GlfwRenderContext : public std::enable_shared_from_this<GlfwRenderContext> {
 public:
     using OnMouseButtonFunc = std::function<void(int button, bool pressed, int mods)>;
     using OnCursorPosFunc = std::function<void(double x, double y)>;
     using OnKeyFunc = std::function<void(int key, int scancode, int action, int mods)>;
     using OnCharFunc = std::function<void(unsigned int codepoint)>;
 
-    // GlfwRenderContext isn't a singleton.
-    static std::shared_ptr<GlfwRenderContext> GetGlobal();
-
-    /* before CreateWindow */
     int Init();
-    void InitFrom(void *glfwWindow);
     void Terminate();
-
-    /* before window operation */
     int CreateWindow(int32_t width, int32_t height, bool visible);
     void DestroyWindow();
-
-    /* window operation */
     int WindowShouldClose();
-    void WaitForEvents();
     void PollEvents();
     void GetWindowSize(int32_t &width, int32_t &height);
     void SetWindowSize(int32_t width, int32_t height);
     void SetWindowTitle(const std::string &title);
-    std::string GetClipboardData();
-    void SetClipboardData(const std::string &data);
-
-    /* gl operation */
-    void MakeCurrent();
-    void SwapBuffers();
+    OHOS::sptr<OHOS::Rosen::Window> GetWindow();
 
     /* input event */
     void OnMouseButton(const OnMouseButtonFunc &onMouseBotton);
@@ -62,15 +61,15 @@ public:
     void OnKey(const OnKeyFunc &onKey);
     void OnChar(const OnCharFunc &onChar);
 
-private:
-    static void OnMouseButton(GLFWwindow *window, int button, int action, int mods);
-    static void OnCursorPos(GLFWwindow *window, double x, double y);
-    static void OnKey(GLFWwindow *window, int key, int scancode, int action, int mods);
-    static void OnChar(GLFWwindow *window, unsigned int codepoint);
+    friend class InputEventConsumer;
 
-    static inline std::shared_ptr<GlfwRenderContext> global_ = nullptr;
-    bool external_ = false;
-    GLFWwindow *window_ = nullptr;
+private:
+    void OnMouseButton(int button, int action, int mods);
+    void OnCursorPos(double x, double y);
+    void OnKey(int key, int scancode, int action, int mods);
+    void OnChar(unsigned int codepoint);
+
+    OHOS::sptr<OHOS::Rosen::Window> window_ = nullptr;
     OnMouseButtonFunc onMouseBotton_ = nullptr;
     OnCursorPosFunc onCursorPos_ = nullptr;
     OnKeyFunc onKey_ = nullptr;
