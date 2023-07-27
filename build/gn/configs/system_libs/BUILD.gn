@@ -129,7 +129,7 @@ config("glfw_config") {
 
 config("ft_engine_config") {
   visibility = [ ":*" ]
-  include_dirs = [ "/usr/include/ftengine/wm" ]
+  include_dirs = [ "/usr/include/ft" ]
   libs = [ "wm" ]
 }
 
