@@ -59,6 +59,8 @@ int main(int argc, const char* argv[])
         .deviceConfig.density = 1,
         .deviceConfig.deviceType = OHOS::Ace::DeviceType::TABLET,
         .windowTitle = "Demo",
+        .viewWidth = 1920,
+        .viewHeight = 1080,
         .deviceWidth = 1920,
         .deviceHeight = 1080,
         .aceVersion = OHOS::Ace::Platform::AceVersion::ACE_2_0,
