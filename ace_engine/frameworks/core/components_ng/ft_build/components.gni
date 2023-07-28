@@ -55,6 +55,7 @@ template("build_component_ng") {
 
     ft_source_set("ace_core_components_${component_name}_${platform}") {
       defines += invoker.defines
+      defines += [ "FT_BUILD" ]
 
       sources = []
       sources += invoker.sources
@@ -69,6 +70,7 @@ template("build_component_ng") {
       deps = []
       deps += extra_deps
       deps += [ "$ace_root/frameworks/core/components/theme/ft_build:build_theme_code" ]
+      deps += [ "//build/gn/configs/system_libs:ft_engine" ]
 
       if (enable_ng_build) {
         assert(false, "enable_ng_build is not supported")
@@ -105,9 +107,9 @@ template("build_component_ng") {
       }
 
       cflags_cc += [
-        "-Wno-return-stack-address", 
-        "-Wno-sign-compare", 
-        "-Wno-unused-lambda-capture", 
+        "-Wno-return-stack-address",
+        "-Wno-sign-compare",
+        "-Wno-unused-lambda-capture",
         "-Wno-c++11-narrowing"
       ]
       # using graphcis_2d drawing lib
