@@ -38,6 +38,7 @@ auto&& renderCallback = [](const void*, const size_t bufferSize, const int32_t w
 };
 
 } // namespace
+bool GetAceRunArgs(int argc, const char* argv[], OHOS::Ace::Platform::AceRunArgs &args);
 
 int main(int argc, const char* argv[])
 {
@@ -79,7 +80,6 @@ int main(int argc, const char* argv[])
             args.pageProfile = pageProfile;
         }
     }
-    std::cout << "hap_path:" << args.assetPath << std::endl;
 
     auto ability = OHOS::Ace::Platform::AceAbility::CreateInstance(args);
     if (!ability) {
@@ -113,4 +113,55 @@ int main(int argc, const char* argv[])
     timer.join();
     std::cout << "hap executor exit" << std::endl;
     return 0;
+}
+
+bool GetAceRunArgs(int argc, const char* argv[], OHOS::Ace::Platform::AceRunArgs &args)
+{
+    if (argc < 2) { // ./hap_executor + package path
+        return false;
+    }
+
+    if (argv == nullptr) {
+        return false;
+    }
+
+    char realPath[PATH_MAX] = { 0x00 };
+    std::string happath(argv[1]);
+    if (realpath(happath.c_str(), realPath) == nullptr) {
+        LOGE("realpath fail! filePath: %{private}s, fail reason: %{public}s", happath.c_str(), strerror(errno));
+        return false;
+    }
+    std::cout << "hap path: " << realPath << std::endl;
+
+    std::string faConfigPath = happath + "/config.json";
+    std::string stageModulePath = happath + "/module.json";
+    if (realpath(stageModulePath.c_str(), realPath) != nullptr) {
+        std::cout << "projectModel: STAGE" << std::endl;
+        args.projectModel = OHOS::Ace::Platform::ProjectModel::STAGE;
+        args.pageProfile = "main_page";
+    } else if (realpath(faConfigPath.c_str(), realPath) != nullptr) {
+        std::cout << "projectModel: FA" << std::endl;
+        args.projectModel = OHOS::Ace::Platform::ProjectModel::FA;
+    } else {
+        std::cout << "File error, please check the hap file" << std::endl;
+        return false;
+    }
+
+    std::string appResourcesPath = "/home/ubuntu/demo/preview/js/AppResources";
+    std::string appResourcesPathStage = "/home/ubuntu/demo/preview/js/default_stage";
+    std::string systemResourcesPath = "/home/ubuntu/demo/preview/js/SystemResources";
+
+    args.assetPath = happath;
+    args.systemResourcesPath = systemResourcesPath;
+    args.appResourcesPath = appResourcesPathStage;
+    args.deviceConfig.orientation = OHOS::Ace::DeviceOrientation::LANDSCAPE;
+    args.deviceConfig.density = 1;
+    args.deviceConfig.deviceType = OHOS::Ace::DeviceType::TABLET;
+    args.windowTitle = "Demo";
+    args.deviceWidth = 1920;
+    args.deviceHeight = 1080;
+    args.aceVersion = OHOS::Ace::Platform::AceVersion::ACE_2_0;
+    args.onRender = std::move(renderCallback);
+     
+    return true;
 }
