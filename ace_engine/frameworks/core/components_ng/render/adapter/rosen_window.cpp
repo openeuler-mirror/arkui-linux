@@ -31,7 +31,11 @@ constexpr float ONE_SECOND_IN_NANO = 1000000000.0f;
 
 float GetDisplayRefreshRate()
 {
+#if (defined PREVIEW) and !(defined FT_BUILD)
+    return 30.0f;
+#else
     return 60.0f;
+#endif
 }
 } // namespace
 
@@ -135,6 +139,7 @@ void RosenWindow::SetRootFrameNode(const RefPtr<NG::FrameNode>& root)
     CHECK_NULL_VOID(root);
     auto rosenRenderContext = AceType::DynamicCast<RosenRenderContext>(root->GetRenderContext());
     CHECK_NULL_VOID(rosenRenderContext);
+
     if (rosenRenderContext->GetRSNode()) {
         CHECK_NULL_VOID(rsUIDirector_);
         rsUIDirector_->SetRoot(rosenRenderContext->GetRSNode()->GetId());

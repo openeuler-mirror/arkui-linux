@@ -55,6 +55,7 @@ template("build_component_ng") {
 
     ft_source_set("ace_core_components_${component_name}_${platform}") {
       defines += invoker.defines
+      defines += [ "FT_BUILD" ]
 
       sources = []
       sources += invoker.sources
