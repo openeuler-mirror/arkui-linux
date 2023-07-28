@@ -31,7 +31,7 @@ constexpr float ONE_SECOND_IN_NANO = 1000000000.0f;
 
 float GetDisplayRefreshRate()
 {
-#ifdef PREVIEW
+#if (defined PREVIEW) and !(defined FT_BUILD)
     return 30.0f;
 #else
     return 60.0f;

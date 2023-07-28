@@ -183,7 +183,7 @@ template("ace_core_source_set") {
       "../image/image_object_svg.cpp",
       "../image/image_provider.cpp",
       "../image/image_source_info.cpp",
-  
+
       # textfield
       "../common/ime/text_editing_value.cpp",
       "../common/ime/text_input_action.cpp",
@@ -465,8 +465,12 @@ template("ace_core_source_set") {
     deps += uicast_configs.uicast_root_deps
 
     if (is_fangtian_build) {
+        sources += [
+          "../animation/native_curve_helper.cpp",
+          "../common/rosen/rosen_convert_helper.cpp",
+        ]
         deps += [
-          # Fangtian TODO
+          "//build/gn/configs/system_libs:ft_engine",
           # "//third_party/flutter/build/fangtian/libtxt:thirdparty_lib_txt_fangtian",
           # "//foundation/graphic/graphic_2d/rosen/modules/2d_engine/rosen_text/ui:rosen_text_ui"
         ]
@@ -489,8 +493,8 @@ template("ace_core_source_set") {
     cflags_cc = []
     cflags_cc += invoker.cflags_cc
     cflags_cc += [
-      "-Wno-return-stack-address", 
-      "-Wno-sign-compare", 
+      "-Wno-return-stack-address",
+      "-Wno-sign-compare",
       "-Wno-unused-lambda-capture",
     ]
   }
@@ -499,20 +503,20 @@ template("ace_core_source_set") {
 foreach(item, ace_platforms) {
   ace_core_source_set("ace_core_" + item.name) {
     platform = item.name
-  
+
     if (defined(item.config)) {
       config = item.config
     } else {
       config = {
       }
     }
-  
+
     if (defined(config.defines)) {
       defines = config.defines
     } else {
       defines = []
     }
-  
+
     if (defined(config.cflags_cc)) {
       cflags_cc = config.cflags_cc
     } else {
