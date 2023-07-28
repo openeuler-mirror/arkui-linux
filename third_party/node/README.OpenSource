@@ -1,0 +1,11 @@
+[
+  {
+    "Name": "node",
+    "License": "ISC License,Public Domain,MIT License,Free Software Foundation - MIT License,Apache License V2.0,ICU License,zlib/libpng License,BSD 2-Clause License,BSD 3-Clause License",
+    "License File": "LICENSE",
+    "Version Number": "14.20.1",
+    "Owner": "sunbingxin@huawei.com",
+    "Upstream URL": "http://www.nodejs.org/",
+    "Description": "Node.js is an open-source, cross-platform, JavaScript runtime environment. It executes JavaScript code outside of a browser."
+  }
+]
