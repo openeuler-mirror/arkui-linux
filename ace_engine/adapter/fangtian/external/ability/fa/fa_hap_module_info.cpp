@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-#include "adapter/preview/external/ability/fa/fa_hap_module_info.h"
+#include "adapter/fangtian/external/ability/fa/fa_hap_module_info.h"
 
 namespace OHOS::Ace {
 void FaHapModuleInfo::Parse(const std::unique_ptr<JsonValue>& root)
@@ -25,6 +25,15 @@ void FaHapModuleInfo::Parse(const std::unique_ptr<JsonValue>& root)
     mainAbility_ = root->GetString("mainAbility");
     moduleName_ = root->GetString("name");
     package_ = root->GetString("package");
+
+    auto abilities = root->GetValue("abilities");
+    if (abilities && abilities->IsArray()) {
+        auto item = abilities->GetArrayItem(0);
+        if (item) {
+            srcLanguage_ = item->GetString("srcLanguage");
+            LOGI("srcLanguage: %s", srcLanguage_.c_str());
+        }
+    }
 }
 
 const std::string& FaHapModuleInfo::GetMainAbility() const
@@ -40,5 +49,10 @@ const std::string& FaHapModuleInfo::GetModuleName() const
 const std::string& FaHapModuleInfo::GetPackage() const
 {
     return package_;
+}
+
+const std::string& FaHapModuleInfo::GetSrcLanguage() const
+{
+    return srcLanguage_;
 }
 } // namespace OHOS::Ace
