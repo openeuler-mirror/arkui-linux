@@ -19,7 +19,7 @@
 #include <iostream>
 #include <vector>
 
-#include <js_native_api.h>
+#include <node/js_native_api.h>
 
 #include "napi/native_common.h"
 
