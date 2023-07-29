@@ -63,6 +63,7 @@ ft_executable("hap_executor") {
         #":copy_napi_modules_shared_library",
         ":copy_linux_shared_library",
         "//build/gn/configs/system_libs:ft_engine",
+        "//ace_engine/adapter/fangtian/external:external_source_fangtian",
     ]
     include_dirs = [ "//third_party/flutter/glfw/include" ]
     if (defined(platform_config.enable_rosen_backend) &&
