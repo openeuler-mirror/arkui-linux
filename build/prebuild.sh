@@ -120,18 +120,28 @@ fi
 # =============================================================================
 # third_party
 # =============================================================================
-if [ ! -d ${PROJECT_DIR}/third_party/ft_engine/build ]; then
-git clone https://gitee.com/openeuler/ft_engine.git ${PROJECT_DIR}/third_party/ft_engine
+if [ ! -d ${PROJECT_DIR}/third_party/flutter ]; then
+    git clone https://gitee.com/openeuler/ft_flutter.git ${PROJECT_DIR}/third_party/flutter
+fi
+
+if [ ! -d ${PROJECT_DIR}/third_party/ft_engine ]; then
+    git clone https://gitee.com/openeuler/ft_engine.git ${PROJECT_DIR}/third_party/ft_engine
+fi
+
+if [ ! -d /usr/include/ft/wm ]; then
+    echo "start build ft_engine"
+    cd ${PROJECT_DIR}/third_party/ft_engine
+    if [ ! -d ${PROJECT_DIR}/third_party/ft_engine/third_party ]; then
+        ./build/prebuild.sh
+    fi
+    ./build.sh -i
+    cd ${PROJECT_DIR}
 fi
 
 if [ ! -e /usr/lib64/libace_skia_fangtian.so ]; then
     echo "start build libace_skia_fangtian.so"
-    if [ ! -d ${PROJECT_DIR}/third_party/flutter/project_build ]; then
-        git clone https://gitee.com/openeuler/ft_flutter.git ${PROJECT_DIR}/third_party/flutter
-        cd ${PROJECT_DIR}/third_party/flutter
-        ./project_build/prebuild.sh
-    fi
     cd ${PROJECT_DIR}/third_party/flutter
+    ./project_build/prebuild.sh
     ./build.sh -i
     cd ${PROJECT_DIR}
 fi

@@ -17,4 +17,5 @@ declare_args() {
   is_fangtian_build = true
   ft_defines = [ "_FANGTIAN" ]
   is_standard_system = true
+  product_name = ""
 }

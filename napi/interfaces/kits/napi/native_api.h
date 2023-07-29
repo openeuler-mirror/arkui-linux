@@ -24,7 +24,7 @@
 #define NAPI_EXPERIMENTAL
 #endif
 
-#include <node_api.h>
+#include <node/node_api.h>
 
 #ifdef NAPI_TEST
 #ifdef _WIN32

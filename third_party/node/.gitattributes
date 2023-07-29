@@ -1,0 +1,33 @@
+test/fixtures/* -text
+vcbuild.bat text eol=crlf
+tools/msvs/find_python.cmd text eol=crlf
+*.tgz filter=lfs diff=lfs merge=lfs -text
+*.trp filter=lfs diff=lfs merge=lfs -text
+*.apk filter=lfs diff=lfs merge=lfs -text
+*.jar filter=lfs diff=lfs merge=lfs -text
+*.mp4 filter=lfs diff=lfs merge=lfs -text
+*.zip filter=lfs diff=lfs merge=lfs -text
+*.asm filter=lfs diff=lfs merge=lfs -text
+*.8svn filter=lfs diff=lfs merge=lfs -text
+*.9svn filter=lfs diff=lfs merge=lfs -text
+*.dylib filter=lfs diff=lfs merge=lfs -text
+*.exe filter=lfs diff=lfs merge=lfs -text
+*.a filter=lfs diff=lfs merge=lfs -text
+*.so filter=lfs diff=lfs merge=lfs -text
+*.bin filter=lfs diff=lfs merge=lfs -text
+*.dll filter=lfs diff=lfs merge=lfs -text
+deps/brotli/c/common/dictionary.bin filter=lfs diff=lfs merge=lfs -text
+deps/npm/node_modules/term-size/vendor/windows/term-size.exe filter=lfs diff=lfs merge=lfs -text
+deps/npm/test/fixtures/forked-underscore-1.5.1.tgz filter=lfs diff=lfs merge=lfs -text
+deps/npm/test/fixtures/gitignore-and-npmignore.tgz filter=lfs diff=lfs merge=lfs -text
+deps/npm/test/fixtures/gitignore.tgz filter=lfs diff=lfs merge=lfs -text
+deps/npm/test/fixtures/npmignore.tgz filter=lfs diff=lfs merge=lfs -text
+deps/npm/test/fixtures/scoped-underscore-1.3.1.tgz filter=lfs diff=lfs merge=lfs -text
+deps/zlib/google/test/data/evil.zip filter=lfs diff=lfs merge=lfs -text
+deps/zlib/google/test/data/evil_via_absolute_file_name.zip filter=lfs diff=lfs merge=lfs -text
+deps/zlib/google/test/data/evil_via_invalid_utf8.zip filter=lfs diff=lfs merge=lfs -text
+deps/zlib/google/test/data/test.zip filter=lfs diff=lfs merge=lfs -text
+deps/zlib/google/test/data/test_encrypted.zip filter=lfs diff=lfs merge=lfs -text
+deps/zlib/google/test/data/test_mismatch_size.zip filter=lfs diff=lfs merge=lfs -text
+deps/zlib/google/test/data/test_nocompress.zip filter=lfs diff=lfs merge=lfs -text
+test/fixtures/google_ssl_hello.bin filter=lfs diff=lfs merge=lfs -text

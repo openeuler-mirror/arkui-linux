@@ -18,9 +18,9 @@
 
 #include <string>
 
-#include "adapter/preview/external/ability/context.h"
-#include "adapter/preview/external/ability/stage/stage_app_info.h"
-#include "adapter/preview/external/ability/stage/stage_hap_module_info.h"
+#include "adapter/fangtian/external/ability/context.h"
+#include "adapter/fangtian/external/ability/stage/stage_app_info.h"
+#include "adapter/fangtian/external/ability/stage/stage_hap_module_info.h"
 #include "base/json/json_util.h"
 #include "base/log/log.h"
 #include "base/memory/ace_type.h"

@@ -127,9 +127,28 @@ config("glfw_config") {
   libs = ["glfw"]
 }
 
+config("ft_engine_config") {
+  visibility = [ ":*" ]
+  include_dirs = [
+    "/usr/include/ft",
+    "/usr/include/ftsurface",
+    # TODO use system header files
+    "//third_party/ft_engine/display_server/rosen/modules",
+    "//third_party/ft_engine/display_server/rosen/modules/render_service_base/include",
+    "//third_party/ft_engine/display_server/interfaces/inner_api/composer",
+    "//third_party/ft_engine/display_server/rosen/modules/composer/vsync/include",
+    "//third_party/ft_engine/display_server/interfaces/inner_api/common",
+    "//third_party/ft_engine/display_server/rosen/modules/render_service_client/core",
+    "//third_party/ft_engine/display_server/interfaces/inner_api/surface",
+    "//third_party/ft_engine/display_server/drivers/interfaces",
+    "//third_party/ft_engine/display_server/utils/buffer_handle/export"
+  ]
+  libs = [ "wm", "render_service_client", "render_service_base" ]
+}
+
 # config("flutter_config") {
 #   visibility = [ ":*" ]
-#   include_dirs = [ 
+#   include_dirs = [
 #     "${sys_inc}/flutter",
 #     "${sys_inc}/flutter/engine",
 #     "${sys_inc}/flutter/engine/flutter",
@@ -142,7 +161,7 @@ config("glfw_config") {
 #   defines = []
 
 #   # flutter glfw
-#   include_dirs += [ 
+#   include_dirs += [
 #     "${sys_inc}/flutter/engine/flutter/shell/platform/common/cpp/client_wrapper/include/flutter",
 #     "${sys_inc}/flutter/engine/flutter/shell/platform/common/cpp/public",
 #   ]
@@ -244,6 +263,16 @@ group("harfbuzz") {
 
 group("glfw") {
   public_configs = [ ":glfw_config" ]
+}
+
+group("ft_engine") {
+  public_deps = [
+    ":eventhandler",
+    ":safwk",
+    ":mmi",
+    ":image",
+  ]
+  public_configs = [ ":ft_engine_config" ]
 }
 
 # group("flutter") {

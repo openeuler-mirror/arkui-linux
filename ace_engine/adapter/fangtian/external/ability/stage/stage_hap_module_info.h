@@ -33,6 +33,7 @@ public:
     void Parse(const std::unique_ptr<JsonValue>& root);
     const std::string& GetCompileMode() const;
     const std::string& GetModuleName() const;
+    const std::string& GetSrcLanguage() const;
     bool GetPartialUpdateFlag() const;
     uint32_t GetLabelId() const;
 
@@ -41,6 +42,7 @@ private:
     std::string moduleName_;
     bool isPartialUpdate_ = true;
     uint32_t labelId_ = 0;
+    std::string srcLanguage_ = "ets";
     ACE_DISALLOW_COPY_AND_MOVE(StageHapModuleInfo);
 };
 } // namespace OHOS::Ace

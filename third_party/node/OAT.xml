@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2021 Huawei Device Co., Ltd.
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+     Notes:
+     This is project config file for OpenHarmony OSS Audit Tool, if you have any questions or concerns, please email chenyaxun.
+-->
+<!-- OAT(OSS Audit Tool) configuration guide:
+basedir: Root dir, the basedir + project path is the real source file location.
+licensefile:
+1.If the project don't have "LICENSE" in root dir, please define all the license files in this project in , OAT will check license files according to this rule.
+
+tasklist(only for batch mode):
+1. task: Define oat check thread, each task will start a new thread.
+2. task name: Only an name, no practical effect.
+3. task policy: Default policy for projects under this task, this field is required and the specified policy must defined in policylist.
+4. task filter: Default filefilter for projects under this task, this field is required and the specified filefilter must defined in filefilterlist.
+5. task project: Projects to be checked, the path field define the source root dir of the project.
+
+
+policyList:
+1. policy: All policyitems will be merged to default OAT.xml rules, the name of policy doesn't affect OAT check process.
+2. policyitem: The fields type, name, path, desc is required, and the fields rule, group, filefilter is optional,the default value is:
+<policyitem type="" name="" path="" desc="" rule="may" group="defaultGroup" filefilter="defaultPolicyFilter"/>
+3. policyitem type:
+    "compatibility" is used to check license compatibility in the specified path;
+    "license" is used to check source license header in the specified path;
+    "copyright" is used to check source copyright header in the specified path;
+    "import" is used to check source dependency in the specified path, such as import ... ,include ...
+    "filetype" is used to check file type in the specified path, supported file types: archive, binary
+    "filename" is used to check whether the specified file exists in the specified path(support projectroot in default OAT.xml), supported file names: LICENSE, README, README.OpenSource
+
+4. policyitem name: This field is used for define the license, copyright, "*" means match all, the "!" prefix means could not match this value. For example, "!GPL" means can not use GPL license.
+5. policyitem path: This field is used for define the source file scope to apply this policyitem, the "!" prefix means exclude the files. For example, "!.*/lib/.*" means files in lib dir will be exclude while process this policyitem.
+6. policyitem rule and group: These two fields are used together to merge policy results. "may" policyitems in the same group means any one in this group passed, the result will be passed.
+7. policyitem filefilter: Used to bind filefilter which define filter rules.
+8. filefilter: Filter rules, the type filename is used to filter file name, the type filepath is used to filter file path.
+
+Note:If the text contains special characters, please escape them according to the following rules:
+" == &gt;
+& == &gt;
+' == &gt;
+< == &gt;
+> == &gt;
+-->
+<configuration>
+    <oatconfig>
+        <licensefile></licensefile>
+        <policylist>
+            <policy name="projectPolicy" desc="多个协议，均不影响兼容性 ：ISC License,Public Domain,MIT License,Free Software Foundation - MIT License,Apache License V2.0,ICU License,zlib/libpng License,BSD 2-Clause License,BSD 3-Clause License">
+            <policyitem type="compatibility" name="Unicode-DFS-2016" path="deps/icu-small/.*" desc="ICU License，不影响兼容性"/>
+            <policyitem type="compatibility" name="Unicode-TOU" path="deps/icu-small/.*" desc="ICU License，不影响兼容性"/>
+            <policyitem type="compatibility" name="Unicode-TOU" path="tools/icu/patches/64/source/.*" desc="ICU License，不影响兼容性"/>
+            <policyitem type="compatibility" name="c-ares license" path="deps/cares/.*" desc="c-ares license，不影响兼容性"/>
+            <policyitem type="compatibility" name="zlib-acknowledgement" path="deps/zlib/.*" desc="zlib/libpng License，不影响兼容性"/>
+            <policyitem type="compatibility" name="zlib/libpng License" path="deps/zlib/.*" desc="zlib/libpng License，不影响兼容性"/>
+            <policyitem type="compatibility" name="Artistic-2.0" path="deps/npm/.*" desc="Artistic License 2.0，协议友好，不影响兼容性"/>
+            <policyitem type="compatibility" name="Unicode-DFS-2016" path="tools/icu/.*" desc="ICU License，不影响兼容性"/>
+            <policyitem type="compatibility" name="BSD License" path="deps/npm/node_modules/bcrypt-pbkdf/.*" desc="BSD LICENSE，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/chownr/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/cmd-shim/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/cross-spawn/node_modules/lru-cache/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/cross-spawn/node_modules/yallist/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/dezalgo/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/ecc-jsbn/lib/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/encoding/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/find-npm-prefix/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/fs-minipass/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/fs-minipass/node_modules/minipass/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/fs-write-stream-atomic/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/glob/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/graceful-fs/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/ignore-walk/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/infer-owner/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/inflight/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/inherits/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/ini/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/init-package-json/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/isexe/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/jsbn/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/json-stringify-safe/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/lockfile/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/lru-cache/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/make-fetch-happen/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/minimatch/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/minizlib/node_modules/minipass/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/mute-stream/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/nopt/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="BSD License" path="deps/npm/node_modules/normalize-package-data/.*" desc="BSD License，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/npm-audit-report/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/npm-bundled/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/npm-cache-filename/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="BSD License" path="deps/npm/node_modules/npm-install-checks/.*" desc="BSD License，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/npm-normalize-package-bin/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/npm-package-arg/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/npm-packlist/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/npm-profile/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="BSD License" path="deps/npm/node_modules/npm-user-validate/.*" desc="BSD License，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/npmlog/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/once/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/osenv/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/pacote/node_modules/minipass/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/promzard/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/proto-list/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/pseudomap/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/read/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/read-installed/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/read-package-json/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/read-package-tree/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/readdir-scoped-modules/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/rimraf/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/semver/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/slide/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/tar/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/tar/node_modules/minipass/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="unlicense" path="deps/npm/node_modules/tweetnacl/.*" desc="unlicense，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/uid-number/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/wcwidth/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/which/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/wrappy/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="deps/npm/node_modules/yallist/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="tools/node_modules/eslint/node_modules/flatted/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="tools/node_modules/eslint/node_modules/glob/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="tools/node_modules/eslint/node_modules/glob-parent/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="tools/node_modules/eslint/node_modules/inflight/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="tools/node_modules/eslint/node_modules/inherits/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="tools/node_modules/eslint/node_modules/isexe/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="tools/node_modules/eslint/node_modules/minimatch/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="tools/node_modules/eslint/node_modules/mute-stream/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="tools/node_modules/eslint/node_modules/once/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="tools/node_modules/eslint/node_modules/rimraf/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="tools/node_modules/eslint/node_modules/semver/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="tools/node_modules/eslint/node_modules/which/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="tools/node_modules/eslint/node_modules/wrappy/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="tools/node_modules/eslint/node_modules/uri-js/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="ISC License" path="tools/node_modules/eslint/lib/.*" desc="ISC License，BSD-style，不影响兼容性"/>
+            <policyitem type="compatibility" name="Apache License" path="tools/node_modules/eslint/node_modules/eslint-visitor-keys/.*" desc="Apache License，不影响兼容性"/>
+            <policyitem type="compatibility" name="BSD License" path="test/fixtures/wpt/resources/.*" desc="BSD License，不影响兼容性"/>
+            <policyitem type="compatibility" name="GPLStyleLicense" path="deps/cares/.*" desc="GPLStyleLicense，不影响兼容性"/>
+            <policyitem type="compatibility" name="AFL-2.1" path="deps/npm/node_modules/json-schema/LICENSE" desc="不影响兼容性"/>
+            <policyitem type="compatibility" name="InvalidLicense" path="deps/npm/node_modules/json-schema/lib/.*" desc="不影响兼容性"/>
+            <policyitem type="compatibility" name="InvalidLicense" path="deps/icu-small/source/common/.*" desc="不影响兼容性"/>
+            <policyitem type="compatibility" name="GPL-3.0+" path="deps/cares/m4/.*" desc="不影响兼容性"/>
+            </policy>
+        </policylist>
+        <filefilterlist>
+            <filefilter name="binaryFileTypePolicyFilter" desc="doc和test中的图片" >
+                <filteritem type="filepath" name="doc/.*.jpg" desc="doc和test中的图片"/>
+                <filteritem type="filepath" name="doc/.*.png" desc="doc和test中的图片"/>
+                <filteritem type="filepath" name="test/.*.jpg" desc="doc和test中的图片"/>
+                <filteritem type="filepath" name="test/.*.png" desc="doc和test中的图片"/>
+                <filteritem type="filepath" name="test/.*.pem" desc="无关二进制"/>
+                <filteritem type="filepath" name="test/.*.wasm" desc="无关二进制"/>
+                <filteritem type="filepath" name="test/.*.pfx" desc="无关二进制"/>
+                <filteritem type="filepath" name="test/.*.gz" desc="无关二进制"/>
+                <filteritem type="filepath" name="test/.*.der" desc="无关二进制"/>
+                <filteritem type="filepath" name="test/.*.z" desc="无关二进制"/>
+                <filteritem type="filepath" name="test/.*.zip" desc="无关二进制"/>
+                <filteritem type="filepath" name="test/.*.sha256" desc="无关二进制"/>
+                <filteritem type="filepath" name="test/.*.sha1" desc="无关二进制"/>
+                <filteritem type="filepath" name="test/.*.http2" desc="无关二进制"/>
+                <filteritem type="filepath" name="test/.*.br" desc="无关二进制"/>
+                <filteritem type="filepath" name="test/.*.bin" desc="无关二进制"/>
+                <filteritem type="filepath" name="deps/.*.pem" desc="无关二进制"/>
+                <filteritem type="filepath" name="deps/.*.png" desc="无关二进制"/>
+                <filteritem type="filepath" name="deps/.*.zip" desc="无关二进制"/>
+                <filteritem type="filepath" name="deps/.*.tgz" desc="无关二进制"/>
+                <filteritem type="filepath" name="deps/.*.tar" desc="无关二进制"/>
+                <filteritem type="filepath" name="deps/.*.bz2" desc="无关二进制"/>
+                <filteritem type="filepath" name="deps/.*.gif" desc="无关二进制"/>
+                <filteritem type="filepath" name="deps/.*.br" desc="无关二进制"/>
+                <filteritem type="filepath" name="deps/.*.gz" desc="无关二进制"/>
+                <filteritem type="filepath" name="deps/.*.size" desc="无关二进制"/>
+                <filteritem type="filepath" name="deps/.*.exe" desc="无关二进制"/>
+                <filteritem type="filepath" name="src/.*.ico" desc="无关二进制"/>
+                <filteritem type="filepath" name="deps/npm/node_modules/clone/LICENSE" desc="无关二进制"/>
+            </filefilter>
+        </filefilterlist>
+        <filefilterlist>
+            <filefilter name="defaultPolicyFilter" desc="compatibility，license文件头校验策略的过滤条件" >
+                <filteritem type="filepath" name="deps/zlib/contrib/minizip/unzip.c" desc="zlib LICENSE，文件未使用，不参与编译,不影响兼容性"/>
+                <filteritem type="filepath" name="deps/npm/node_modules/bcrypt-pbkdf/index.js" desc="BSD LICENSE，文件未使用，不参与编译,不影响兼容性"/>
+                <filteritem type="filepath" name="deps/npm/node_modules/init-package-json/default-input.js" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/npm/node_modules/normalize-package-data/lib/fixer.js" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/npm/node_modules/normalize-package-data/lib/normalize.js" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/npm/node_modules/spdx-expression-parse/parse.js" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/npm/node_modules/spdx-expression-parse/scan.js" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/npm/test/tap/deprecate.js" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="deps/npm/test/tap/sorted-package-json.js" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="test/parallel/test-whatwg-url-constructor.js" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="test/parallel/test-whatwg-url-origin.js" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="test/parallel/test-whatwg-url-setters.js" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="test/parallel/test-whatwg-url-toascii.js" desc="三方代码未写LICENSE头"/>
+                <filteritem type="filepath" name="tools/inspector_protocol/jinja2/bccache.py" desc="BSD头写在python doc里"/>
+                <filteritem type="filepath" name="tools/inspector_protocol/jinja2/ext.py" desc="BSD头写在python doc里"/>
+                <filteritem type="filepath" name="tools/inspector_protocol/jinja2/get_jinja2.sh" desc="三方仓构建工具未使用不参与打包，没写LICENSE头"/>
+                <filteritem type="filepath" name="tools/inspector_protocol/jinja2/optimizer.py" desc="BSD头写在python doc里"/>
+                <filteritem type="filepath" name="tools/inspector_protocol/jinja2/runtime.py" desc="BSD头写在python doc里"/>
+                <filteritem type="filepath" name="tools/inspector_protocol/jinja2/sandbox.py" desc="BSD头写在python doc里"/>
+                <filteritem type="filepath" name="tools/inspector_protocol/jinja2/visitor.py" desc="BSD头写在python doc里"/>
+                <filteritem type="filepath" name="tools/node_modules/eslint/node_modules/flatted/index.js" desc="三方代码ISC LICENSE BSD-style LICENSE协议友好没有兼容性问题"/>
+                <filteritem type="filepath" name="tools/node_modules/eslint/node_modules/flatted/cjs/index.js" desc="三方代码ISC LICENSE BSD-style LICENSE协议友好没有兼容性问题"/>
+                <filteritem type="filepath" name="tools/node_modules/eslint/node_modules/flatted/esm/index.js" desc="三方代码ISC LICENSE BSD-style LICENSE协议友好没有兼容性问题"/>
+                <filteritem type="filepath" name="vcbuild.bat" desc="三方仓内编译脚本，未写license头，不参与编译，不影响兼容性"/>
+                <filteritem type="filepath" name="deps/npm/node_modules/har-validator/node_modules/ajv/scripts/travis-gh-pages" desc="三方仓内编译脚本，未写license头，不参与编译，不影响兼容性"/>
+                <filteritem type="filepath" name="tools/inspector_protocol/markupsafe/get_markupsafe.sh" desc="三方仓内编译脚本，未写license头，不参与编译，不影响兼容性"/>
+                <filteritem type="filepath" name="tools/msvs/install_tools/install_tools.bat" desc="三方仓内编译脚本，未写license头，不参与编译，不影响兼容性"/>
+                <filteritem type="filepath" name="tools/node_modules/eslint/node_modules/ajv/scripts/travis-gh-pages" desc="文三方仓内编译脚本，未写license头，不参与编译，不影响兼容性"/>
+                <filteritem type="filepath" name="tools/inspector_protocol/jinja2/LICENSE" desc="此为LICENSE文件"/>
+                <filteritem type="filepath" name="LICENSE" desc="此为LICENSE文件"/>
+                <filteritem type="filepath" name="tools/inspector_protocol/markupsafe/LICENSE" desc="此为LICENSE文件"/>
+                <filteritem type="filepath" name="tools/node_modules/babel-eslint/node_modules/source-map/LICENSE" desc="此为LICENSE文件"/>
+                <filteritem type="filepath" name="tools/node_modules/eslint/node_modules/uri-js/LICENSE" desc="此为LICENSE文件"/>
+                <filteritem type="filepath" name="deps/icu-small/LICENSE" desc="此为LICENSE文件"/>
+                <filteritem type="filepath" name="deps/npm/node_modules/uri-js/LICENSE" desc="此为LICENSE文件"/>
+                <filteritem type="filepath" name="deps/npm/node_modules/qs/LICENSE" desc="此为LICENSE文件"/>
+                <filteritem type="filepath" name="lib/internal/cluster/.*" desc="文件没有添加license头，跟随node整体的license"/>
+                <filteritem type="filepath" name="lib/internal/util/iterable_weak_map.js" desc="不参与编译，不影响兼容性"/>
+                <filteritem type="filepath" name="deps/npm/node_modules/validate-npm-package-license/index.js" desc="文件没有添加license头，外层LICENSE位Apache"/>
+				<filteritem type="filepath" name="deps/cares/Makefile.am" desc="不参与编译，不影响兼容性"/>
+				<filteritem type="filepath" name="deps/cares/m4/zz40-xc-ovr.m4" desc="不参与编译，不影响兼容性"/>
+				<filteritem type="filepath" name="deps/cares/m4/xc-val-flgs.m4" desc="不参与编译，不影响兼容性"/>
+				<filteritem type="filepath" name="deps/cares/m4/xc-am-iface.m4" desc="不参与编译，不影响兼容性"/>
+				<filteritem type="filepath" name="deps/cares/m4/xc-cc-check.m4" desc="不参与编译，不影响兼容性"/>
+				<filteritem type="filepath" name="deps/cares/m4/xc-lt-iface.m4" desc="不参与编译，不影响兼容性"/>
+				<filteritem type="filepath" name="deps/cares/m4/xc-translit.m4" desc="不参与编译，不影响兼容性"/>
+                <filteritem type="filepath" name="deps/cares/README.cares" desc="不参与编译，不影响兼容性"/>
+                <filteritem type="filepath" name="deps/cares/RELEASE-NOTES" desc="不参与编译，不影响兼容性"/>
+                <filteritem type="filepath" name="deps/npm/man/man1/npm-dist-tag.1" desc="不参与编译，不影响兼容性"/>
+                <filteritem type="filepath" name="deps/npm/man/man5/install.5" desc="不参与编译，不影响兼容性"/>
+            </filefilter>
+        </filefilterlist>
+        <licensematcherlist>
+            <licensematcher name="MIT License" desc="如果工具扫描是InvalidLicense，可在此定义匹配规则，注意引号要转义" >
+            <licensetext name="MIT Licensed" desc="MIT LICENSE"/>
+            </licensematcher>
+            <licensematcher name="BSD License" desc="如果工具扫描是InvalidLicense，可在此定义匹配规则，注意引号要转义" >
+            <licensetext name="      Standard UNIX getopt function.  Code is from BSD." desc="BSD License"/>
+            </licensematcher>
+            <licensematcher name="MIT License" desc="如果工具扫描是InvalidLicense，可在此定义匹配规则，注意引号要转义" >
+            <licensetext name=" MIT license " desc="MIT LICENSE"/>
+            </licensematcher>
+            <licensematcher name="MIT License" desc="如果工具扫描是InvalidLicense，可在此定义匹配规则，注意引号要转义" >
+            <licensetext name=" Licensed under the MIT (MIT-LICENSE.txt) license." desc="MIT LICENSE"/>
+            </licensematcher>
+            <licensematcher name="MIT License" desc="如果工具扫描是InvalidLicense，可在此定义匹配规则，注意引号要转义" >
+            <licensetext name=" Distributed under MIT style license" desc="MIT LICENSE"/>
+            </licensematcher>
+            <licensematcher name="MIT License" desc="如果工具扫描是InvalidLicense，可在此定义匹配规则，注意引号要转义" >
+            <licensetext name="*! safe-buffer. MIT License. Feross Aboukhadijeh " desc="MIT LICENSE"/>
+            </licensematcher>
+            <licensematcher name="MIT License" desc="如果工具扫描是InvalidLicense，可在此定义匹配规则，注意引号要转义" >
+            <licensetext name=" @license URI.js v4.4.0 (c) 2011 Gary Court." desc="MIT LICENSE"/>
+            </licensematcher>
+            <licensematcher name="MIT License" desc="如果工具扫描是InvalidLicense，可在此定义匹配规则，注意引号要转义" >
+            <licensetext name="# * This software is licensed as described in the file COPYING, which
+# * you should have received as part of this distribution. The terms
+# * are also available at http://curl.haxx.se/docs/copyright.html." desc="MIT LICENSE"/>
+            </licensematcher>
+            <licensematcher name="BSD License" desc="如果工具扫描是InvalidLicense，可在此定义匹配规则，注意引号要转义" >
+            <licensetext name="Distributed under both the W3C Test Suite License [1] and the W3C
+3-clause BSD License [2]. To contribute to a W3C Test Suite, see the
+policies and contribution forms [3]." desc="BSD License"/>
+            </licensematcher>
+            <licensematcher name="MIT License" desc="如果工具扫描是InvalidLicense，可在此定义匹配规则，注意引号要转义" >
+            <licensetext name="@license
+ * Lodash (Custom Build) lodash.com/license | Underscore.js 1.8.3 underscorejs.org/LICENSE" desc="MIT LICENSE"/>
+            </licensematcher>
+            <licensematcher name="MIT License" desc="如果工具扫描是InvalidLicense，可在此定义匹配规则，注意引号要转义" >
+            <licensetext name=" @license
+ * Lodash lodash.com/license | Underscore.js 1.8.3 underscorejs.org/LICENSE" desc="MIT LICENSE"/>
+            </licensematcher>
+            <licensematcher name="MIT License" desc="如果工具扫描是InvalidLicense，可在此定义匹配规则，注意引号要转义" >
+            <licensetext name="# Use of this source code is governed by an MIT-style license." desc="MIT LICENSE"/>
+            </licensematcher>
+            <licensematcher name="BSD License" desc="如果工具扫描是InvalidLicense，可在此定义匹配规则，注意引号要转义" >
+            <licensetext name=":license: BSD." desc="BSD License"/>
+            </licensematcher>
+            <licensematcher name="ISC License" desc="如果工具扫描是InvalidLicense，可在此定义匹配规则，注意引号要转义" >
+            <licensetext name="The ISC License" desc="ISC License"/>
+            </licensematcher>
+            <licensematcher name="BSD License" desc="如果工具扫描是InvalidLicense，可在此定义匹配规则，注意引号要转义" >
+            <licensetext name="Blowfish block cipher for OpenBSD" desc="BSD License"/>
+            </licensematcher>
+            <licensematcher name="ISC License" desc="如果工具扫描是InvalidLicense，可在此定义匹配规则，注意引号要转义" >
+            <licensetext name="This software is covered under the following copyright:" desc="ISC License"/>
+            </licensematcher>
+            <licensematcher name="ISC License" desc="如果工具扫描是InvalidLicense，可在此定义匹配规则，注意引号要转义" >
+            <licensetext name="Copyright (c) 2012-2014 Andris Reinman" desc="ISC License"/>
+            </licensematcher>
+            <licensematcher name="ISC License" desc="如果工具扫描是InvalidLicense，可在此定义匹配规则，注意引号要转义" >
+            <licensetext name="The ISC License" desc="ISC License"/>
+            </licensematcher>
+            <licensematcher name="ISC License" desc="如果工具扫描是InvalidLicense，可在此定义匹配规则，注意引号要转义" >
+            <licensetext name="ISC License" desc="ISC License"/>
+            </licensematcher>
+            <licensematcher name="BSD License" desc="如果工具扫描是InvalidLicense，可在此定义匹配规则，注意引号要转义" >
+            <licensetext name="The BSD License" desc="BSD License"/>
+            </licensematcher>
+            <licensematcher name="unlicense" desc="如果工具扫描是InvalidLicense，可在此定义匹配规则，注意引号要转义" >
+            <licensetext name="This is free and unencumbered software released into the public domain." desc="unlicense"/>
+            </licensematcher>
+            <licensematcher name="ISC License" desc="如果工具扫描是InvalidLicense，可在此定义匹配规则，注意引号要转义" >
+            <licensetext name="Copyright (C) 2012 by Jun Woong." desc="ISC License"/>
+            </licensematcher>
+            <licensematcher name="zlib-acknowledgement" desc="如果工具扫描是InvalidLicense，可在此定义匹配规则，注意引号要转义" >
+            <licensetext name="License: Custom license" desc="zlib-acknowledgement"/>
+            </licensematcher>
+            <licensematcher name="BSD License" desc="如果工具扫描是InvalidLicense，可在此定义匹配规则，注意引号要转义" >
+            <licensetext name="W3C 3-clause BSD License" desc="BSD License"/>
+            </licensematcher>
+            <licensematcher name="ISC License" desc="如果工具扫描是InvalidLicense，可在此定义匹配规则，注意引号要转义" >
+            <licensetext name="wcwidth.js: JavaScript Portng of Markus Kuhn's wcwidth() Implementation" desc="ISC License"/>
+            </licensematcher>
+            <licensematcher name="ISC License" desc="如果工具扫描是InvalidLicense，可在此定义匹配规则，注意引号要转义" >
+            <licensetext name="The ISC License" desc="ISC License"/>
+            </licensematcher>
+            <licensematcher name="ISC License" desc="">
+                <licensetext name="
+                    Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted,
+                    provided that the above copyright notice and this permission notice appear in all copies.  THE SOFTWARE IS PROVIDED
+                    &gt;AS IS&gt; AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+                    MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL
+                    DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE
+                    OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+                " desc=""/>
+            </licensematcher>
+            <licensematcher name="zlib/libpng License" desc="如果工具扫描是InvalidLicense，可在此定义匹配规则，注意引号要转义" >
+                <licensetext name="
+                    * For conditions of distribution and use, see copyright notice in zlib.h
+                " desc="zlib/libpng License"/>
+            </licensematcher>
+            <licensematcher name="zlib/libpng License" desc="如果工具扫描是InvalidLicense，可在此定义匹配规则，注意引号要转义" >
+                <licensetext name="
+                    The encryption/decryption parts of this source code (as opposed to the
+                    non-echoing password parts) were originally written in Europe.  The
+                    whole source package can be freely distributed, including from the USA.
+                    (Prior to January 2000, re-export from the US was a violation of US law.)
+                " desc="zlib/libpng License"/>
+            </licensematcher>
+            <licensematcher name="Apache License" desc="如果工具扫描是InvalidLicense，可在此定义匹配规则，注意引号要转义" >
+                <licensetext name="
+                    @author Toru Nagashima &lt;https://github.com/mysticatea&gt;
+                    See LICENSE file in root directory for full license.
+                " desc="Apache License"/>
+            </licensematcher>
+            <licensematcher name="ISC License" desc="如果工具扫描是InvalidLicense，可在此定义匹配规则，注意引号要转义" >
+                <licensetext name="
+                    @fileoverview Prefers object spread property over Object.assign
+                    @author Sharmila Jesupaul
+                    See LICENSE file in root directory for full license.
+                " desc=""/>
+            </licensematcher>
+            <licensematcher name="ISC License" desc="如果工具扫描是InvalidLicense，可在此定义匹配规则，注意引号要转义" >
+                <licensetext name="
+                    Redistribution and use in source and binary forms, with or without modification, are
+                    permitted provided that the following conditions are met:
+
+                       1. Redistributions of source code must retain the above copyright notice, this list of
+                          conditions and the following disclaimer.
+
+                       2. Redistributions in binary form must reproduce the above copyright notice, this list
+                          of conditions and the following disclaimer in the documentation and/or other materials
+                          provided with the distribution.
+                " desc=""/>
+                <licensetext name="
+                    Redistribution and use in source and binary forms, with or without
+                    modification, are permitted provided that the following conditions are met:
+
+                    A. Redistributions of source code must retain the above copyright notice,
+                       this list of conditions and the following disclaimer.
+                    B. Redistributions in binary form must reproduce the above copyright notice,
+                       this list of conditions and the following disclaimer in the documentation
+                       and/or other materials provided with the distribution.
+                    C. Neither the names of the copyright holders nor the names of its
+                       contributors may be used to endorse or promote products derived from this
+                       software without specific prior written permission.
+                " desc=""/>
+            </licensematcher>
+            <licensematcher name="c-ares license" desc="如果工具扫描是InvalidLicense，可在此定义匹配规则，注意引号要转义" >
+                <licensetext name="
+                    Copyright (c) 2004 by Internet Systems Consortium, Inc. (&quot;ISC&quot;)
+                    Copyright (c) 1996,1999 by Internet Software Consortium.
+
+                    Permission to use, copy, modify, and distribute this software for any
+                    purpose with or without fee is hereby granted, provided that the above
+                    copyright notice and this permission notice appear in all copies.
+                " desc=""/>
+            </licensematcher>
+        </licensematcherlist>
+    </oatconfig>
+</configuration>
