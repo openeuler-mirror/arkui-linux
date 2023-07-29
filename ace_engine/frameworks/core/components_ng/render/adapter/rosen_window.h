@@ -18,7 +18,7 @@
 
 #include "render_service_client/core/ui/rs_ui_director.h"
 #include "vsync_receiver.h"
-#ifdef PREVIEW
+#if (defined PREVIEW) and !(defined FT_BUILD)
 #include "window_prviewer.h"
 #else
 #include "wm/window.h"
