@@ -34,11 +34,13 @@ public:
     const std::string& GetMainAbility() const;
     const std::string& GetModuleName() const;
     const std::string& GetPackage() const;
+    const std::string& GetSrcLanguage() const;
 
 private:
     std::string mainAbility_;
     std::string moduleName_;
     std::string package_;
+    std::string srcLanguage_ = "ets";
     ACE_DISALLOW_COPY_AND_MOVE(FaHapModuleInfo);
 };
 } // namespace OHOS::Ace
