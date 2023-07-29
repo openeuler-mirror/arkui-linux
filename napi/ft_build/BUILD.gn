@@ -23,26 +23,25 @@ config("ace_napi_config") {
     # Fangtian TODO
     # "//third_party/node/src",
   ]
-
-  deps += [
-    "//build/gn/configs/system_libs:uv"
-  ]
 }
 
 
-ft_source_set("ace_napi_static") {
-  defines = []
-  public_configs = [ ":ace_napi_config" ]
-  deps = [ "//build/gn/configs/system_libs:c_utils" ]
+  ft_source_set("ace_napi_static") {
+    defines = []
+    public_configs = [ ":ace_napi_config" ]
+  deps = [
+    "//build/gn/configs/system_libs:c_utils",
+    "//build/gn/configs/system_libs:libuv",
+  ]
 
-  sources = napi_sources
+    sources = napi_sources
 
-  if (current_cpu == "arm64") {
-    defines += [ "_ARM64_" ]
-  }
-  if (current_os == "ohos" && current_cpu == "x86_64") {
-    defines += [ "SIMULATOR" ]
-  }
+    if (current_cpu == "arm64") {
+      defines += [ "_ARM64_" ]
+    }
+    if (current_os == "ohos" && current_cpu == "x86_64") {
+      defines += [ "SIMULATOR" ]
+    }
 
   if (use_linux) {
     defines += [ 
@@ -73,97 +72,96 @@ ft_source_set("ace_napi_static") {
     # } else {
     #   external_deps = [ "hilog:libhilog" ]
     # }
+    }
+
+    cflags_cc = [ "-Wno-missing-braces" ]
   }
 
-  cflags_cc = [ "-Wno-missing-braces" ]
-}
+    ft_shared_library("ace_napi") {
+      deps = [
+        ":ace_napi_static",
+      ]
+      public_configs = [ ":ace_napi_config" ]
+  }
 
-ft_shared_library("ace_napi") {
-    deps = [ ":ace_napi_static" ]
-    public_configs = [ ":ace_napi_config" ]
-    if (!is_cross_platform_build) {
-    public_deps = [ "//third_party/libuv:uv" ]
-    }
-}
+  config("container_scope_config") {
+    visibility = [ ":*" ]
+    include_dirs = [ "$ace_root/frameworks" ]
+  }
 
-config("container_scope_config") {
-  visibility = [ ":*" ]
-  include_dirs = [ "$ace_root/frameworks" ]
-}
-
-ft_shared_library("ace_container_scope") {
-  public_configs = [ ":container_scope_config" ]
+  ft_shared_library("ace_container_scope") {
+    public_configs = [ ":container_scope_config" ]
 
   configs = [ "$ace_root/ft_build:ace_config" ]
 
-  sources = [ "$ace_root/frameworks/core/common/container_scope.cpp" ]
-}
+    sources = [ "$ace_root/frameworks/core/common/container_scope.cpp" ]
+  }
 
-ft_source_set("ace_container_scope_static") {
-  public_configs = [ ":container_scope_config" ]
+  ft_source_set("ace_container_scope_static") {
+    public_configs = [ ":container_scope_config" ]
 
   configs = [ "$ace_root/ft_build:ace_config" ]
 
-  sources = [ "$ace_root/frameworks/core/common/container_scope.cpp" ]
-}
+    sources = [ "$ace_root/frameworks/core/common/container_scope.cpp" ]
+  }
 
-template("ace_napi_lib") {
-  forward_variables_from(invoker, "*")
-  if (defined(use_js_debug) && use_js_debug) {
-    deps_ = [
+  template("ace_napi_lib") {
+    forward_variables_from(invoker, "*")
+    if (defined(use_js_debug) && use_js_debug) {
+      deps_ = [
     "../native_engine/impl/${engine_path}/ft_build:ace_napi_impl_${engine_path}_debug",
-    ]
-  } else {
-    deps_ =
+      ]
+    } else {
+      deps_ =
         [ "../native_engine/impl/${engine_path}/ft_build:ace_napi_impl_${engine_path}" ]
-  }
+    }
 
-  ft_shared_library(target_name) {
-    public_configs = [ "../native_engine/impl/${engine_path}:ace_napi_${engine_path}_config" ]
+      ft_shared_library(target_name) {
+    public_configs = [ "../native_engine/impl/${engine_path}/ft_build:ace_napi_${engine_path}_config" ]
 
-    deps = deps_
-    if (defined(use_icu) && use_icu) {
+        deps = deps_
+        if (defined(use_icu) && use_icu) {
       deps += [ "//build/gn/configs/system_libs:icu" ]
+      }
     }
   }
-}
 
-napi_libs = []
+  napi_libs = []
 
-foreach(item, ace_platforms) {
+  foreach(item, ace_platforms) {
 if (item.name == "ohos" || item.name == "fangtian" || is_cross_platform_build) {
   engine_config = {}
   support_engines = {}
-  engine_config = item.config
-  support_engines = engine_config.js_engines
-  foreach(engine, support_engines) {
-    if (engine.engine_name != "ark") {
-      ace_napi_lib("ace_napi_${engine.engine_path}") {
-        engine_path = engine.engine_path
-      }
-      napi_libs += [ ":ace_napi_${engine.engine_path}" ]
-      if (defined(engine.have_debug) && engine.have_debug) {
-        ace_napi_lib("ace_napi_${engine.engine_path}_debug") {
+      engine_config = item.config
+      support_engines = engine_config.js_engines
+      foreach(engine, support_engines) {
+        if (engine.engine_name != "ark") {
+          ace_napi_lib("ace_napi_${engine.engine_path}") {
             engine_path = engine.engine_path
-            use_js_debug = true
+          }
+          napi_libs += [ ":ace_napi_${engine.engine_path}" ]
+          if (defined(engine.have_debug) && engine.have_debug) {
+            ace_napi_lib("ace_napi_${engine.engine_path}_debug") {
+              engine_path = engine.engine_path
+              use_js_debug = true
+            }
+            napi_libs += [ ":ace_napi_${engine.engine_path}_debug" ]
+          }
+        } else if (engine.engine_name == "ark") {
+          ace_napi_lib("ace_napi_${engine.engine_name}") {
+            engine_path = engine.engine_name
+            use_icu = true
+          }
+          napi_libs += [ ":ace_napi_${engine.engine_name}" ]
         }
-        napi_libs += [ ":ace_napi_${engine.engine_path}_debug" ]
       }
-    } else if (engine.engine_name == "ark") {
-      ace_napi_lib("ace_napi_${engine.engine_name}") {
-        engine_path = engine.engine_name
-        use_icu = true
-      }
-      napi_libs += [ ":ace_napi_${engine.engine_name}" ]
     }
   }
-}
-}
 
-group("napi_packages") {
-  deps = [ ":ace_napi" ]
-  deps += napi_libs
-}
+  group("napi_packages") {
+    deps = [ ":ace_napi" ]
+    deps += napi_libs
+  }
 
 # Fangtian TODO
 
