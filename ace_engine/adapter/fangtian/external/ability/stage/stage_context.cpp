@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-#include "adapter/preview/external/ability/stage/stage_context.h"
+#include "adapter/fangtian/external/ability/stage/stage_context.h"
 
 namespace OHOS::Ace {
 StageContext::StageContext()

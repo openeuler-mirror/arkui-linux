@@ -17,11 +17,16 @@
 #include <iostream>
 #include <sstream>
 #include <thread>
+#include <unistd.h>
 
 #include "adapter/fangtian/entrance/ace_ability.h"
 #include "adapter/fangtian/entrance/ace_run_args.h"
 #include "adapter/fangtian/entrance/samples/key_input_handler.h"
 #include "adapter/fangtian/entrance/samples/touch_event_handler.h"
+
+#include "adapter/fangtian/external/ability/context.h"
+#include "adapter/fangtian/external/ability/fa/fa_context.h"
+#include "adapter/fangtian/external/ability/stage/stage_context.h"
 
 namespace {
 
@@ -37,11 +42,11 @@ auto&& renderCallback = [](const void*, const size_t bufferSize, const int32_t w
 };
 
 } // namespace
+bool GetAceRunArgs(int argc, const char* argv[], OHOS::Ace::Platform::AceRunArgs &args);
 
 int main(int argc, const char* argv[])
 {
     OHOS::Ace::LogWrapper::SetLogLevel(OHOS::Ace::LogLevel::DEBUG);
-    LOGI("main nihao\n");
     std::string assetPathJs = "/home/zach/appications/test/default";
     std::string assetPathEts = "/home/zach/appications/test/default_2.0";
     std::string assetPathEtsStage = "/home/ubuntu/demo/preview/js/default_stage/ets";
@@ -51,15 +56,19 @@ int main(int argc, const char* argv[])
     std::string pageProfile = "main_page";
 
     OHOS::Ace::Platform::AceRunArgs args = {
-        .assetPath = assetPathJs,
+        .projectModel = OHOS::Ace::Platform::ProjectModel::STAGE,
+        .assetPath = assetPathEtsStage,
         .systemResourcesPath = systemResourcesPath,
-        .appResourcesPath = appResourcesPath,
+        .appResourcesPath = appResourcesPathStage,
         .deviceConfig.orientation = OHOS::Ace::DeviceOrientation::LANDSCAPE,
         .deviceConfig.density = 1,
         .deviceConfig.deviceType = OHOS::Ace::DeviceType::TABLET,
         .windowTitle = "Demo",
+        .viewWidth = 1920,
+        .viewHeight = 1080,
         .deviceWidth = 1920,
         .deviceHeight = 1080,
+        .aceVersion = OHOS::Ace::Platform::AceVersion::ACE_2_0,
         .onRender = std::move(renderCallback),
     };
 
@@ -75,7 +84,6 @@ int main(int argc, const char* argv[])
             args.pageProfile = pageProfile;
         }
     }
-    std::cout << "hap_path:" << args.assetPath << std::endl;
 
     auto ability = OHOS::Ace::Platform::AceAbility::CreateInstance(args);
     if (!ability) {
@@ -85,12 +93,13 @@ int main(int argc, const char* argv[])
         std::cout << "create ability OK" << std::endl;
     }
 
-    OHOS::Ace::Platform::KeyInputHandler::InitialTextInputCallback(ability->GetGlfwWindowController());
-    OHOS::Ace::Platform::TouchEventHandler::InitialTouchEventCallback(ability->GetGlfwWindowController());
-
-    std::thread timer([&ability]() {
+    // TODO adaptor for fangtian mmi
+    // OHOS::Ace::Platform::KeyInputHandler::InitialTextInputCallback(ability->GetGlfwWindowController());
+    // OHOS::Ace::Platform::TouchEventHandler::InitialTouchEventCallback(ability->GetGlfwWindowController());
+    bool runFlag = true;
+    std::thread timer([&ability, &runFlag]() {
         int32_t getJSONTreeTimes = GET_INSPECTOR_TREE_TIMES;
-        while (getJSONTreeTimes--) {
+        while (getJSONTreeTimes-- && runFlag) {
             std::this_thread::sleep_for(std::chrono::milliseconds(GET_INSPECTOR_TREE_INTERVAL));
             std::string jsonTreeStr = ability->GetJSONTree();
             // clear all information
@@ -104,6 +113,79 @@ int main(int argc, const char* argv[])
     ability->InitEnv();
     std::cout << "Ace initialize done. run loop now" << std::endl;
     ability->Start();
-
+    runFlag = false;
+    timer.join();
+    std::cout << "hap executor exit" << std::endl;
     return 0;
+}
+
+bool GetAceRunArgs(int argc, const char* argv[], OHOS::Ace::Platform::AceRunArgs &args)
+{
+    if (argc < 2) { // ./hap_executor + package path
+        return false;
+    }
+
+    if (argv == nullptr) {
+        return false;
+    }
+
+    char realPath[PATH_MAX] = { 0x00 };
+    std::string happath(argv[1]);
+    if (realpath(happath.c_str(), realPath) == nullptr) {
+        LOGE("realpath fail! filePath: %{private}s, fail reason: %{public}s", happath.c_str(), strerror(errno));
+        return false;
+    }
+    std::cout << "hap path: " << realPath << std::endl;
+
+    std::string faConfigPath = happath + "/config.json";
+    std::string stageModulePath = happath + "/module.json";
+    if (realpath(stageModulePath.c_str(), realPath) != nullptr) {
+        std::cout << "projectModel: STAGE" << std::endl;
+        args.projectModel = OHOS::Ace::Platform::ProjectModel::STAGE;
+        args.pageProfile = "main_page";
+    } else if (realpath(faConfigPath.c_str(), realPath) != nullptr) {
+        std::cout << "projectModel: FA" << std::endl;
+        args.projectModel = OHOS::Ace::Platform::ProjectModel::FA;
+    } else {
+        std::cout << "File error, please check the hap file" << std::endl;
+        return false;
+    }
+
+    std::string appResourcesPath = "/home/ubuntu/demo/preview/js/AppResources";
+    std::string appResourcesPathStage = "/home/ubuntu/demo/preview/js/default_stage";
+    std::string systemResourcesPath = "/home/ubuntu/demo/preview/js/SystemResources";
+
+    args.assetPath = happath;
+    args.systemResourcesPath = systemResourcesPath;
+    args.appResourcesPath = happath;
+    args.deviceConfig.orientation = OHOS::Ace::DeviceOrientation::LANDSCAPE;
+    args.deviceConfig.density = 1;
+    args.deviceConfig.deviceType = OHOS::Ace::DeviceType::TABLET;
+    args.windowTitle = "Demo";
+    args.deviceWidth = 1920;
+    args.deviceHeight = 1080;
+    args.onRender = std::move(renderCallback);
+
+    bool stageModel = args.projectModel == OHOS::Ace::Platform::ProjectModel::STAGE;
+    auto context = OHOS::Ace::Context::CreateContext(stageModel, args.appResourcesPath);
+    CHECK_NULL_RETURN(context, false);
+    if (stageModel) {
+        args.aceVersion = OHOS::Ace::Platform::AceVersion::ACE_2_0;
+        std::cout << "GetSrcLanguage: ets" << std::endl;
+    } else {
+        auto faContext = OHOS::Ace::AceType::DynamicCast<OHOS::Ace::FaContext>(context);
+        CHECK_NULL_RETURN(faContext, false);
+        auto hapModuleInfo = faContext->GetHapModuleInfo();
+        CHECK_NULL_RETURN(hapModuleInfo, false);
+        std::string srcLanguage = hapModuleInfo->GetSrcLanguage();
+        if (hapModuleInfo->GetSrcLanguage() == "ets") {
+            args.aceVersion = OHOS::Ace::Platform::AceVersion::ACE_2_0;
+            std::cout << "GetSrcLanguage: ets" << std::endl;
+        } else {
+            args.aceVersion = OHOS::Ace::Platform::AceVersion::ACE_1_0;
+            std::cout << "GetSrcLanguage: js" << std::endl;
+        }
+    }
+
+    return true;
 }

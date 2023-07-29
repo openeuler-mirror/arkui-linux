@@ -17,21 +17,15 @@
 
 #include <functional>
 
-#ifndef ENABLE_ROSEN_BACKEND
-#include "flutter/lib/ui/ui_dart_state.h"
-
-#include "adapter/fangtian/entrance/dir_asset_provider.h"
-#include "core/common/flutter/flutter_asset_manager.h"
-#include "core/common/flutter/flutter_task_executor.h"
-#else // ENABLE_ROSEN_BACKEND == true
-#include <ui/rs_surface_node.h>
-#include <ui/rs_ui_director.h>
-
+//#include "wm/window.h"
+//#include <ui/rs_surface_node.h>
+//#include <ui/rs_ui_director.h>
 #include "flutter/lib/ui/ui_dart_state.h"
 #include "adapter/fangtian/entrance/rs_dir_asset_provider.h"
+#include "adapter/fangtian/entrance/dir_asset_provider.h"
 #include "core/common/rosen/rosen_asset_manager.h"
+#include "core/common/flutter/flutter_asset_manager.h"
 #include "core/common/flutter/flutter_task_executor.h"
-#endif
 
 #include "adapter/fangtian/entrance/ace_application_info.h"
 #include "adapter/fangtian/osal/stage_card_parser.h"
@@ -83,12 +77,12 @@ AceContainer::AceContainer(int32_t instanceId, FrontendType type, RefPtr<Context
 {
     ThemeConstants::InitDeviceType();
 
-    auto state = flutter::UIDartState::Current()->GetStateById(instanceId);
+/*     auto state = flutter::UIDartState::Current()->GetStateById(instanceId);
     auto taskExecutor = Referenced::MakeRefPtr<FlutterTaskExecutor>(state->GetTaskRunners());
     if (type_ != FrontendType::DECLARATIVE_JS && type_ != FrontendType::ETS_CARD) {
         taskExecutor->InitJsThread();
     }
-    taskExecutor_ = taskExecutor;
+    taskExecutor_ = taskExecutor; */
 }
 
 void AceContainer::Initialize()
@@ -784,40 +778,19 @@ void AceContainer::UpdateDeviceConfig(const DeviceConfig& deviceConfig)
         TaskExecutor::TaskType::UI);
 }
 
-#ifndef ENABLE_ROSEN_BACKEND
-void AceContainer::SetView(FlutterAceView* view, double density, int32_t width, int32_t height)
-{
-    if (view == nullptr) {
-        return;
-    }
-
-    auto container = AceType::DynamicCast<AceContainer>(AceEngine::Get().GetContainer(view->GetInstanceId()));
-    if (!container) {
-        return;
-    }
-    auto platformWindow = PlatformWindow::Create(view);
-    if (!platformWindow) {
-        LOGE("Create PlatformWindow failed!");
-        return;
-    }
-
-    std::unique_ptr<Window> window = std::make_unique<Window>(std::move(platformWindow));
-    container->AttachView(std::move(window), view, density, width, height);
-}
-#else
-void AceContainer::SetView(
-    RSAceView* view, double density, int32_t width, int32_t height, SendRenderDataCallback onRender)
+void AceContainer::SetView(RSAceView* view, double density, int32_t width, int32_t height,
+    OHOS::sptr<OHOS::Rosen::Window> ftWindow, SendRenderDataCallback onRender)
 {
     CHECK_NULL_VOID(view);
     auto container = AceType::DynamicCast<AceContainer>(AceEngine::Get().GetContainer(view->GetInstanceId()));
     CHECK_NULL_VOID(container);
     auto taskExecutor = container->GetTaskExecutor();
     CHECK_NULL_VOID(taskExecutor);
-    auto rsWindow = new Rosen::Window(onRender);
-    auto window = std::make_unique<NG::RosenWindow>(rsWindow, taskExecutor, view->GetInstanceId());
-    container->AttachView(std::move(window), view, density, width, height, onRender);
+    // TODO adaptor for rs
+    //auto rsWindow = new Rosen::Window(onRender);
+    //auto window = std::make_unique<NG::RosenWindow>(rsWindow, taskExecutor, view->GetInstanceId());
+    //container->AttachView(std::move(window), view, density, width, height, onRender);
 }
-#endif
 
 #ifndef ENABLE_ROSEN_BACKEND
 void AceContainer::AttachView(
