@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-#include "adapter/preview/external/ability/stage/stage_app_info.h"
+#include "adapter/fangtian/external/ability/stage/stage_app_info.h"
 
 namespace OHOS::Ace {
 void StageAppInfo::Parse(const std::unique_ptr<JsonValue>& root)

@@ -13,14 +13,14 @@
  * limitations under the License.
  */
 
-#include "adapter/preview/external/ability/context.h"
+#include "adapter/fangtian/external/ability/context.h"
 
 #include <fstream>
 #include <iostream>
 #include <sstream>
 
-#include "adapter/preview/external/ability/fa/fa_context.h"
-#include "adapter/preview/external/ability/stage/stage_context.h"
+#include "adapter/fangtian/external/ability/fa/fa_context.h"
+#include "adapter/fangtian/external/ability/stage/stage_context.h"
 
 namespace OHOS::Ace {
 namespace {
