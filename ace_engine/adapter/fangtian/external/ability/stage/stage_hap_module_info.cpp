@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-#include "adapter/preview/external/ability/stage/stage_hap_module_info.h"
+#include "adapter/fangtian/external/ability/stage/stage_hap_module_info.h"
 
 namespace OHOS::Ace {
 void StageHapModuleInfo::Parse(const std::unique_ptr<JsonValue>& root)
@@ -50,6 +50,11 @@ const std::string& StageHapModuleInfo::GetCompileMode() const
 const std::string& StageHapModuleInfo::GetModuleName() const
 {
     return moduleName_;
+}
+
+const std::string& StageHapModuleInfo::GetSrcLanguage() const
+{
+    return srcLanguage_;
 }
 
 bool StageHapModuleInfo::GetPartialUpdateFlag() const

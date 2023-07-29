@@ -24,6 +24,10 @@
 #include "adapter/fangtian/entrance/samples/key_input_handler.h"
 #include "adapter/fangtian/entrance/samples/touch_event_handler.h"
 
+#include "adapter/fangtian/external/ability/context.h"
+#include "adapter/fangtian/external/ability/fa/fa_context.h"
+#include "adapter/fangtian/external/ability/stage/stage_context.h"
+
 namespace {
 
 constexpr int32_t GET_INSPECTOR_TREE_TIMES = 12;
@@ -121,15 +125,35 @@ bool GetAceRunArgs(int argc, const char* argv[], OHOS::Ace::Platform::AceRunArgs
 
     args.assetPath = happath;
     args.systemResourcesPath = systemResourcesPath;
-    args.appResourcesPath = appResourcesPathStage;
+    args.appResourcesPath = happath;
     args.deviceConfig.orientation = OHOS::Ace::DeviceOrientation::LANDSCAPE;
     args.deviceConfig.density = 1;
     args.deviceConfig.deviceType = OHOS::Ace::DeviceType::TABLET;
     args.windowTitle = "Demo";
     args.deviceWidth = 1920;
     args.deviceHeight = 1080;
-    args.aceVersion = OHOS::Ace::Platform::AceVersion::ACE_2_0;
     args.onRender = std::move(renderCallback);
-     
+
+    bool stageModel = args.projectModel == OHOS::Ace::Platform::ProjectModel::STAGE;
+    auto context = OHOS::Ace::Context::CreateContext(stageModel, args.appResourcesPath);
+    CHECK_NULL_RETURN(context, false);
+    if (stageModel) {
+        args.aceVersion = OHOS::Ace::Platform::AceVersion::ACE_2_0;
+        std::cout << "GetSrcLanguage: ets" << std::endl;
+    } else {
+        auto faContext = OHOS::Ace::AceType::DynamicCast<OHOS::Ace::FaContext>(context);
+        CHECK_NULL_RETURN(faContext, false);
+        auto hapModuleInfo = faContext->GetHapModuleInfo();
+        CHECK_NULL_RETURN(hapModuleInfo, false);
+        std::string srcLanguage = hapModuleInfo->GetSrcLanguage();
+        if (hapModuleInfo->GetSrcLanguage() == "ets") {
+            args.aceVersion = OHOS::Ace::Platform::AceVersion::ACE_2_0;
+            std::cout << "GetSrcLanguage: ets" << std::endl;
+        } else {
+            args.aceVersion = OHOS::Ace::Platform::AceVersion::ACE_1_0;
+            std::cout << "GetSrcLanguage: js" << std::endl;
+        }
+    }
+
     return true;
 }
