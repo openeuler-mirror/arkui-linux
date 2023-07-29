@@ -20,7 +20,7 @@
 #include <cstdint>
 #include <string>
 
-#include "../../../third_party/node/src/js_native_api.h"
+#include <node/js_native_api.h>
 
 class NativeValue;
 class NativeEngine;

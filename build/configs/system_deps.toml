@@ -31,4 +31,6 @@ package_deps = [
     "harfbuzz-devel",
     "cjson-devel",
     "ruby",
+    "libuv-devel",
+    "nodejs-devel",
 ]
