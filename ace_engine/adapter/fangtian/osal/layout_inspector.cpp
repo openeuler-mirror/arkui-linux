@@ -17,9 +17,9 @@
 
 #include <string>
 
-//#include "third_party/skia/include/core/SkString.h"
-//#include "third_party/skia/include/utils/SkBase64.h"
-//#include "wm/window.h"
+#include "SkString.h"
+#include "utils/SkBase64.h"
+#include "wm/window.h"
 
 #include "base/thread/background_task_executor.h"
 #include "base/utils/utils.h"
@@ -127,7 +127,6 @@ void LayoutInspector::GetSnapshotJson(int32_t containerId, std::unique_ptr<JsonV
     auto container = AceEngine::Get().GetContainer(containerId);
     CHECK_NULL_VOID_NOLOG(container);
 
-    /*
     OHOS::sptr<OHOS::Rosen::Window> window = OHOS::Rosen::Window::GetTopWindowWithId(container->GetWindowId());
     CHECK_NULL_VOID_NOLOG(window);
     auto pixelMap = window->Snapshot();
@@ -145,7 +144,6 @@ void LayoutInspector::GetSnapshotJson(int32_t containerId, std::unique_ptr<JsonV
     SkString info(encodeLength);
     SkBase64::Encode(data, height * stride, info.writable_str());
     message->Put("pixelMapBase64", info.c_str());
-    */
 }
 
 } // namespace OHOS::Ace
