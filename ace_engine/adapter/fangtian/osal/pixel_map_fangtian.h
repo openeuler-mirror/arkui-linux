@@ -17,12 +17,17 @@
 #define FOUNDATION_ACE_ADAPTER_PREVIEW_OSAL_PIXEL_MAP_PREVIEW_H
 
 #include "base/image/pixel_map.h"
+#include "pixel_map.h"
 
 namespace OHOS::Ace {
-class PixelMapPreview : public PixelMap {
-    DECLARE_ACE_TYPE(PixelMapOhos, PixelMap)
+class PixelMapFangtian : public PixelMap {
+    DECLARE_ACE_TYPE(PixelMapFangtian, PixelMap)
 
 public:
+    explicit PixelMapFangtian(std::shared_ptr<Media::PixelMap> pixmap) : pixmap_(pixmap) {}
+    ~PixelMapFangtian() = default;
+    static PixelFormat PixelFormatConverter(Media::PixelFormat pixelFormat);
+    static AlphaType AlphaTypeConverter(Media::AlphaType alphaType);
     static RefPtr<PixelMap> CreatePixelMap(void* sptrAddr);
     static RefPtr<PixelMap> CreatePixelMapFromDataAbility(void* uniquePtr);
     static RefPtr<PixelMap> ConvertSkImageToPixmap(
@@ -38,6 +43,10 @@ public:
     void* GetRawPixelMapPtr() const override;
     std::string GetId() override;
     std::string GetModifyId() override;
+    std::shared_ptr<Media::PixelMap> GetPixelMapSharedPtr() override;
+
+private:
+    std::shared_ptr<Media::PixelMap> pixmap_;
 };
 } // namespace OHOS::Ace
 
