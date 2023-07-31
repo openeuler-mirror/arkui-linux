@@ -40,12 +40,13 @@ template("ace_osal_preview_source_set") {
       "fetch_manager.cpp",
       "frame_report.cpp",
       "mouse_style_ohos.cpp",
-      "pixel_map_preview.cpp",
       "response_data.cpp",
       "ressched_report.cpp",
       "stage_card_parser.cpp",
       "system_properties.cpp",
       "trace_id_impl.cpp",
+      "layout_inspector.cpp",
+      "pixel_map_fangtian.cpp",
     ]
 
     cflags_cc = [
@@ -60,13 +61,16 @@ template("ace_osal_preview_source_set") {
       ":utilsecurec_source_$platform",
       "//build/gn/configs/system_libs:mmi",
       "//build/gn/configs/system_libs:eventhandler",
+      "//build/gn/configs/system_libs:ft_engine",
+      "//build/gn/configs/system_libs:skia",
+      "//build/gn/configs/system_libs:image",
     ]
 
     libs = ["curl"]
     if (is_standard_system) {
       sources += [
-        "${ace_root}/adapter/fangtian/osal/resource_theme_style.cpp",
-        "frame_trace_adapter_impl.cpp",
+        "frame_trace_adapter_fake_impl.cpp",
+        "resource_theme_style.cpp",
         "resource_adapter_impl_standard.cpp",
         "resource_convertor.cpp",
       ]
