@@ -141,9 +141,10 @@ config("ft_engine_config") {
     "//third_party/ft_engine/display_server/rosen/modules/render_service_client/core",
     "//third_party/ft_engine/display_server/interfaces/inner_api/surface",
     "//third_party/ft_engine/display_server/drivers/interfaces",
-    "//third_party/ft_engine/display_server/utils/buffer_handle/export"
+    "//third_party/ft_engine/display_server/utils/buffer_handle/export",
+    "//third_party/ft_engine/display_server/rosen/modules/frame_analyzer/export",
   ]
-  libs = [ "wm", "render_service_client", "render_service_base" ]
+  libs = [ "wm", "render_service_client", "render_service_base", "frame_analyzer" ]
 }
 
 # config("flutter_config") {
