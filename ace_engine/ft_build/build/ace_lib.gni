@@ -22,12 +22,11 @@ template("libace_static") {
     deps = [ "$ace_root/frameworks/base/ft_build:ace_base_$platform" ]
 
     if (enable_ng_build) {
-      # Fangtian TODO
       assert(false, "not support ng build")
-      # deps += [
-      #   "$ace_root/frameworks/bridge/ft_build:framework_bridge_ng_$platform",
-      #   "$ace_root/frameworks/core/ft_build:ace_core_ng_$platform",
-      # ]
+      deps += [
+         "$ace_root/frameworks/bridge/ft_build:framework_bridge_ng_$platform",
+         "$ace_root/frameworks/core/ft_build:ace_core_ng_$platform",
+      ]
     } else {
       deps += [
         "$ace_root/frameworks/bridge/ft_build:framework_bridge_$platform",
@@ -42,9 +41,10 @@ template("libace_static") {
     # build-in ark js engine for preview
     if (defined(config.use_build_in_js_engine) &&
         config.use_build_in_js_engine && defined(config.ark_engine)) {
+      print("use build in ark engine ")
       deps += [
-        # "$ace_root/frameworks/bridge/declarative_frontend:declarative_js_engine_ark_$platform",
-        # "$ace_root/frameworks/bridge/js_frontend/engine:js_engine_ark_$platform",
+        "$ace_root/frameworks/bridge/declarative_frontend/ft_build:declarative_js_engine_ark_$platform",
+        "$ace_root/frameworks/bridge/js_frontend/engine/ft_build:js_engine_ark_$platform",
       ]
     }
   }
