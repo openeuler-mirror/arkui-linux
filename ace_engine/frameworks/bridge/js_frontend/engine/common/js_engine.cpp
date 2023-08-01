@@ -18,19 +18,17 @@
 
 #include "frameworks/bridge/js_frontend/engine/common/js_engine.h"
 
-#include "frameworks/bridge/js_frontend/engine/common/runtime_constants.h"
-// Fangtian TODO
-// #include "native_engine/native_engine.h"
+#include "frameworks/bridge/js_frontend/engine/common/runtime_constants.h" 
+#include "native_engine/native_engine.h"
 
 namespace OHOS::Ace::Framework {
 
 void JsEngine::RunNativeEngineLoop()
 {
-    // Fangtian TODO
     LOGW("RunNativeEngineLoop not implemented.");
-    // if (nativeEngine_ != nullptr) {
-    //     nativeEngine_->Loop(LOOP_NOWAIT, false);
-    // }
+    if (nativeEngine_ != nullptr) {
+        nativeEngine_->Loop(LOOP_NOWAIT, false);
+    }
 }
 
 #if !defined(PREVIEW)

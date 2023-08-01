@@ -296,6 +296,7 @@ template("ace_core_source_set") {
       "$ace_root/frameworks/core/components/positioned/ft_build:ace_core_components_positioned_$platform",
       "$ace_root/frameworks/core/components/progress/ft_build:ace_core_components_progress_$platform",
       "$ace_root/frameworks/core/components/proxy/ft_build:ace_core_components_proxy_$platform",
+      "$ace_root/frameworks/core/components/qrcode/ft_build:ace_core_components_qrcode_$platform",
       "$ace_root/frameworks/core/components/refresh/ft_build:ace_core_components_refresh_$platform",
       "$ace_root/frameworks/core/components/relative_container/ft_build:ace_core_components_relative_container_$platform",
       "$ace_root/frameworks/core/components/root/ft_build:ace_core_components_root_$platform",
@@ -337,7 +338,9 @@ template("ace_core_source_set") {
       "$ace_root/frameworks/core/components/watch_slider/ft_build:ace_core_components_watch_slider_$platform",
       "$ace_root/frameworks/core/components/wrap/ft_build:ace_core_components_wrap_$platform",
    ]
-
+  deps += [
+    "$ace_root/frameworks/core/components_ng/pattern/qrcode/ft_build:ace_core_components_qrcode_pattern_ng_$platform",
+  ]
    deps += [
       "$ace_root/frameworks/core/components_v2/common/ft_build:ace_core_components_common_v2_$platform",
       "$ace_root/frameworks/core/components_v2/foreach/ft_build:ace_core_components_foreach_v2_$platform",

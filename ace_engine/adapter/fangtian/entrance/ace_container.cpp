@@ -77,12 +77,15 @@ AceContainer::AceContainer(int32_t instanceId, FrontendType type, RefPtr<Context
 {
     ThemeConstants::InitDeviceType();
 
-/*     auto state = flutter::UIDartState::Current()->GetStateById(instanceId);
-    auto taskExecutor = Referenced::MakeRefPtr<FlutterTaskExecutor>(state->GetTaskRunners());
-    if (type_ != FrontendType::DECLARATIVE_JS && type_ != FrontendType::ETS_CARD) {
-        taskExecutor->InitJsThread();
-    }
-    taskExecutor_ = taskExecutor; */
+    //auto state = flutter::UIDartState::Current()->GetStateById(instanceId);
+    //auto taskExecutor = Referenced::MakeRefPtr<FlutterTaskExecutor>(state->GetTaskRunners());
+    //if (type_ != FrontendType::DECLARATIVE_JS && type_ != FrontendType::ETS_CARD) {
+    //    taskExecutor->InitJsThread();
+    //}
+    
+    auto taskExecutor = Referenced::MakeRefPtr<FlutterTaskExecutor>();
+    taskExecutor->InitPlatformThread(false);
+    taskExecutor_ = taskExecutor;
 }
 
 void AceContainer::Initialize()
@@ -790,94 +793,9 @@ void AceContainer::SetView(RSAceView* view, double density, int32_t width, int32
     //auto rsWindow = new Rosen::Window(onRender);
     //auto window = std::make_unique<NG::RosenWindow>(rsWindow, taskExecutor, view->GetInstanceId());
     //container->AttachView(std::move(window), view, density, width, height, onRender);
+    container->AttachView(nullptr, view, density, width, height, onRender);
 }
 
-#ifndef ENABLE_ROSEN_BACKEND
-void AceContainer::AttachView(
-    std::unique_ptr<Window> window, FlutterAceView* view, double density, int32_t width, int32_t height)
-{
-    ContainerScope scope(instanceId_);
-    aceView_ = view;
-    auto instanceId = aceView_->GetInstanceId();
-
-    auto state = flutter::UIDartState::Current()->GetStateById(instanceId);
-    ACE_DCHECK(state != nullptr);
-    auto flutterTaskExecutor = AceType::DynamicCast<FlutterTaskExecutor>(taskExecutor_);
-    flutterTaskExecutor->InitOtherThreads(state->GetTaskRunners());
-    if (type_ == FrontendType::DECLARATIVE_JS) {
-        // For DECLARATIVE_JS frontend display UI in JS thread temporarily.
-        flutterTaskExecutor->InitJsThread(false);
-        InitializeFrontend();
-        auto front = GetFrontend();
-        if (front) {
-            front->UpdateState(Frontend::State::ON_CREATE);
-            front->SetJsMessageDispatcher(AceType::Claim(this));
-        }
-    }
-    resRegister_ = aceView_->GetPlatformResRegister();
-    auto pipelineContext = AceType::MakeRefPtr<PipelineContext>(
-        std::move(window), taskExecutor_, assetManager_, resRegister_, frontend_, instanceId);
-    pipelineContext->SetRootSize(density, width, height);
-    pipelineContext->SetTextFieldManager(AceType::MakeRefPtr<TextFieldManager>());
-    pipelineContext->SetIsRightToLeft(AceApplicationInfo::GetInstance().IsRightToLeft());
-    pipelineContext->SetMessageBridge(messageBridge_);
-    pipelineContext->SetWindowModal(windowModal_);
-    pipelineContext->SetDrawDelegate(aceView_->GetDrawDelegate());
-    pipelineContext->SetIsJsCard(type_ == FrontendType::JS_CARD);
-    pipelineContext_ = pipelineContext;
-    InitializeCallback();
-
-    ThemeConstants::InitDeviceType();
-    // Only init global resource here, construct theme in UI thread
-    auto themeManager = AceType::MakeRefPtr<ThemeManagerImpl>();
-    if (themeManager) {
-        pipelineContext_->SetThemeManager(themeManager);
-        // Init resource, load theme map.
-        themeManager->InitResource(resourceInfo_);
-        themeManager->LoadSystemTheme(resourceInfo_.GetThemeId());
-        taskExecutor_->PostTask(
-            [themeManager, assetManager = assetManager_, colorScheme = colorScheme_, aceView = aceView_]() {
-                themeManager->ParseSystemTheme();
-                themeManager->SetColorScheme(colorScheme);
-                themeManager->LoadCustomTheme(assetManager);
-                // get background color from theme
-                aceView->SetBackgroundColor(themeManager->GetBackgroundColor());
-            },
-            TaskExecutor::TaskType::UI);
-    }
-
-    auto weak = AceType::WeakClaim(AceType::RawPtr(pipelineContext_));
-    taskExecutor_->PostTask(
-        [weak]() {
-            auto context = weak.Upgrade();
-            if (context == nullptr) {
-                LOGE("context is nullptr");
-                return;
-            }
-            context->SetupRootElement();
-        },
-        TaskExecutor::TaskType::UI);
-    aceView_->Launch();
-
-    frontend_->AttachPipelineContext(pipelineContext_);
-    auto cardFronted = AceType::DynamicCast<CardFrontend>(frontend_);
-    if (cardFronted) {
-        cardFronted->SetDensity(static_cast<double>(density));
-        taskExecutor_->PostTask(
-            [weak, width, height]() {
-                auto context = weak.Upgrade();
-                if (context == nullptr) {
-                    LOGE("context is nullptr");
-                    return;
-                }
-                context->OnSurfaceChanged(width, height);
-            },
-            TaskExecutor::TaskType::UI);
-    }
-
-    AceEngine::Get().RegisterToWatchDog(instanceId, taskExecutor_, GetSettings().useUIAsJSThread);
-}
-#else
 void AceContainer::AttachView(std::unique_ptr<Window> window, RSAceView* view, double density, int32_t width,
     int32_t height, SendRenderDataCallback onRender)
 {
@@ -885,10 +803,10 @@ void AceContainer::AttachView(std::unique_ptr<Window> window, RSAceView* view, d
     aceView_ = view;
     auto instanceId = aceView_->GetInstanceId();
 
-    auto state = flutter::UIDartState::Current()->GetStateById(instanceId);
+    //auto state = flutter::UIDartState::Current()->GetStateById(instanceId);
     ACE_DCHECK(state != nullptr);
     auto rsTaskExecutor = AceType::DynamicCast<FlutterTaskExecutor>(taskExecutor_);
-    rsTaskExecutor->InitOtherThreads(state->GetTaskRunners());
+    //rsTaskExecutor->InitOtherThreads(state->GetTaskRunners());
     if (type_ == FrontendType::DECLARATIVE_JS || type_ == FrontendType::ETS_CARD) {
         // For DECLARATIVE_JS frontend display UI in JS thread temporarily.
         rsTaskExecutor->InitJsThread(false);
@@ -948,7 +866,8 @@ void AceContainer::AttachView(std::unique_ptr<Window> window, RSAceView* view, d
             TaskExecutor::TaskType::UI);
     }
 
-    taskExecutor_->PostTask(
+    // TODO adaptor to ft_engine
+    /* taskExecutor_->PostTask(
         [pipelineContext = AceType::DynamicCast<PipelineContext>(pipelineContext_), onRender, this]() {
             CHECK_NULL_VOID(pipelineContext);
             auto director = Rosen::RSUIDirector::Create();
@@ -973,7 +892,7 @@ void AceContainer::AttachView(std::unique_ptr<Window> window, RSAceView* view, d
             pipelineContext->SetRSUIDirector(director);
             LOGI("Init Rosen Backend");
         },
-        TaskExecutor::TaskType::UI);
+        TaskExecutor::TaskType::UI); */
 
     auto weak = AceType::WeakClaim(AceType::RawPtr(pipelineContext_));
     taskExecutor_->PostTask(
@@ -1006,7 +925,6 @@ void AceContainer::AttachView(std::unique_ptr<Window> window, RSAceView* view, d
 
     AceEngine::Get().RegisterToWatchDog(instanceId, taskExecutor_, GetSettings().useUIAsJSThread);
 }
-#endif
 
 void AceContainer::InitDeviceInfo(int32_t instanceId, const AceRunArgs& runArgs)
 {
