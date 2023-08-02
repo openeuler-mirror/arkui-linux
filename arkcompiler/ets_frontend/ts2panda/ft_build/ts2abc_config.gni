@@ -16,10 +16,10 @@ if (!ark_standalone_build) {
   import("//build/gn/fangtian.gni")
   #import("//build/test.gni")
   build_root = "//build"
-  ts2abc_root = "//arkcompiler/ets_frontend/ts2panda"
+  ts2abc_root = "//arkcompiler/ets_frontend/ts2panda/ft_build"
 } else {
   import("$build_root/ark.gni")
-  ts2abc_root = "//arkcompiler/ets_frontend/ts2panda"
+  ts2abc_root = "//arkcompiler/ets_frontend/ts2panda/ft_build"
 }
 
 declare_args() {
@@ -31,7 +31,7 @@ declare_args() {
   ts2abc_build_path = ""
 }
 
-node_modules = "//prebuilts/build-tools/common/ts2abc/node_modules"
+node_modules = "//build/common/ts2abc/node_modules"
 build_public_version = true
 if (build_public_version) {
   nodejs_dir = "//prebuilts/build-tools/common/nodejs"
@@ -54,11 +54,10 @@ if (host_toolchain == toolchain_mac) {
       "/obj/arkcompiler/ets_frontend/ts2panda/build_win"
 } else {
   ts2abc_build_deps = [ "$ts2abc_root:ts2abc_build($toolchain_linux)" ]
-  ts2abc_build_path =
-      get_label_info("$ts2abc_root:ts2abc_build($toolchain_linux)",
-                     "root_out_dir") +
-      "/obj/arkcompiler/ets_frontend/ts2panda/build"
-  node_path = "${nodejs_dir}/node-v12.18.4-linux-x64/bin/"
+  #ts2abc_build_deps = ""
+  ts2abc_build_path = "//build/ets_frontend/ts2panda/build"
+  node_path = "//build/common/nodejs/bin/"
+#  /home/xieyijun/arkui-linux/prebuilts/build-tools/common/nodejs/node-v12.18.4-linux-x64/bin/ 
 }
 
 # Generate js plugin.
@@ -86,7 +85,7 @@ template("ts2abc_gen_file") {
     script = "${ts2abc_root}/scripts/generate_plugin.py"
 
     deps = extra_dependencies
-    deps += [ ts2abc_build_deps ]
+    #deps += [ ts2abc_build_deps ]
     args = [
       "--node",
       rebase_path("${node_path}"),
@@ -129,10 +128,10 @@ template("ts2abc_gen_abc") {
       visibility = invoker.extra_visibility
     }
 
-    script = "${ts2abc_root}/scripts/generate_js_bytecode.py"
+    script = "${ts2abc_root}/../scripts/generate_js_bytecode.py"
 
     deps = extra_dependencies
-    deps += ts2abc_build_deps 
+    #deps +=  ts2abc_build_deps 
 
     args = [
       "--src-js",

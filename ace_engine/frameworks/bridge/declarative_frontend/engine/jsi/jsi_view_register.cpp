@@ -1480,7 +1480,7 @@ static const std::unordered_map<std::string, std::function<void(BindingTarget)>>
     { "UICast", JSUICast::JSBind },
 #endif
 #ifdef FORM_SUPPORTED
-    { "FormComponent", JSForm::JSBind },
+    // { "FormComponent", JSForm::JSBind },
 #endif
 #ifdef PLUGIN_COMPONENT_SUPPORTED
     { "PluginComponent", JSPlugin::JSBind },
@@ -1560,15 +1560,15 @@ static const std::unordered_map<std::string, std::function<void(BindingTarget)>>
     { "RelativeContainer", JSRelativeContainer::JSBind },
     { "__Common__", JSCommonView::JSBind },
 #ifdef PREVIEW
-    { "FormComponent", JSForm::JSBind },
-    { "XComponent", JSXComponent::JSBind },
-    { "XComponentController", JSXComponentController::JSBind },
-    { "RichText", JSRichText::JSBind },
-    { "Web", JSWeb::JSBind },
-    { "WebController", JSWebController::JSBind },
-    { "Video", JSVideo::JSBind },
-    { "VideoController", JSVideoController::JSBind },
-    { "PluginComponent", JSPlugin::JSBind },
+    // { "FormComponent", JSForm::JSBind },
+    // { "XComponent", JSXComponent::JSBind },
+    // { "XComponentController", JSXComponentController::JSBind },
+    // { "RichText", JSRichText::JSBind },
+    // { "Web", JSWeb::JSBind },
+    // { "WebController", JSWebController::JSBind },
+    // { "Video", JSVideo::JSBind },
+    // { "VideoController", JSVideoController::JSBind },
+    // { "PluginComponent", JSPlugin::JSBind },
 #endif
 };
 

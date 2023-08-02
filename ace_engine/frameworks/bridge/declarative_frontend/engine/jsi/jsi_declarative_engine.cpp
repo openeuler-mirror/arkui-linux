@@ -64,8 +64,8 @@
 #include "frameworks/core/components_ng/pattern/xcomponent/xcomponent_pattern.h"
 
 #if defined(PREVIEW)
-extern const char _binary_jsMockSystemPlugin_abc_start[];
-extern const char _binary_jsMockSystemPlugin_abc_end[];
+// extern const char _binary_jsMockSystemPlugin_abc_start[];
+// extern const char _binary_jsMockSystemPlugin_abc_end[];
 #endif
 extern const char _binary_stateMgmt_abc_start[];
 extern const char _binary_stateMgmt_abc_end[];
@@ -289,13 +289,13 @@ void JsiDeclarativeEngineInstance::InitAceModule()
         }
     }
 #if defined(PREVIEW)
-    std::string jsMockSystemPluginString(_binary_jsMockSystemPlugin_abc_start,
-        _binary_jsMockSystemPlugin_abc_end - _binary_jsMockSystemPlugin_abc_start);
-    bool jsMockSystemPlugin =
-        runtime_->EvaluateJsCode((uint8_t*)(jsMockSystemPluginString.c_str()), jsMockSystemPluginString.length());
-    if (!jsMockSystemPlugin) {
-        LOGE("EvaluateJsCode jsMockSystemPlugin failed");
-    }
+    // std::string jsMockSystemPluginString(_binary_jsMockSystemPlugin_abc_start,
+    //     _binary_jsMockSystemPlugin_abc_end - _binary_jsMockSystemPlugin_abc_start);
+    // bool jsMockSystemPlugin =
+    //     runtime_->EvaluateJsCode((uint8_t*)(jsMockSystemPluginString.c_str()), jsMockSystemPluginString.length());
+    // if (!jsMockSystemPlugin) {
+    //     LOGE("EvaluateJsCode jsMockSystemPlugin failed");
+    // }
 #endif
 }
 

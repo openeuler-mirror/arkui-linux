@@ -13,7 +13,7 @@
 
 import("//build/gn/fangtian.gni")
 import("//ace_engine/ft_build/ace_config.gni")
-
+  dylib_suffix = ".so"
 config("ace_pc_preview_config") {
   cflags_cc = [
     "-std=c++17",
@@ -98,7 +98,12 @@ ft_executable("hap_executor") {
        # "//base/startup/init/interfaces/innerkits:libbeget_proxy",
        # "//foundation/communication/ipc/interfaces/innerkits/ipc_single:ipc_single",
        # "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy:samgr_proxy",
-       # "$ace_napi/fangtian:ace_napi",
+
+        "$ace_napi/ft_build:ace_napi",
+        "//napi/ft_build:ace_napi_ark",
+        "//napi/ft_build:ace_container_scope",
+        "//arkcompiler/ets_runtime/ft_build:libark_jsruntime",
+        "$ace_root/ft_build/build:libace_static_${platform}",
     ]
     libs = ["z", "icui18n", "icuuc"]
 }
@@ -139,6 +144,7 @@ ft_copy("copy_linux_shared_library") {
     # sources += [ sec_path + "/thirdparty/bounds_checking_function/libsec_shared.so"]
     deps += [
       "//build/gn/configs/system_libs:c_utils",
+      #"//arkcompiler/ets_runtime/ft_build:libark_jsruntime",
     ]
 
     # Add napi framework-related dynamic libraries
@@ -147,13 +153,13 @@ ft_copy("copy_linux_shared_library") {
 #    sources += [ "$ace_napi_path/arkui/napi/libace_napi${dylib_suffix}" ]
 
     # Add ark engine-related dynamic libraries
-#   ark_js_path = get_label_info("//arkcompiler/ets_runtime:libark_jsruntime",
-#                                "root_out_dir")
-#   sources += [
-#       "$ace_napi_path/arkui/napi/libace_napi_ark${dylib_suffix}",
-#       "$ark_js_path/arkcompiler/ets_runtime/libark_jsruntime${dylib_suffix}",
+   ark_js_path = get_label_info("//arkcompiler/ets_runtime:libark_jsruntime",
+                                "root_out_dir")
+    sources += [
+#       "//napi/libace_napi_ark${dylib_suffix}",
+       "$ark_js_path/arkcompiler/ets_runtime/libark_jsruntime${dylib_suffix}",
 #       "//third_party/icu/ohos_icu4j/data/icudt69l.dat",
-#   ]
+   ]
 
     # Add dynamic libraries
 
@@ -165,8 +171,8 @@ ft_copy("copy_linux_shared_library") {
   #                                   "root_out_dir") + "/thirdparty/flutter/libace_skia_fangtian.so"
 
     deps += [
-        #"$ace_napi/fangtian:ace_napi_ark",
-        #"//arkcompiler/ets_runtime:libark_jsruntime",
+#        "$ace_napi/ft_build:ace_napi_ark",
+        "//arkcompiler/ets_runtime/ft_build:libark_jsruntime",
         #"//commonlibrary/c_utils/base:utils",
         "//third_party/flutter/glfw:glfw",
     ]
