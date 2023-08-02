@@ -70,6 +70,7 @@ gen_obj("js_proxyclass") {
     jsproxyclass_obj_path = base_output_path + "/js_proxy_class.c"
   }
   output = jsproxyclass_obj_path
+  snapshot_dep = []
 }
 
 gen_obj("js_enum_style") {
@@ -78,6 +79,7 @@ gen_obj("js_enum_style") {
     jsenumstyle_obj_path = base_output_path + "/js_enum_style.c"
   }
   output = jsenumstyle_obj_path
+  snapshot_dep = []
 }
 
 # build declarative javascript engine source
@@ -313,6 +315,25 @@ template("declarative_js_engine") {
 
     sources += uicast_configs.uicast_frontend_sources
     deps += [ "$ace_root/frameworks/core/components/qrcode/ft_build:ace_core_components_qrcode_$platform", ]
+    
+    # rich components needed by phone and TV. wearable like watch do not need them
+    if (defined(config.rich_components_support) &&
+        config.rich_components_support) {
+      sources += [
+        "../jsview/js_camera.cpp",
+        "../jsview/js_piece.cpp",
+        "../jsview/js_rating.cpp",
+        "../jsview/models/rating_model_impl.cpp",
+      ]
+      if (defined(config.video_components_support) &&
+          config.video_components_support) {
+        sources += [
+          "../jsview/js_video.cpp",
+          "../jsview/js_video_controller.cpp",
+          "../jsview/models/video_model_impl.cpp",
+        ]
+      }
+    }
 
     if (defined(config.xcomponent_components_support) &&
         config.xcomponent_components_support) {
