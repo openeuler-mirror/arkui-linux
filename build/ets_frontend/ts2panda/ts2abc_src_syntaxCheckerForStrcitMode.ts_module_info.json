@@ -1,0 +1,12 @@
+{
+  "collect": false,
+  "dest": [
+    "system/unknown/"
+  ],
+  "install_enable": false,
+  "label": "//arkcompiler/ets_frontend/ts2panda:ts2abc_src_syntaxCheckerForStrcitMode.ts(//build/toolchain/linux:clang_x64)",
+  "label_name": "ts2abc_src_syntaxCheckerForStrcitMode.ts",
+  "notice": "clang_x64/obj/arkcompiler/ets_frontend/ts2panda/ts2abc_src_syntaxCheckerForStrcitMode.ts.notice.txt",
+  "source": "clang_x64/obj/arkcompiler/ets_frontend/ts2panda/",
+  "type": "unknown"
+}

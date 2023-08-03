@@ -196,7 +196,9 @@ std::unique_ptr<AceAbility> AceAbility::CreateInstance(AceRunArgs& runArgs)
 
     controller->CreateWindow(runArgs.viewWidth, runArgs.viewHeight, true);
 
-    // EventDispatcher::GetInstance().SetGlfwWindowController(controller);
+    //auto controller = FlutterDesktopCreateWindow(
+    //    runArgs.deviceWidth, runArgs.deviceHeight, runArgs.windowTitle.c_str(), runArgs.onRender);
+    //EventDispatcher::GetInstance().SetGlfwWindowController(controller);
     EventDispatcher::GetInstance().Initialize();
     auto aceAbility = std::make_unique<AceAbility>(runArgs);
     // aceAbility->SetGlfwWindowController(controller);

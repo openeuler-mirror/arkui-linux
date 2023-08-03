@@ -3,4 +3,4 @@ out/
 prebuilts/
 **/__pycache__
 third_party/ft_engine
-third_party/ft_flutter
+third_party/flutter
