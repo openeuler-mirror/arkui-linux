@@ -149,17 +149,10 @@ public:
 
     void SetWindowId(uint32_t windowId) override {}
 
-#ifndef ENABLE_ROSEN_BACKEND
-    FlutterAceView* GetAceView() const
-    {
-        return aceView_;
-    }
-#else
     RSAceView* GetAceView() const
     {
         return aceView_;
     }
-#endif
 
     void* GetView() const override
     {
@@ -264,19 +257,10 @@ private:
     void InitializeFrontend();
     void InitializeCallback();
 
-#ifndef ENABLE_ROSEN_BACKEND
-    void AttachView(
-        std::unique_ptr<Window> window, FlutterAceView* view, double density, int32_t width, int32_t height);
-#else
     void AttachView(
         std::unique_ptr<Window> window, RSAceView* view, double density, int32_t width, int32_t height, SendRenderDataCallback onRender);
-#endif
 
-#ifndef ENABLE_ROSEN_BACKEND
-    FlutterAceView* aceView_ = nullptr;
-#else
     RSAceView* aceView_ = nullptr;
-#endif
 
     int32_t instanceId_;
     RefPtr<TaskExecutor> taskExecutor_;
