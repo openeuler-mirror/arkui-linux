@@ -20,6 +20,10 @@ config("ace_config") {
     "$ace_root",
     "$ace_root/frameworks",
     "$root_out_dir/arkui/framework",
+    "//arkcompiler/ets_runtime",
+    "//arkcompiler/runtime_core",
+    "$ace_napi",
+    "$ace_root/frameworks/bridge",
   ]
 
   defines = ace_common_defines

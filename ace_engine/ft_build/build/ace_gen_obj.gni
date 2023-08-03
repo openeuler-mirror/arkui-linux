@@ -41,6 +41,7 @@ template("gen_obj") {
     ]
 
     deps = []
+    deps += invoker.snapshot_dep
 
     inputs = [ invoker.input ]
     outputs = [ invoker.output ]

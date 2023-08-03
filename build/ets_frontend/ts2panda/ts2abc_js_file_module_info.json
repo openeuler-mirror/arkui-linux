@@ -1,0 +1,12 @@
+{
+  "collect": false,
+  "dest": [
+    "system/unknown/ts2abc_js_file"
+  ],
+  "install_enable": false,
+  "label": "//arkcompiler/ets_frontend/ts2panda:ts2abc_js_file(//build/toolchain/linux:clang_x64)",
+  "label_name": "ts2abc_js_file",
+  "notice": "clang_x64/obj/arkcompiler/ets_frontend/ts2panda/ts2abc_js_file.notice.txt",
+  "source": "clang_x64/obj/arkcompiler/ets_frontend/ts2panda/ts2abc_js_file",
+  "type": "unknown"
+}
