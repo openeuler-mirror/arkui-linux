@@ -1,1 +1,0 @@
-{"version":3,"file":"syntaxChecker.d.ts","sourceRoot":"","sources":["../../../src/syntaxChecker.ts"],"names":[],"mappings":"AAeA,OAAO,KAAK,EAAE,MAAM,YAAY,CAAC;AAWjC,OAAO,EAAE,QAAQ,EAAE,MAAM,YAAY,CAAC;AACtC,OAAO,EAWH,KAAK,EAER,MAAM,SAAS,CAAC;AAkBjB,wBAAgB,yBAAyB,CAAC,QAAQ,EAAE,QAAQ,QAmC3D;AAkLD,wBAAgB,gBAAgB,CAAC,IAAI,EAAE,EAAE,CAAC,IAAI,EAAE,KAAK,EAAC,KAAK,QAK1D"}

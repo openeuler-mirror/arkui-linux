@@ -53,11 +53,17 @@ if (host_toolchain == toolchain_mac) {
                      "root_out_dir") +
       "/obj/arkcompiler/ets_frontend/ts2panda/build_win"
 } else {
-  ts2abc_build_deps = [ "$ts2abc_root:ts2abc_build($toolchain_linux)" ]
-  #ts2abc_build_deps = ""
-  ts2abc_build_path = "//build/ets_frontend/ts2panda/build"
+  ts2abc_build_deps = [ "$ts2abc_root:ts2abc_build" ]
+#  ts2abc_build_path =
+#      get_label_info("$ts2abc_root:ts2abc_build($toolchain_linux)",
+#                     "root_out_dir") +
+#      "/obj/arkcompiler/ets_frontend/ts2panda/build"
+  ts2abc_build_path =
+      get_label_info("$ts2abc_root:ts2abc_build($toolchain_linux)",
+                     "root_out_dir") +
+      "/../obj/arkcompiler/ets_frontend/ts2panda/ft_build/build/"
+#  node_path = "${nodejs_dir}/node-v12.18.4-linux-x64/bin/"
   node_path = "//build/common/nodejs/bin/"
-#  /home/xieyijun/arkui-linux/prebuilts/build-tools/common/nodejs/node-v12.18.4-linux-x64/bin/ 
 }
 
 # Generate js plugin.
@@ -85,7 +91,7 @@ template("ts2abc_gen_file") {
     script = "${ts2abc_root}/scripts/generate_plugin.py"
 
     deps = extra_dependencies
-    #deps += [ ts2abc_build_deps ]
+    deps += ts2abc_build_deps
     args = [
       "--node",
       rebase_path("${node_path}"),
@@ -131,7 +137,7 @@ template("ts2abc_gen_abc") {
     script = "${ts2abc_root}/../scripts/generate_js_bytecode.py"
 
     deps = extra_dependencies
-    #deps +=  ts2abc_build_deps 
+    deps += ts2abc_build_deps
 
     args = [
       "--src-js",
@@ -163,7 +169,7 @@ template("ts2abc_unittest_action") {
   invoker.module_out_path = "ark/ts2abc"
 
   # unittest for phone running
-  ohos_unittest(_target_name_) {
+  ft_unittest(_target_name_) {
     configs = [ "${ts2abc_root}/ts2abc:ts2abc_config" ]
     deps = [ "${ts2abc_root}/ts2abc:ts2abc_static" ]
     forward_variables_from(invoker, "*")
