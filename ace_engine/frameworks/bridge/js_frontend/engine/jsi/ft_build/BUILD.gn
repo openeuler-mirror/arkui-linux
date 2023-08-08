@@ -11,7 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#import("//arkcompiler/ets_frontend/ts2panda/ts2abc_config.gni")
+import("//arkcompiler/ets_frontend/ts2panda/ft_build/ts2abc_config.gni")
 import("//build/gn/fangtian.gni")
 import("//ace_engine/ft_build/ace_config.gni")
 import("//ace_engine/ft_build/build/ace_gen_obj.gni")
@@ -19,28 +19,29 @@ import("//ace_engine/ft_build/build/ace_gen_obj.gni")
 base_output_path = get_label_info(":gen_abc_proxyclass", "target_out_dir")
 abcstrip_native_min_obj_path = base_output_path + "strip.native.min.abc"
 
-#ts2abc_gen_abc("gen_strip_native_min_abc") {
-#  extra_visibility = [ ":*" ]  # Only targets in this file can depend on this.
-#  src_js = rebase_path(
-#          "$root_out_dir/obj/third_party/jsframework/dist/strip.native.min.js")
-#  dst_file = rebase_path(base_output_path + "/strip.native.min.abc")
+ts2abc_gen_abc("gen_strip_native_min_abc") {
+  extra_visibility = [ ":*" ]  # Only targets in this file can depend on this.
+  src_js = rebase_path(
+          "$root_out_dir/obj/third_party/jsframework/dist/strip.native.min.js")
+  dst_file = rebase_path(base_output_path + "/strip.native.min.abc")
 
-#  in_puts =
-#      [ "$root_out_dir/obj/third_party/jsframework/dist/strip.native.min.js" ]
-#  out_puts = [ base_output_path + "/strip.native.min.abc" ]
-#  extra_dependencies = [ "//third_party/jsframework:gen_snapshot" ]
-#}
+  in_puts =
+      [ "$root_out_dir/obj/third_party/jsframework/dist/strip.native.min.js" ]
+  out_puts = [ base_output_path + "/strip.native.min.abc" ]
 
-#gen_obj("abc_strip_native_min") {
-#  input = base_output_path + "/strip.native.min.abc"
-#  if (use_mac || use_mingw_win || use_ios || use_linux) {
-#    abcstripnativemin_obj_path = base_output_path + "/strip_native_min.c"
-#  } else {
-#    abcstripnativemin_obj_path = base_output_path + "/strip_native_min.o"
-#  }
-#  output = abcstripnativemin_obj_path
-#  snapshot_dep = [ ":gen_strip_native_min_abc" ]
-#}
+  extra_dependencies = [ "//third_party/jsframework:gen_snapshot", ]
+}
+
+gen_obj("abc_strip_native_min") {
+  input = base_output_path + "/strip.native.min.abc"
+  if (use_mac || use_mingw_win || use_ios || use_linux) {
+    abcstripnativemin_obj_path = base_output_path + "/strip_native_min.c"
+  } else {
+    abcstripnativemin_obj_path = base_output_path + "/strip_native_min.o"
+  }
+  output = abcstripnativemin_obj_path
+  snapshot_dep = [ ":gen_strip_native_min_abc" ]
+}
 
 template("js_engine_ark") {
   forward_variables_from(invoker, "*")
@@ -89,7 +90,7 @@ template("js_engine_ark") {
     deps = []
     #if (defined(config.build_for_preview) && config.build_for_preview) {
       deps += [
-        #":gen_obj_src_abc_strip_native_min",
+        ":gen_obj_src_abc_strip_native_min",
         #"$napi/native_engine/impl/ark:ace_napi_impl_ark",
       ]
     #} else {

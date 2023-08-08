@@ -11,13 +11,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import("//build/ohos.gni")
-import("//foundation/arkui/ace_engine/ace_config.gni")
+#import("//build/ohos.gni")
+import("//build/gn/fangtian.gni")
+#import("//foundation/arkui/ace_engine/ace_config.gni")
+import("//ace_engine/ft_build/ace_config.gni")
 
 prebuilt_js_path = get_label_info(":gen_snapshot", "target_out_dir") +
                    "/dist/strip.native.min.js"
-prebuilt_js_api_mock_path = get_label_info(":gen_snapshot", "target_out_dir") +
-                            "/dist/jsMockSystemPlugin.js"
+#prebuilt_js_api_mock_path = get_label_info(":gen_snapshot", "target_out_dir") +
+#                            "/dist/jsMockSystemPlugin.js"
 
 action("gen_node_modules") {
   script = "//third_party/jsframework/prebuild_env.sh"
@@ -31,33 +33,38 @@ action("gen_node_modules") {
 
 action("gen_snapshot") {
   script = "//third_party/jsframework/js_framework_build.sh"
+  deps = [ ":gen_node_modules" ]
 
   js_framework = "//third_party/jsframework/runtime"
   js_framework_mock_generate = "//third_party/jsframework/mock-generate"
   is_mac = "false"
-  use_mac = host_os == "mac"
+  #use_mac = host_os == "mac"
 
-  if (is_standard_system || is_cross_platform_build) {
-    node_modules = "//prebuilts/build-tools/common/js-framework/node_modules"
-    if (use_mac) {
-      nodejs_path =
-          "//prebuilts/build-tools/common/nodejs/node-v12.18.4-darwin-x64"
-      is_mac = "true"
-    } else {
-      nodejs_path =
-          "//prebuilts/build-tools/common/nodejs/node-v12.18.4-linux-x64"
-      is_mac = "false"
-    }
-  } else {
-    node_modules = "//prebuilts/ace-toolkit/js-framework/node_modules"
-    if (use_mac) {
-      nodejs_path = "//prebuilts/ace-toolkit/nodejs/node-v12.18.4-darwin-x64"
-      is_mac = "true"
-    } else {
-      nodejs_path = "//prebuilts/ace-toolkit/nodejs/node-v12.18.4-linux-x64"
-      is_mac = "false"
-    }
-  }
+  #node_modules = "//build/common/js-framework/node_modules"
+  node_modules = "//prebuilts/build-tools/common/js-framework/node_modules"
+  nodejs_path = "//build/common/nodejs"
+
+  #if (is_standard_system || is_cross_platform_build) {
+  #  node_modules = "//prebuilts/build-tools/common/js-framework/node_modules"
+  #  if (use_mac) {
+  #    nodejs_path =
+  #        "//prebuilts/build-tools/common/nodejs/node-v12.18.4-darwin-x64"
+  #    is_mac = "true"
+  #  } else {
+  #    nodejs_path =
+  #        z
+  #    is_mac = "false"
+  #  }
+  #} else {
+  #  node_modules = "//prebuilts/ace-toolkit/js-framework/node_modules"
+  #  if (use_mac) {
+  #    nodejs_path = "//prebuilts/ace-toolkit/nodejs/node-v12.18.4-darwin-x64"
+  #    is_mac = "true"
+  #  } else {
+  #    nodejs_path = "//prebuilts/ace-toolkit/nodejs/node-v12.18.4-linux-x64"
+  #    is_mac = "false"
+  #  }
+  #}
 
   buildfile_jsmock = "//third_party/jsframework/build_jsmock_system_plugin.js"
   buildfile_native_min = "//third_party/jsframework/build_strip_native_min.js"
@@ -185,7 +192,7 @@ action("gen_snapshot") {
   ]
   outputs = [
     prebuilt_js_path,
-    prebuilt_js_api_mock_path,
+    #prebuilt_js_api_mock_path,
   ]
 }
 
@@ -220,7 +227,7 @@ if (!is_standard_system && !is_cross_platform_build) {
     outputs = [ v8_snapshot_bin_path ]
   }
 
-  ohos_prebuilt_etc("v8_snapshot_bin") {
+  ft_prebuilt_etc("v8_snapshot_bin") {
     deps = [ ":gen_snapshot_bin" ]
     source = v8_snapshot_bin_path
     part_name = "ace_engine_full"
@@ -266,7 +273,7 @@ if (!is_standard_system && !is_cross_platform_build) {
   }
 }
 
-import("//arkcompiler/ets_frontend/ts2panda/ts2abc_config.gni")
+import("//arkcompiler/ets_frontend/ts2panda/ft_build/ts2abc_config.gni")
 ark_abc_path =
     get_label_info(":ark_build", "target_out_dir") + "/strip.native.min.abc"
 
@@ -281,10 +288,10 @@ ts2abc_gen_abc("ark_jsf") {
   out_puts = [ ark_abc_path ]
 }
 
-ohos_prebuilt_etc("ark_build") {
-  deps = [ ":ark_jsf" ]
-  source = ark_abc_path
-  if (!is_cross_platform_build) {
-    part_name = "ace_engine"
-  }
-}
+#ft_prebuilt_etc("ark_build") {
+#  deps = [ ":ark_jsf" ]
+#  source = ark_abc_path
+#  if (!is_cross_platform_build) {
+#    part_name = "ace_engine"
+#  }
+#}
