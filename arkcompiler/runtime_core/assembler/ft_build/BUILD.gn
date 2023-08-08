@@ -27,32 +27,32 @@ config("arkassembler_public_config") {
 libarkassembler_sources = [
   "$ark_root/plugins/ecmascript/assembler/extension/ecmascript_meta.cpp",
   "$target_gen_dir/ins_to_string.cpp",
-  "annotation.cpp",
-  "assembly-emitter.cpp",
-  "assembly-ins.cpp",
-  "assembly-parser.cpp",
-  "assembly-program.cpp",
-  "assembly-type.cpp",
-  "context.cpp",
-  "extensions/extensions.cpp",
-  "lexer.cpp",
-  "meta.cpp",
+  "../annotation.cpp",
+  "../assembly-emitter.cpp",
+  "../assembly-ins.cpp",
+  "../assembly-parser.cpp",
+  "../assembly-program.cpp",
+  "../assembly-type.cpp",
+  "../context.cpp",
+  "../extensions/extensions.cpp",
+  "../lexer.cpp",
+  "../meta.cpp",
 ]
 
 libarkassembler_configs = [
-  # sdk_libc_secshared_config,
-  "$ark_root:ark_config",
+   sdk_libc_secshared_config,
+  "$ark_root/ft_build:ark_config",
   ":arkassembler_public_config",
-  "$ark_root/libpandabase:arkbase_public_config",
-  "$ark_root/libpandafile:arkfile_public_config",
+  "$ark_root/libpandabase/ft_build:arkbase_public_config",
+  "$ark_root/libpandafile/ft_build:arkfile_public_config",
 ]
 
 plugin_deps = []
 foreach(plugin, enabled_plugins) {
   print("add assembler plugin: $plugin")
   plugin_dir = "$ark_root/plugins/$plugin"
-  libarkassembler_configs += [ "$plugin_dir:assembler" ]
-  plugin_deps += [ "$plugin_dir:assembler_deps" ]
+  libarkassembler_configs += [ "$plugin_dir/ft_build:assembler" ]
+  plugin_deps += [ "$plugin_dir/ft_build:assembler_deps" ]
 
   source_files = read_file("$plugin_dir/subproject_sources.gn", "scope")
   if (defined(source_files.srcs_assembler_path)) {
@@ -81,19 +81,19 @@ source_set("libarkassembler_static") {
     ":isa_gen_libarkassembler_isa_h",
     ":isa_gen_libarkassembler_opcode_parsing_h",
     ":isa_gen_libarkassembler_operand_types_print_h",
-    "$ark_root/libpandabase:libarkbase_static",
-    "$ark_root/libpandafile:libarkfile_static",
+    "$ark_root/libpandabase/ft_build:libarkbase_static",
+    "$ark_root/libpandafile/ft_build:libarkfile_static",
     sdk_libc_secshared_dep,
   ]
 
   deps += plugin_deps
 }
 
-ohos_shared_library("libarkassembler") {
+ft_shared_library("libarkassembler") {
   deps = [ ":libarkassembler_static" ]
 
   if (!is_standard_system) {
-    relative_install_dir = "ark"
+   #relative_install_dir = "ark"
   }
   output_extension = "so"
   if (is_mingw) {
@@ -118,15 +118,15 @@ source_set("libarkassembler_frontend_set_static") {
     ":isa_gen_libarkassembler_isa_h",
     ":isa_gen_libarkassembler_opcode_parsing_h",
     ":isa_gen_libarkassembler_operand_types_print_h",
-    "$ark_root/libpandabase:libarkbase_frontend_static",
-    "$ark_root/libpandafile:libarkfile_frontend_static",
+    "$ark_root/libpandabase/ft_build:libarkbase_frontend_static",
+    "$ark_root/libpandafile/ft_build:libarkfile_frontend_static",
     sdk_libc_secshared_dep,
   ]
 
   deps += plugin_deps
 }
 
-ohos_static_library("libarkassembler_frontend_static") {
+ft_static_library("libarkassembler_frontend_static") {
   deps = [ ":libarkassembler_frontend_set_static" ]
 
   part_name = "runtime_core"
@@ -134,7 +134,7 @@ ohos_static_library("libarkassembler_frontend_static") {
 }
 
 source_set("ark_asm_static") {
-  sources = [ "pandasm.cpp" ]
+  sources = [ "../pandasm.cpp" ]
 
   include_dirs = [
     "$target_gen_dir",
@@ -142,19 +142,19 @@ source_set("ark_asm_static") {
   ]
 
   public_configs = [
-    # sdk_libc_secshared_config,
+     sdk_libc_secshared_config,
     ":arkassembler_public_config",
-    "$ark_root:ark_config",
-    "$ark_root/libpandabase:arkbase_public_config",
-    "$ark_root/libpandafile:arkfile_public_config",
-    "$ark_root/runtime:arkruntime_public_config",
+    "$ark_root/ft_build:ark_config",
+    "$ark_root/libpandabase/ft_build:arkbase_public_config",
+    "$ark_root/libpandafile/ft_build:arkfile_public_config",
+    "$ark_root/runtime/ft_build:arkruntime_public_config",
   ]
 
   deps = [
     ":libarkassembler_frontend_static",
-    "$ark_root/bytecode_optimizer:libarkbytecodeopt_frontend_static",
-    "$ark_root/libpandabase:libarkbase_frontend_static",
-    "$ark_root/libpandafile:libarkfile_frontend_static",
+    "$ark_root/bytecode_optimizer/ft_build:libarkbytecodeopt_frontend_static",
+    "$ark_root/libpandabase/ft_build:libarkbase_frontend_static",
+    "$ark_root/libpandafile/ft_build:libarkfile_frontend_static",
   ]
 
   libs = platform_libs
@@ -163,10 +163,10 @@ source_set("ark_asm_static") {
   }
 }
 
-ohos_executable("ark_asm") {
+ft_executable("ark_asm") {
   deps = [ ":ark_asm_static" ]
 
-  install_enable = false
+  ##install_enable = false
   part_name = "runtime_core"
   subsystem_name = "arkcompiler"
 }
@@ -180,25 +180,25 @@ ark_isa_gen("isa_gen_libarkassembler") {
     "opcode_parsing.h.erb",
     "operand_types_print.h.erb",
   ]
-  sources = "templates"
+  sources = "../templates"
   destination = "$target_gen_dir"
   requires = [
-    "asm_isapi.rb",
-    "../libpandafile/pandafile_isapi.rb",
+    "../asm_isapi.rb",
+    "../../libpandafile/pandafile_isapi.rb",
   ]
 }
 
 ark_gen_file("ark_asm_meta_gen_h") {
-  template_file = "templates/meta_gen.cpp.erb"
-  data_file = "metadata.yaml"
-  requires = [ "asm_metadata.rb" ]
+  template_file = "../templates/meta_gen.cpp.erb"
+  data_file = "../metadata.yaml"
+  requires = [ "../asm_metadata.rb" ]
   output_file = "$target_gen_dir/meta_gen.h"
 }
 
 ark_gen_file("ark_asm_register_extensions_h") {
-  extra_dependencies = [ "$ark_root:concat_plugins_yamls" ]
-  template_file = "extensions/register_extensions.h.erb"
-  data_file = "$target_gen_dir/../../plugin_options.yaml"
+  extra_dependencies = [ "$ark_root/ft_build:concat_plugins_yamls" ]
+  template_file = "../extensions/register_extensions.h.erb"
+  data_file = "$target_gen_dir/../../ft_build/plugin_options.yaml"
   requires = [ "$ark_root/templates/plugin_options.rb" ]
   output_file = "$target_gen_dir/register_extensions.h"
 }

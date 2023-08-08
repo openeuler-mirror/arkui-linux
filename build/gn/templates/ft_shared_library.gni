@@ -21,12 +21,25 @@
 # - use_exceptions: use exceptions, default is false
 # - use_rtti: use rtti, default is false
 template("ft_shared_library") {
-  # Handle subsystem & part_name
+  assert(!defined(invoker.output_dir),
+         "output_dir is not allowed to be defined.")
+
   if (defined(invoker.subsystem_name) && defined(invoker.part_name)) {
     subsystem_name = invoker.subsystem_name
     part_name = invoker.part_name
   } else if (defined(invoker.part_name)) {
-    assert("false", "Please set 'subsystem_name' for 'part_name'")
+    part_name = invoker.part_name
+    _part_subsystem_info_file =
+        "$root_build_dir/build_configs/parts_info/part_subsystem.json"
+    _arguments = [
+      "--part-name",
+      part_name,
+      "--part-subsystem-info-file",
+      rebase_path(_part_subsystem_info_file, root_build_dir),
+    ]
+    get_subsystem_script = "//build/templates/common/get_subsystem_name.py"
+    subsystem_name =
+        exec_script(get_subsystem_script, _arguments, "trim string")
   } else if (defined(invoker.subsystem_name)) {
     subsystem_name = invoker.subsystem_name
     part_name = subsystem_name
@@ -40,31 +53,43 @@ template("ft_shared_library") {
          "[GN ERROR] Internal error, please contact maintainer.")
 
   # Change output dir
-  output_dir = "${root_out_dir}/${subsystem_name}/${part_name}"
+    output_dir = "${root_out_dir}/${subsystem_name}/${part_name}"
 
   # Call `shared_library()`
   shared_library("${target_name}") {
     forward_variables_from(invoker,
                            "*",
                            [
-                             # variable_to_not_forward_list
                              "configs",
                              "remove_configs",
-                             #"no_default_deps",
-                             #"external_deps",
-                             #"install_images",
-                             #"module_install_dir",
-                             #"relative_install_dir",
-                             #"symlink_target_name",
+                             "no_default_deps",
+                             "external_deps",
+                             "install_images",
+                             "module_install_dir",
+                             "relative_install_dir",
+                             "symlink_target_name",
                              "output_dir",
-                             #"install_enable",
-                             #"version_script",
-                             #"license_file",
-                             #"license_as_sources",
+                             "install_enable",
+                             "version_script",
+                             "license_file",
+                             "license_as_sources",
                              "use_exceptions",
                              "use_rtti",
-                             #"stl",
+                             "stl",
+
+                             # Sanitizer variables
+                             "sanitize",
                            ])
+    output_dir = output_dir
+
+    if (!defined(inputs)) {
+      inputs = []
+    }
+
+    if (!defined(ldflags)) {
+      ldflags = []
+    }
+
     if (defined(invoker.configs)) {
       configs += invoker.configs
     }
@@ -81,5 +106,153 @@ template("ft_shared_library") {
       configs += [ "//build/gn/configs/compiler:rtti" ]
       configs -= [ "//build/gn/configs/compiler:no_rtti" ]
     }
-  }
+
+    if (!defined(output_name)) {
+      output_name = target_name
+    }
+
+    if (defined(invoker.no_default_deps)) {
+      no_default_deps = invoker.no_default_deps
+    }
+
+    if (defined(invoker.version_script)) {
+      _version_script = rebase_path(invoker.version_script, root_build_dir)
+      inputs += [ invoker.version_script ]
+      ldflags += [ "-Wl,--version-script=${_version_script}" ]
+    }
+
+    if (!defined(ldflags)) {
+      ldflags = []
+    }
+    if (!defined(libs)) {
+      libs = []
+    }
+    if (!defined(cflags_cc)) {
+      cflags_cc = []
+    }
+    if (!defined(deps)) {
+      deps = []
+    }
+    if (true) {
+      if (defined(invoker.stl)) {
+        cflags_cc += [
+          "-nostdinc++",
+          "-I" + rebase_path(
+                  "//prebuilts/clang/ohos/${host_platform_dir}/llvm_ndk/include/c++/v1",
+                  root_build_dir),
+        ]
+        ldflags += [
+          "-nostdlib++",
+          "-L" + rebase_path("${clang_stl_path}/${abi_target}/c++",
+                             root_build_dir),
+        ]
+
+        libs += [ invoker.stl ]
+      } else {
+        if (current_cpu == "arm") {
+          libs += [ "unwind" ]
+        }
+
+        #libs += [ "c++" ]
+      }
+    }
+
+    if (!defined(include_dirs)) {
+      include_dirs = []
+    }
+    if (defined(invoker.external_deps)) {
+      external_deps_script =
+          rebase_path("//build/templates/common/external_deps_handler.py")
+      external_deps_temp_file =
+          "$target_gen_dir/${part_name}__${target_name}_external_deps_temp.json"
+      arguments = [ "--external-deps" ]
+      arguments += invoker.external_deps
+      arguments += [
+        "--parts-src-flag-file",
+        rebase_path(parts_src_flag_file, root_build_dir),
+        "--external-deps-temp-file",
+        rebase_path(external_deps_temp_file, root_build_dir),
+        "--sdk-base-dir",
+        rebase_path("${innersdk_base_dir}", root_build_dir),
+        "--sdk-dir-name",
+        "${innersdk_dir_name}",
+        "--current-toolchain",
+        current_toolchain,
+        "--innerkits-adapter-info-file",
+        rebase_path("//build/ohos/inner_kits_adapter.json", root_build_dir),
+      ]
+      if (is_use_sdk) {
+        arguments += [ "--use-sdk" ]
+      }
+
+      exec_script(external_deps_script, arguments, "string")
+
+      external_deps_info = read_file(external_deps_temp_file, "json")
+      if (defined(external_deps_info.deps)) {
+        deps += external_deps_info.deps
+      }
+      if (defined(external_deps_info.libs)) {
+        libs += external_deps_info.libs
+      }
+      if (defined(external_deps_info.include_dirs)) {
+        include_dirs += external_deps_info.include_dirs
+      }
+    }
+
+    if (defined(is_debug) && !is_debug && enable_debug_components != "") {
+      foreach(component_name, debug_components) {
+        if (part_name == component_name) {
+          configs -= default_opt_configs
+          configs += debug_level_configs
+        }
+      }
+    }
+
+    module_type_napi = false
+    if (defined(invoker.relative_install_dir) && product_name != "ohos-sdk") {
+      relative_paths = string_split(invoker.relative_install_dir, "/")
+      foreach(p, relative_paths) {
+        if (p == "module") {
+          module_type_napi = true
+        }
+      }
+      if (module_type_napi) {
+        napi_white_list = [
+          "fileio",
+          "downloadsingle",
+          "tel_call_manager_api",
+          "rpc",
+          "color_picker",
+          "accessibility",
+          "stationary",
+          "remote_file_share_native",
+          "window_animation",
+          "cryptoframework_napi",
+          "rdb",
+          "distributeddataobject_impl",
+          "medialibrary",
+          "image",
+          "featureability",
+          "medical",
+          "devicestatus",
+          "hiappevent",
+          "hiappevent_v9",
+          "quickfixmanager_napi",
+        ]
+        foreach(m, napi_white_list) {
+          if (m == target_name) {
+            module_type_napi = false
+          }
+        }
+      }
+    }
+    if (module_type_napi) {
+      if (!defined(invoker.version_script)) {
+        _version_script =
+            rebase_path("//build/templates/cxx/napi.versionscript")
+        inputs += [ _version_script ]
+        ldflags += [ "-Wl,--version-script=${_version_script}" ]
+      }
+    }
+  } 
 }

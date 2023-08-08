@@ -110,6 +110,12 @@ config("cjson_config") {
   include_dirs = [ "${sys_inc}/cJSON" ]
 }
 
+config("jsoncpp_config") {
+  visibility = [ ":*" ]
+  libs = [ "jsoncpp" ]
+  include_dirs = [ "${sys_inc}/jsoncpp" ]
+}
+
 config("icu_config") {
   visibility = [ ":*" ]
   libs = ["icui18n", "icuuc"]
@@ -252,6 +258,10 @@ group("libuv") {
 
 group("cjson") {
   public_configs = [ ":cjson_config" ]
+}
+
+group("jsoncpp") {
+  public_configs = [ ":jsoncpp_config" ]
 }
 
 group("icu") {

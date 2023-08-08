@@ -95,7 +95,7 @@ group("ark_packages") {
 # Common config for ark source
 config("ark_config") {
   if (!ark_standalone_build) {
-    visibility = [ ":*" ]
+    visibility = [ "*" ]
   }
 
   include_dirs = [ "$ark_root" ]
@@ -273,7 +273,7 @@ concat_yamls("concat_plugins_yamls") {
 }
 
 concat_yamls("concat_entrypoints_yamls") {
-  output_file = "$target_gen_dir/runtime/entrypoints.yaml"
+  output_file = "$target_gen_dir/../runtime/ft_build/entrypoints.yaml"
   default_file = "$ark_root/runtime/entrypoints/entrypoints.yaml"
   add_yamls = entrypoints_yamls
 }
@@ -285,7 +285,7 @@ concat_yamls("concat_inst_templates_yamls") {
 }
 
 merge_yamls("merge_runtime_options_yamls") {
-  output_file = "$target_gen_dir/runtime_options.yaml"
+  output_file = "$target_gen_dir/../runtime/runtime_options.yaml"
   add_yamls = [ "$ark_root/runtime/options.yaml" ] + runtime_options_yamls
 }
 # if (!ark_standalone_build) {
