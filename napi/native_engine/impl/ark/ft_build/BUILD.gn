@@ -81,6 +81,7 @@ template("ace_napi_impl") {
     deps = [
       "//napi/ft_build:ace_napi", 
       "//build/gn/configs/system_libs:c_utils",
+      "$ark_root/libpandabase/ft_build:libarkbase_static",
     ]
 
     if (target_os == "ios") {

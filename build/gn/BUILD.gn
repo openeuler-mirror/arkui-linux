@@ -23,6 +23,7 @@ group("arkui") {
     "//ace_engine/adapter/fangtian/entrance/samples:hap_executor",
     "//arkcompiler/ets_runtime/ft_build:libark_jsruntime",
     "//arkcompiler/ets_runtime/ecmascript/js_vm/ft_build:ark_js_vm",
+    "//arkcompiler/ets_frontend/ft_build:ets_frontend_build",
     "//napi/ft_build:ace_napi",
   ]
 }
