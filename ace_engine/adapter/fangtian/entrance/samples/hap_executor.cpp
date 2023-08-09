@@ -47,42 +47,10 @@ bool GetAceRunArgs(int argc, const char* argv[], OHOS::Ace::Platform::AceRunArgs
 int main(int argc, const char* argv[])
 {
     OHOS::Ace::LogWrapper::SetLogLevel(OHOS::Ace::LogLevel::DEBUG);
-    std::string assetPathJs = "/home/zach/appications/test/default";
-    std::string assetPathEts = "/home/zach/appications/test/default_2.0";
-    std::string assetPathEtsStage = "/home/ubuntu/demo/preview/js/default_stage/ets";
-    std::string appResourcesPath = "/home/ubuntu/demo/preview/js/AppResources";
-    std::string appResourcesPathStage = "/home/ubuntu/demo/preview/js/default_stage";
-    std::string systemResourcesPath = "/home/ubuntu/demo/preview/js/SystemResources";
-    std::string pageProfile = "main_page";
-
-    OHOS::Ace::Platform::AceRunArgs args = {
-        .projectModel = OHOS::Ace::Platform::ProjectModel::STAGE,
-        .assetPath = assetPathEtsStage,
-        .systemResourcesPath = systemResourcesPath,
-        .appResourcesPath = appResourcesPathStage,
-        .deviceConfig.orientation = OHOS::Ace::DeviceOrientation::LANDSCAPE,
-        .deviceConfig.density = 1,
-        .deviceConfig.deviceType = OHOS::Ace::DeviceType::TABLET,
-        .windowTitle = "Demo",
-        .viewWidth = 1920,
-        .viewHeight = 1080,
-        .deviceWidth = 1920,
-        .deviceHeight = 1080,
-        .aceVersion = OHOS::Ace::Platform::AceVersion::ACE_2_0,
-        .onRender = std::move(renderCallback),
-    };
-
-    if (argc == MAX_ARGS_COUNT) {
-        if (!std::strcmp(argv[1], ACE_VERSION_2)) {
-            args.assetPath = assetPathEts;
-            args.aceVersion = OHOS::Ace::Platform::AceVersion::ACE_2_0;
-        } else if (!std::strcmp(argv[1], MODEL_STAGE)) {
-            args.assetPath = assetPathEtsStage;
-            args.appResourcesPath = appResourcesPathStage;
-            args.aceVersion = OHOS::Ace::Platform::AceVersion::ACE_2_0;
-            args.projectModel = OHOS::Ace::Platform::ProjectModel::STAGE;
-            args.pageProfile = pageProfile;
-        }
+    OHOS::Ace::Platform::AceRunArgs args;
+    if (!GetAceRunArgs(argc, argv, args)) {
+        std::cout << "Please run in the following format: ./hap_executor packagepath" << std::endl;
+        return 0;
     }
 
     auto ability = OHOS::Ace::Platform::AceAbility::CreateInstance(args);
