@@ -66,7 +66,7 @@ if [ -d "$prebuilts_path" ]; then
   else
     # ./nodejs/bin/node ./mock-generate/build.js
     # ./nodejs/bin/node build_jsmock_system_plugin.js || exit 1 &
-    ./nodejs/bin/node build_strip_native_min.js || exit 1 &
+    ./node-v12.18.4-linux-x64/bin/node build_strip_native_min.js || exit 1 &
     # run unit test
     ./node-v12.18.4-linux-x64/bin/node node_modules/.bin/mocha -r ts-node/register test/lib.ts test/ut/**/*.ts test/ut/*.ts || exit 1&
     wait
