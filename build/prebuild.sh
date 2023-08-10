@@ -55,6 +55,10 @@ pip3 install -r ${SCRIPT_DIR}/configs/requirements.txt
 # Remove out dir
 rm -rf ${PROJECT_DIR}/out
 
+# prebuilts_download
+cd ${PROJECT_DIR}
+build/prebuilts_download.sh --skip-ssl
+
 # =============================================================================
 # System Packages
 # =============================================================================
