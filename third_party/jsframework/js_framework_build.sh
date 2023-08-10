@@ -57,18 +57,18 @@ if [ -d "$prebuilts_path" ]; then
   cp -r $2 $9
   cd $9
   if [ "${11}" == 'true' ];then
-    ./node-v12.18.4-darwin-x64/bin/node ./mock-generate/build.js
-    ./node-v12.18.4-darwin-x64/bin/node build_jsmock_system_plugin.js || exit 1 &
+    # ./node-v12.18.4-darwin-x64/bin/node ./mock-generate/build.js
+    # ./node-v12.18.4-darwin-x64/bin/node build_jsmock_system_plugin.js || exit 1 &
     ./node-v12.18.4-darwin-x64/bin/node build_strip_native_min.js || exit 1 &
     # run unit test
     ./node-v12.18.4-darwin-x64/bin/node node_modules/.bin/mocha -r ts-node/register test/lib.ts test/ut/**/*.ts test/ut/*.ts || exit 1 &
     wait
   else
-    ./nodejs/bin/node ./mock-generate/build.js
-    ./nodejs/bin/node build_jsmock_system_plugin.js || exit 1 &
+    # ./nodejs/bin/node ./mock-generate/build.js
+    # ./nodejs/bin/node build_jsmock_system_plugin.js || exit 1 &
     ./nodejs/bin/node build_strip_native_min.js || exit 1 &
     # run unit test
-    ./nodejs/bin/node node_modules/.bin/mocha -r ts-node/register test/lib.ts test/ut/**/*.ts test/ut/*.ts || exit 1&
+    ./node-v12.18.4-linux-x64/bin/node node_modules/.bin/mocha -r ts-node/register test/lib.ts test/ut/**/*.ts test/ut/*.ts || exit 1&
     wait
   fi
 else
@@ -82,7 +82,7 @@ rm -rf ./node_modules
 if [ "${11}" == 'true' ];then
   rm -rf ./node-v12.18.4-darwin-x64
 else
-  rm -rf ./nodejs
+  rm -rf ./node-v12.18.4-linux-x64
 fi
 rm -rf ./runtime
 rm -rf ./tsconfig.json
