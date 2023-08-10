@@ -25,6 +25,7 @@ config("ace_pc_preview_config") {
   include_dirs = [
     "$ace_root",
     "$ace_root/frameworks",
+    "$ace_root/adapter/fangtian/entrance",
     "$flutter_root/engine",
     "$flutter_root/engine/flutter/shell/platform/common/cpp/public",
     "$flutter_root/engine/ace_adapter/flutter/shell/platform/glfw/public",
@@ -72,7 +73,7 @@ ft_executable("hap_executor") {
       sources += [ "touch_event_handler_rs.cpp" ]
       defines += [ "ENABLE_ROSEN_BACKEND" ]
       deps += [
-        "//foundation/graphic/graphic_2d/rosen/modules/glfw_render_context:libglfw_render_context",
+        "$ace_root/ft_build/build:libace_static_fangtian",
       ]
     } else {
       deps += [

@@ -134,7 +134,7 @@ template("build_component_ng") {
           defined(invoker.rosen_sources)) {
         sources += invoker.rosen_sources
         # Fangtian TODO
-        deps += [ "$render_server_dir/rosen/modules/render_service_client/ft_build:librender_service_client" ]
+        # deps += [ "$render_server_dir/rosen/modules/render_service_client/ft_build:librender_service_client" ]
         # include_dirs +=
         #     [ "//foundation/window/window_manager/interfaces/innerkits" ]
       }
