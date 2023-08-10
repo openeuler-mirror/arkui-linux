@@ -63,7 +63,7 @@ int main(int argc, const char* argv[])
 
     // TODO adaptor for fangtian mmi
     // OHOS::Ace::Platform::KeyInputHandler::InitialTextInputCallback(ability->GetGlfwWindowController());
-    // OHOS::Ace::Platform::TouchEventHandler::InitialTouchEventCallback(ability->GetGlfwWindowController());
+    OHOS::Ace::Platform::TouchEventHandler::InitialTouchEventCallback(ability->GetGlfwWindowController());
     bool runFlag = true;
     std::thread timer([&ability, &runFlag]() {
         int32_t getJSONTreeTimes = GET_INSPECTOR_TREE_TIMES;

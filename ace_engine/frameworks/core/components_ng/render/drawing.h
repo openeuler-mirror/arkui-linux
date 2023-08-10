@@ -19,8 +19,7 @@
 #ifndef ACE_UNITTEST
 #include "draw/canvas.h"
 #include "draw/shadow.h"
-/* Fangtian TODO */
-// #include "drawing/engine_adapter/skia_adapter/skia_canvas.h"
+#include "drawing/engine_adapter/skia_adapter/skia_canvas.h"
 #include "image/image.h"
 #include "rosen_text/ui/font_collection.h"
 #include "rosen_text/ui/typography.h"
@@ -55,8 +54,7 @@ using RSColorType = Rosen::Drawing::ColorType;
 using RSAlphaType = Rosen::Drawing::AlphaType;
 using RSScalar = Rosen::Drawing::scalar;
 using RSClipOp = Rosen::Drawing::ClipOp;
-/* Fangtian TODO */
-// using RSSkCanvas = Rosen::Drawing::SkiaCanvas;
+using RSSkCanvas = Rosen::Drawing::SkiaCanvas;
 using RSMatrix = Rosen::Drawing::Matrix;
 using RSCamera3D = Rosen::Drawing::Camera3D;
 using RSMaskFilter = Rosen::Drawing::MaskFilter;
