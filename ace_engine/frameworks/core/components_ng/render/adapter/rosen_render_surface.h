@@ -16,11 +16,11 @@
 #ifndef FOUNDATION_ACE_FRAMEWORKS_CORE_COMPONENTS_NG_PAINTS_ADAPTER_ROSEN_RENDER_SURFACE_H
 #define FOUNDATION_ACE_FRAMEWORKS_CORE_COMPONENTS_NG_PAINTS_ADAPTER_ROSEN_RENDER_SURFACE_H
 
-#if !defined(LINUX_PLATFORM) && !defined(WINDOWS_PLATFORM) && !defined(MAC_PLATFORM)
+//#if !defined(LINUX_PLATFORM) && !defined(WINDOWS_PLATFORM) && !defined(MAC_PLATFORM)
 #include "surface.h"
 #include "surface_delegate.h"
 #include "window.h"
-#endif
+//#endif
 
 #include "base/memory/referenced.h"
 #include "base/utils/noncopyable.h"
@@ -52,32 +52,32 @@ public:
 
     std::string GetUniqueId() const override;
 
-#if !defined(LINUX_PLATFORM) && !defined(WINDOWS_PLATFORM) && !defined(MAC_PLATFORM)
+//#if !defined(LINUX_PLATFORM) && !defined(WINDOWS_PLATFORM) && !defined(MAC_PLATFORM)
     OHOS::sptr<OHOS::Surface> GetSurface() const
     {
         return producerSurface_;
     }
-#endif
+//#endif
 
     void SetExtSurfaceBounds(int32_t left, int32_t top, int32_t width, int32_t height) override;
 
     void SetExtSurfaceCallback(const RefPtr<ExtSurfaceCallbackInterface>& extSurfaceCallback) override;
 
 private:
-#if !defined(LINUX_PLATFORM) && !defined(WINDOWS_PLATFORM) && !defined(MAC_PLATFORM)
+//#if !defined(LINUX_PLATFORM) && !defined(WINDOWS_PLATFORM) && !defined(MAC_PLATFORM)
     OHOS::sptr<OHOS::Surface> producerSurface_ = nullptr;
     struct NativeWindow* nativeWindow_ = nullptr;
-#endif
+//#endif
     WeakPtr<NG::RenderContext> renderContext_ = nullptr;
     RefPtr<ExtSurfaceCallbackInterface> extSurfaceCallbackInterface_ = nullptr;
-#if !defined(LINUX_PLATFORM) && !defined(WINDOWS_PLATFORM) && !defined(MAC_PLATFORM)
+//#if !defined(LINUX_PLATFORM) && !defined(WINDOWS_PLATFORM) && !defined(MAC_PLATFORM)
     sptr<OHOS::SurfaceDelegate> surfaceDelegate_;
-#endif
+//#endif
 
     ACE_DISALLOW_COPY_AND_MOVE(RosenRenderSurface);
 };
 
-#ifdef OHOS_PLATFORM
+//#ifdef OHOS_PLATFORM
 class ExtSurfaceCallback : public OHOS::SurfaceDelegate::ISurfaceCallback {
 public:
     explicit ExtSurfaceCallback(const WeakPtr<ExtSurfaceCallbackInterface>& interface) : weakInterface_(interface) {}
@@ -93,6 +93,6 @@ public:
 private:
     WeakPtr<ExtSurfaceCallbackInterface> weakInterface_;
 };
-#endif
+//#endif
 } // namespace OHOS::Ace::NG
 #endif // FOUNDATION_ACE_FRAMEWORKS_CORE_COMPONENTS_NG_PAINTS_ADAPTER_ROSEN_RENDER_SURFACE_H
