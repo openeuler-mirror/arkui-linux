@@ -17,9 +17,9 @@
 
 #include <functional>
 
-//#include "wm/window.h"
-//#include <ui/rs_surface_node.h>
-//#include <ui/rs_ui_director.h>
+#include "wm/window.h"
+#include <ui/rs_surface_node.h>
+#include <ui/rs_ui_director.h>
 #include "flutter/lib/ui/ui_dart_state.h"
 #include "adapter/fangtian/entrance/rs_dir_asset_provider.h"
 #include "adapter/fangtian/entrance/dir_asset_provider.h"
@@ -52,7 +52,7 @@
 #include "core/components/theme/theme_constants.h"
 #include "core/components/theme/theme_manager_impl.h"
 #include "core/components_ng/pattern/text_field/text_field_manager.h"
-//#include "core/components_ng/render/adapter/rosen_window.h"
+#include "core/components_ng/render/adapter/rosen_window.h"
 //#include "core/components_ng/render/adapter/window_prviewer.h"
 #include "core/pipeline/base/element.h"
 #include "core/pipeline/pipeline_context.h"
@@ -82,7 +82,7 @@ AceContainer::AceContainer(int32_t instanceId, FrontendType type, RefPtr<Context
     //if (type_ != FrontendType::DECLARATIVE_JS && type_ != FrontendType::ETS_CARD) {
     //    taskExecutor->InitJsThread();
     //}
-    
+
     auto taskExecutor = Referenced::MakeRefPtr<FlutterTaskExecutor>();
     taskExecutor->InitPlatformThread(false);
     taskExecutor_ = taskExecutor;
@@ -789,11 +789,8 @@ void AceContainer::SetView(RSAceView* view, double density, int32_t width, int32
     CHECK_NULL_VOID(container);
     auto taskExecutor = container->GetTaskExecutor();
     CHECK_NULL_VOID(taskExecutor);
-    // TODO adaptor for rs
-    //auto rsWindow = new Rosen::Window(onRender);
-    //auto window = std::make_unique<NG::RosenWindow>(rsWindow, taskExecutor, view->GetInstanceId());
-    //container->AttachView(std::move(window), view, density, width, height, onRender);
-    container->AttachView(nullptr, view, density, width, height, onRender);
+    std::unique_ptr<Window> window = std::make_unique<NG::RosenWindow>(ftWindow, taskExecutor, view->GetInstanceId());
+    container->AttachView(std::move(window), view, density, width, height, onRender);
 }
 
 void AceContainer::AttachView(std::unique_ptr<Window> window, RSAceView* view, double density, int32_t width,
