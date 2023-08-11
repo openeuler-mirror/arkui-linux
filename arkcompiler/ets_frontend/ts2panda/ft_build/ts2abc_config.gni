@@ -31,7 +31,7 @@ declare_args() {
   ts2abc_build_path = ""
 }
 
-node_modules = "//build/common/ts2abc/node_modules"
+node_modules = "//prebuilts/build-tools/common/ts2abc/node_modules"
 build_public_version = true
 if (build_public_version) {
   nodejs_dir = "//prebuilts/build-tools/common/nodejs"
@@ -54,16 +54,11 @@ if (host_toolchain == toolchain_mac) {
       "/obj/arkcompiler/ets_frontend/ts2panda/build_win"
 } else {
   ts2abc_build_deps = [ "$ts2abc_root:ts2abc_build" ]
-#  ts2abc_build_path =
-#      get_label_info("$ts2abc_root:ts2abc_build($toolchain_linux)",
-#                     "root_out_dir") +
-#      "/obj/arkcompiler/ets_frontend/ts2panda/build"
   ts2abc_build_path =
       get_label_info("$ts2abc_root:ts2abc_build($toolchain_linux)",
                      "root_out_dir") +
       "/../obj/arkcompiler/ets_frontend/ts2panda/ft_build/build/"
-#  node_path = "${nodejs_dir}/node-v12.18.4-linux-x64/bin/"
-  node_path = "//build/common/nodejs/bin/"
+  node_path = "${nodejs_dir}/node-v12.18.4-linux-x64/bin/"
 }
 
 # Generate js plugin.
