@@ -52,7 +52,7 @@ is_experiment_build = false
 #need js engine for fangtian
 use_build_in_js_engine = true
 use_external_icu = "shared"
-use_curl_download = true 
+use_curl_download = true
 ohos_standard_fontmgr = false
 sk_use_hilog = false
 rich_components_support = true
@@ -66,7 +66,7 @@ js_pa_support = false
 connect_server_support = true
 hdc_register_support = false
 pa_engine_path = "adapter/fangtian/entrance/pa_engine"
-enable_rosen_backend = false
+enable_rosen_backend = true
 enable_standard_input = false
 build_container_scope_lib = false
 multiple_window_support = false
@@ -131,7 +131,7 @@ if (pixel_map_support) {
 }
 
 if (enable_rosen_backend) {
-#defines += [ "ENABLE_ROSEN_BACKEND" ]
+  defines += [ "ENABLE_ROSEN_BACKEND" ]
 }
 
 if (enable_standard_input) {

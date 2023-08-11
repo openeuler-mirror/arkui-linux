@@ -31,7 +31,7 @@ public:
 #ifndef ENABLE_ROSEN_BACKEND
     using GlfwController = FlutterDesktopWindowControllerRef;
 #else
-    using GlfwController = std::shared_ptr<OHOS::Rosen::GlfwRenderContext>;
+    using GlfwController = std::shared_ptr<FT::Rosen::GlfwRenderContext>;
 #endif
     static void InitialTouchEventCallback(const GlfwController &controller);
 };

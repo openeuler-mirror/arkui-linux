@@ -48,7 +48,7 @@ private:
 #else
 class KeyInputHandler {
 public:
-    static void InitialTextInputCallback(const std::shared_ptr<OHOS::Rosen::GlfwRenderContext> &controller);
+    static void InitialTextInputCallback(const std::shared_ptr<FT::Rosen::GlfwRenderContext> &controller);
     static void KeyboardHook(GLFWwindow* window, int key, int scancode, int action, int mods);
     static void CharHook(GLFWwindow* window, unsigned int code_point);
 

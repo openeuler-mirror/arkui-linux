@@ -14,7 +14,7 @@
  */
 #include "core/components_ng/render/adapter/rosen_render_surface.h"
 
-#include "foundation/graphic/graphic_2d/interfaces/inner_api/surface/surface_utils.h"
+#include "surface_utils.h"
 #include "render_service_client/core/ui/rs_surface_node.h"
 
 #include "base/memory/referenced.h"
