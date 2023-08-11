@@ -132,6 +132,8 @@ bool GetAceRunArgs(int argc, const char* argv[], OHOS::Ace::Platform::AceRunArgs
     args.windowTitle = "Demo";
     args.deviceWidth = 1920;
     args.deviceHeight = 1080;
+    args.viewWidth = 1920;
+    args.viewHeight = 1080;
     args.onRender = std::move(renderCallback);
 
     bool stageModel = args.projectModel == OHOS::Ace::Platform::ProjectModel::STAGE;

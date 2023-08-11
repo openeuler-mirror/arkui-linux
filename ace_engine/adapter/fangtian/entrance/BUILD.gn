@@ -15,7 +15,7 @@ import("//build/gn/fangtian.gni")
 import("//ace_engine/ft_build/ace_config.gni")
 
 ft_source_set("ace_entrance_fangtian") {
-  defines = ["PREVIEW", "LINUX_PLATFORM"]
+  defines = ["PREVIEW", "LINUX_PLATFORM", "FT_BUILD"]
   cflags_cc = [
     "-Wno-unused-const-variable",
     "-Wno-unused-function",
