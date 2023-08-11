@@ -38,33 +38,29 @@ action("gen_snapshot") {
   js_framework = "//third_party/jsframework/runtime"
   js_framework_mock_generate = "//third_party/jsframework/mock-generate"
   is_mac = "false"
-  #use_mac = host_os == "mac"
+  use_mac = host_os == "mac"
 
-  #node_modules = "//build/common/js-framework/node_modules"
-  node_modules = "//prebuilts/build-tools/common/js-framework/node_modules"
-  nodejs_path = "//build/common/nodejs"
-
-  #if (is_standard_system || is_cross_platform_build) {
-  #  node_modules = "//prebuilts/build-tools/common/js-framework/node_modules"
-  #  if (use_mac) {
-  #    nodejs_path =
-  #        "//prebuilts/build-tools/common/nodejs/node-v12.18.4-darwin-x64"
-  #    is_mac = "true"
-  #  } else {
-  #    nodejs_path =
-  #        z
-  #    is_mac = "false"
-  #  }
-  #} else {
-  #  node_modules = "//prebuilts/ace-toolkit/js-framework/node_modules"
-  #  if (use_mac) {
-  #    nodejs_path = "//prebuilts/ace-toolkit/nodejs/node-v12.18.4-darwin-x64"
-  #    is_mac = "true"
-  #  } else {
-  #    nodejs_path = "//prebuilts/ace-toolkit/nodejs/node-v12.18.4-linux-x64"
-  #    is_mac = "false"
-  #  }
-  #}
+  if (is_standard_system || is_cross_platform_build) {
+    node_modules = "//prebuilts/build-tools/common/js-framework/node_modules"
+    if (use_mac) {
+      nodejs_path =
+          "//prebuilts/build-tools/common/nodejs/node-v12.18.4-darwin-x64"
+      is_mac = "true"
+    } else {
+      nodejs_path =
+          "//prebuilts/build-tools/common/nodejs/node-v12.18.4-linux-x64"
+      is_mac = "false"
+    }
+  } else {
+    node_modules = "//prebuilts/ace-toolkit/js-framework/node_modules"
+    if (use_mac) {
+      nodejs_path = "//prebuilts/ace-toolkit/nodejs/node-v12.18.4-darwin-x64"
+      is_mac = "true"
+    } else {
+      nodejs_path = "//prebuilts/ace-toolkit/nodejs/node-v12.18.4-linux-x64"
+      is_mac = "false"
+    }
+  }
 
   buildfile_jsmock = "//third_party/jsframework/build_jsmock_system_plugin.js"
   buildfile_native_min = "//third_party/jsframework/build_strip_native_min.js"
@@ -273,20 +269,20 @@ if (!is_standard_system && !is_cross_platform_build) {
   }
 }
 
-import("//arkcompiler/ets_frontend/ts2panda/ft_build/ts2abc_config.gni")
-ark_abc_path =
-    get_label_info(":ark_build", "target_out_dir") + "/strip.native.min.abc"
-
-ts2abc_gen_abc("ark_jsf") {
-  extra_visibility = [ ":*" ]  # Only targets in this file can depend on this
-  extra_dependencies = [ ":gen_snapshot" ]
-
-  src_js = rebase_path(prebuilt_js_path)
-  dst_file = rebase_path(ark_abc_path)
-
-  in_puts = [ prebuilt_js_path ]
-  out_puts = [ ark_abc_path ]
-}
+#import("//arkcompiler/ets_frontend/ts2panda/ft_build/ts2abc_config.gni")
+#ark_abc_path =
+#    get_label_info(":ark_build", "target_out_dir") + "/strip.native.min.abc"
+#
+#ts2abc_gen_abc("ark_jsf") {
+#  extra_visibility = [ ":*" ]  # Only targets in this file can depend on this
+#  extra_dependencies = [ ":gen_snapshot" ]
+#
+#  src_js = rebase_path(prebuilt_js_path)
+#  dst_file = rebase_path(ark_abc_path)
+#
+#  in_puts = [ prebuilt_js_path ]
+#  out_puts = [ ark_abc_path ]
+#}
 
 #ft_prebuilt_etc("ark_build") {
 #  deps = [ ":ark_jsf" ]
