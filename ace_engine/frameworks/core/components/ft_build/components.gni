@@ -56,6 +56,7 @@ template("build_component") {
       deps = []
       deps += extra_deps
       deps += [ "$ace_root/frameworks/core/components/theme/ft_build:build_theme_code" ]
+      deps += [ "//build/gn/configs/system_libs:ft_engine" ]
 
       if (defined(invoker.public_configs)) {
         public_configs = []

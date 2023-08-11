@@ -81,9 +81,10 @@ void KeyInputHandler::InitialTextInputCallback(FlutterDesktopWindowControllerRef
     FlutterDesktopAddKeyboardHookHandler(controller, std::make_unique<KeyInputHandler>());
 }
 #else
-void KeyInputHandler::InitialTextInputCallback(const std::shared_ptr<OHOS::Rosen::GlfwRenderContext> &controller)
+void KeyInputHandler::InitialTextInputCallback(const std::shared_ptr<FT::Rosen::GlfwRenderContext> &controller)
 {
     // clipboard
+    /*
     auto callbackSetClipboardData = [controller](const std::string& data) {
         controller->SetClipboardData(data);
     };
@@ -92,7 +93,7 @@ void KeyInputHandler::InitialTextInputCallback(const std::shared_ptr<OHOS::Rosen
     };
     ClipboardProxy::GetInstance()->SetDelegate(
         std::make_unique<ClipboardProxyImpl>(callbackSetClipboardData, callbackGetClipboardData));
-
+    */
     // key: key_event(normal, modifier), char: unicode char input
     controller->OnKey([](int key, int scancode, int action, int mods) {
         KeyboardHook(nullptr, key, scancode, action, mods);

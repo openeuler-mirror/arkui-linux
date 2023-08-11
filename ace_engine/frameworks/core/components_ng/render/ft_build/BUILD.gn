@@ -50,6 +50,7 @@ build_component_ng("render_ng") {
     "../adapter/rosen_modifier_property.cpp",
     "../adapter/rosen_render_context.cpp",
     "../adapter/rosen_window.cpp",
+    "../adapter/rosen_render_surface.cpp",
   ]
 
   if (enable_ng_build) {

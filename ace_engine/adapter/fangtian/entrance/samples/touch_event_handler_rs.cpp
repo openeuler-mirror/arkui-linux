@@ -18,7 +18,7 @@
 #include <vector>
 #include "base/log/log.h"
 #include "core/event/touch_event.h"
-#include "adapter/linux/entrance/event_dispatcher.h"
+#include "adapter/fangtian/entrance/event_dispatcher.h"
 
 namespace OHOS::Ace::Platform {
 namespace {

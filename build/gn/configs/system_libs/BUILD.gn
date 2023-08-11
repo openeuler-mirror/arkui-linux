@@ -150,7 +150,7 @@ config("ft_engine_config") {
     "//third_party/ft_engine/display_server/utils/buffer_handle/export",
     "//third_party/ft_engine/display_server/rosen/modules/frame_analyzer/export",
   ]
-  libs = [ "wm", "render_service_client", "render_service_base", "frame_analyzer" ]
+  libs = [ "wm", "render_service_client", "render_service_base", "frame_analyzer", "surface" ]
 }
 
 # config("flutter_config") {
