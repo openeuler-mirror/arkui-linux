@@ -34,13 +34,13 @@
 #include "adapter/fangtian/external/ability/context.h"
 #include "adapter/fangtian/external/ability/fa/fa_context.h"
 #include "adapter/fangtian/external/ability/stage/stage_context.h"
-
-//#ifndef ENABLE_ROSEN_BACKEND
+#include "flutter/fml/thread.h"
+#ifndef ENABLE_ROSEN_BACKEND
 #include "adapter/fangtian/entrance/flutter_ace_view.h"
-//#else
+#else
 #include "adapter/fangtian/entrance/rs_ace_view.h"
 #include "wm/window.h"
-//#endif
+#endif
 
 namespace OHOS::Ace::Platform {
 
@@ -284,7 +284,10 @@ private:
     //app bar to use
     bool installationFree_ = false;
     int32_t labelId_;
-
+    std::unique_ptr<fml::Thread> platformRunner_ = nullptr;
+    std::unique_ptr<fml::Thread> gpuRunner_ = nullptr;
+    std::unique_ptr<fml::Thread> uiRunner_ = nullptr;
+    std::unique_ptr<fml::Thread> ioRunner_ = nullptr;
     ACE_DISALLOW_COPY_AND_MOVE(AceContainer);
 };
 

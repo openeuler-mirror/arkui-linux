@@ -169,7 +169,7 @@ bool SystemProperties::IsScoringEnabled(const std::string& name)
 
 bool SystemProperties::GetDebugEnabled()
 {
-    return false;
+    return true;
 }
 
 std::string SystemProperties::GetLanguage()
