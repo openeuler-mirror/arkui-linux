@@ -45,7 +45,7 @@ ft_source_set("ace_entrance_fangtian") {
     "$ace_root/frameworks/core/components/theme/ft_build:build_theme_code",
     "//build/gn/configs/system_libs:ft_engine",
   ]
-  defines += [ "ENABLE_ROSEN_BACKEND" ]
+  defines += [ "ENABLE_ROSEN_BACKEND", "FT_BUILD" ]
   #if (defined(config.enable_rosen_backend) && config.enable_rosen_backend) {
   #  sources -= [ "flutter_ace_view.cpp" ]
   #  sources += [ "rs_ace_view.cpp" ]
