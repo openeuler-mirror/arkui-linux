@@ -20,6 +20,7 @@
 # - remove_configs: configs to remove
 # - use_exceptions: use exceptions, default is false
 # - use_rtti: use rtti, default is false
+enable_debug_components = ""
 template("ft_shared_library") {
   assert(!defined(invoker.output_dir),
          "output_dir is not allowed to be defined.")
