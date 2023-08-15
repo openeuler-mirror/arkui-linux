@@ -78,8 +78,7 @@ action("cross_values_getters_generate") {
 
   args = [
     rebase_path(
-        #"$target_out_dir/$target_gen_dir/asm_defines_def_cpp_gen/asm_defines_def.o",
-        "//out/Debug/x64/obj/out/Debug/x64/gen/arkcompiler/runtime_core/cross_values/ft_build/asm_defines_def_cpp_gen/asm_defines_def.o",
+        "$target_out_dir/../../../../$target_gen_dir/asm_defines_def_cpp_gen/asm_defines_def.o",
         root_build_dir),
     rebase_path("$target_gen_dir/generated_values", root_build_dir),
     rebase_path(outputs[0], root_build_dir),
