@@ -818,7 +818,7 @@ void AceContainer::AttachView(std::unique_ptr<Window> window, RSAceView* view, d
     //rsTaskExecutor->InitOtherThreads(state->GetTaskRunners());
     if (type_ == FrontendType::DECLARATIVE_JS || type_ == FrontendType::ETS_CARD) {
         // For DECLARATIVE_JS frontend display UI in JS thread temporarily.
-        //rsTaskExecutor->InitJsThread(false);
+        rsTaskExecutor->InitJsThread(false);
         InitializeFrontend();
         auto front = GetFrontend();
         if (front) {
@@ -875,8 +875,7 @@ void AceContainer::AttachView(std::unique_ptr<Window> window, RSAceView* view, d
             TaskExecutor::TaskType::UI);
     }
 
-    // TODO adaptor to ft_engine
-    /* taskExecutor_->PostTask(
+    taskExecutor_->PostTask(
         [pipelineContext = AceType::DynamicCast<PipelineContext>(pipelineContext_), onRender, this]() {
             CHECK_NULL_VOID(pipelineContext);
             auto director = Rosen::RSUIDirector::Create();
@@ -901,7 +900,7 @@ void AceContainer::AttachView(std::unique_ptr<Window> window, RSAceView* view, d
             pipelineContext->SetRSUIDirector(director);
             LOGI("Init Rosen Backend");
         },
-        TaskExecutor::TaskType::UI); */
+        TaskExecutor::TaskType::UI);
 
     auto weak = AceType::WeakClaim(AceType::RawPtr(pipelineContext_));
     taskExecutor_->PostTask(
