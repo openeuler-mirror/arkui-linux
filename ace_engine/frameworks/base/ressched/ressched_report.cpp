@@ -48,14 +48,14 @@ void LoadAceApplicationContext(std::unordered_map<std::string, std::string>& pay
 {
     // Fangtian TODO
     LOGW("LoadAceApplicationContext not implemented.");
-    // auto& aceApplicationInfo = AceApplicationInfo::GetInstance();
-    // payload[PID] = std::to_string(aceApplicationInfo.GetPid());
-    // payload[UID] = std::to_string(aceApplicationInfo.GetUid());
-    // payload[BUNDLE_NAME] = aceApplicationInfo.GetPackageName();
-    // payload[ABILITY_NAME] = aceApplicationInfo.GetAbilityName();
-    // for (auto& pair : payload) {
-    //     LOGD("DataReport:  %{public}s :  %{public}s", pair.first.c_str(), pair.second.c_str());
-    // }
+    auto& aceApplicationInfo = AceApplicationInfo::GetInstance();
+    payload[PID] = std::to_string(aceApplicationInfo.GetPid());
+    payload[UID] = std::to_string(aceApplicationInfo.GetUid());
+    payload[BUNDLE_NAME] = aceApplicationInfo.GetPackageName();
+    payload[ABILITY_NAME] = aceApplicationInfo.GetAbilityName();
+    for (auto& pair : payload) {
+        LOGD("DataReport:  %{public}s :  %{public}s", pair.first.c_str(), pair.second.c_str());
+    }
 }
 }
 
