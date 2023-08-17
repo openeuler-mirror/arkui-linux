@@ -278,12 +278,12 @@ void JsiDeclarativeEngineInstance::InitAceModule()
         int32_t codeLength;
         codeStart = (uint8_t*)_binary_stateMgmt_abc_start;
         codeLength = _binary_stateMgmt_abc_end - _binary_stateMgmt_abc_start;
-        bool stateMgmtResult = runtime_->EvaluateJsCode(codeStart, codeLength);
+        bool stateMgmtResult = runtime_->EvaluateJsCode(codeStart, codeLength, "stateMgmt");
         if (!stateMgmtResult) {
             LOGE("EvaluateJsCode stateMgmt failed");
         }
         bool jsEnumStyleResult = runtime_->EvaluateJsCode(
-            (uint8_t*)_binary_jsEnumStyle_abc_start, _binary_jsEnumStyle_abc_end - _binary_jsEnumStyle_abc_start);
+            (uint8_t*)_binary_jsEnumStyle_abc_start, _binary_jsEnumStyle_abc_end - _binary_jsEnumStyle_abc_start, "jsEnumStyle");
         if (!jsEnumStyleResult) {
             LOGE("EvaluateJsCode jsEnumStyle failed");
         }
