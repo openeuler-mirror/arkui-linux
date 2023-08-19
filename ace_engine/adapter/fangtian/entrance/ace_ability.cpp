@@ -56,6 +56,7 @@ constexpr char ASSET_PATH_SHARE_STAGE[] = "resources/base/profile";
 constexpr double SCREEN_DENSITY_COEFFICIENT_PHONE = 1080.0 * 160.0 / 480.0;
 constexpr double SCREEN_DENSITY_COEFFICIENT_WATCH = 466.0 * 160 / 320.0;
 constexpr double SCREEN_DENSITY_COEFFICIENT_TABLE = 2560.0 * 160.0 / 280.0;
+constexpr double SCREEN_DENSITY_COEFFICIENT_PC = 1920.0 * 160.0 / 280.0;
 constexpr double SCREEN_DENSITY_COEFFICIENT_TV = 3840.0 * 160.0 / 640.0;
 
 void AdaptDeviceType(AceRunArgs& runArgs)
@@ -66,6 +67,8 @@ void AdaptDeviceType(AceRunArgs& runArgs)
         runArgs.deviceConfig.density = runArgs.deviceWidth / SCREEN_DENSITY_COEFFICIENT_WATCH;
     } else if (runArgs.deviceConfig.deviceType == DeviceType::TABLET) {
         runArgs.deviceConfig.density = runArgs.deviceWidth / SCREEN_DENSITY_COEFFICIENT_TABLE;
+    } else if (runArgs.deviceConfig.deviceType == DeviceType::PC) {
+        runArgs.deviceConfig.density = runArgs.deviceWidth / SCREEN_DENSITY_COEFFICIENT_PC;
     } else if (runArgs.deviceConfig.deviceType == DeviceType::TV) {
         runArgs.deviceConfig.density = runArgs.deviceWidth / SCREEN_DENSITY_COEFFICIENT_TV;
     } else {

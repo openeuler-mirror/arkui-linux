@@ -84,6 +84,10 @@ public:
     {
         return SystemProperties::GetDeviceType() == DeviceType::TABLET;
     }
+    bool IsPC() const
+    {
+    	return SystemProperties::GetDeviceType() == DeviceType::PC;
+    }
     bool IsOnHover() const
     {
         return mouseState_ == MouseState::HOVER;
