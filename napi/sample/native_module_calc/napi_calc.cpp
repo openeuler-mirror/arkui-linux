@@ -19,7 +19,7 @@
 #include "napi/native_node_api.h"
 
 extern const char _binary_calc_js_start[];
-extern const char _binary_calc_js_end[];
+extern const char *_binary_calc_js_end;
 
 /*
  * Sync callback

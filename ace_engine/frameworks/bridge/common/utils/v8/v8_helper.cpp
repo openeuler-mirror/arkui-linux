@@ -16,7 +16,7 @@
 #include "frameworks/bridge/common/utils/v8/v8_helper.h"
 
 extern const char _binary_v8_startup_snapshot_bin_start[];
-extern const char _binary_v8_startup_snapshot_bin_end[];
+extern const char *_binary_v8_startup_snapshot_bin_end;
 
 namespace OHOS::Ace::Framework {
 

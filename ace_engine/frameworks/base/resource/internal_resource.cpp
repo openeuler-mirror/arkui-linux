@@ -23,43 +23,43 @@
 // Use objcopy transform to compiled object file.
 // The following parameters represent the beginning and end of the file.
 extern uint8_t _binary_errorcode_json_start[];
-extern uint8_t _binary_errorcode_json_end[];
+extern uint8_t *_binary_errorcode_json_end;
 
 // binary/tv_rate_star_big_off.svg
 // Use objcopy transform to compiled object file.
 // The following parameters represent the beginning and end of the file.
 extern uint8_t _binary_tv_rate_star_big_off_svg_start[];
-extern uint8_t _binary_tv_rate_star_big_off_svg_end[];
+extern uint8_t *_binary_tv_rate_star_big_off_svg_end;
 
 // binary/tv_rate_star_big_on.svg
 // Use objcopy transform to compiled object file.
 // The following parameters represent the beginning and end of the file.
 extern uint8_t _binary_tv_rate_star_big_on_svg_start[];
-extern uint8_t _binary_tv_rate_star_big_on_svg_end[];
+extern uint8_t *_binary_tv_rate_star_big_on_svg_end;
 
 // binary/tv_rate_star_small_off.svg
 // Use objcopy transform to compiled object file.
 // The following parameters represent the beginning and end of the file.
 extern uint8_t _binary_tv_rate_star_small_off_svg_start[];
-extern uint8_t _binary_tv_rate_star_small_off_svg_end[];
+extern uint8_t *_binary_tv_rate_star_small_off_svg_end;
 
 // binary/tv_rate_star_small_on.png
 // Use objcopy transform to compiled object file.
 // The following parameters represent the beginning and end of the file.
 extern uint8_t _binary_tv_rate_star_small_on_svg_start[];
-extern uint8_t _binary_tv_rate_star_small_on_svg_end[];
+extern uint8_t *_binary_tv_rate_star_small_on_svg_end;
 
 // binary/indexletter_bar.json
 // Use objcopy transform to compiled object file.
 // The following parameters represent the beginning and end of the file.
 extern uint8_t _binary_indexletter_bar_json_start[];
-extern uint8_t _binary_indexletter_bar_json_end[];
+extern uint8_t *_binary_indexletter_bar_json_end;
 
 // binary/entry.json
 // Use objcopy transform to compiled object file.
 // The following parameters represent the beginning and end of the file.
 extern uint8_t _binary_entry_json_start[];
-extern uint8_t _binary_entry_json_end[];
+extern uint8_t *_binary_entry_json_end;
 
 namespace OHOS::Ace {
 namespace {

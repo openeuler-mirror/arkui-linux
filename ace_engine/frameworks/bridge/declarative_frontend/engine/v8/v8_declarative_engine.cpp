@@ -50,9 +50,9 @@
 #include "frameworks/core/components/xcomponent/xcomponent_component_client.h"
 
 extern const char _binary_stateMgmt_js_start[];
-extern const char _binary_stateMgmt_js_end[];
+extern const char *_binary_stateMgmt_js_end;
 extern const char _binary_jsEnumStyle_js_start[];
-extern const char _binary_jsEnumStyle_js_end[];
+extern const char *_binary_jsEnumStyle_js_end;
 
 namespace OHOS::Ace::Framework {
 namespace {

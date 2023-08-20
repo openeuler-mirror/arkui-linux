@@ -59,7 +59,7 @@
 
 #ifndef OHOS_PALTFORM
 extern const char _binary_strip_native_min_abc_start[];
-extern const char _binary_strip_native_min_abc_end[];
+extern const char *_binary_strip_native_min_abc_end;
 #endif
 
 namespace OHOS::Ace::Framework {
