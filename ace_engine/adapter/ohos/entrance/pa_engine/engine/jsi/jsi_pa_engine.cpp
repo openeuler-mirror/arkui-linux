@@ -32,7 +32,7 @@
 #include "frameworks/bridge/js_frontend/engine/jsi/jsi_base_utils.h"
 
 extern const char _binary_paMgmt_abc_start[];
-extern const char _binary_paMgmt_abc_end[];
+extern const char *_binary_paMgmt_abc_end;
 
 namespace OHOS::Ace {
 namespace {
