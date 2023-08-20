@@ -335,9 +335,8 @@ GlobalTSTypeRef TSIteratorInstanceType::GetPropTypeGT(JSThread *thread,
     if (tsManager->IsTSIteratorResult(kindGt)) {
         if (propGt.IsDefault()) {
 #ifndef NDEBUG
-            JSHandle<JSTaggedValue> valueString = thread->GlobalConstants()->GetHandledValueString();
             ASSERT(EcmaStringAccessor::StringsAreEqual(*propName, EcmaString::Cast(
-                valueString.GetTaggedValue().GetTaggedObject())));
+                thread->GlobalConstants()->GetHandledValueString().GetTaggedValue().GetTaggedObject())));
 #endif
             propGt = elementGt;
         }

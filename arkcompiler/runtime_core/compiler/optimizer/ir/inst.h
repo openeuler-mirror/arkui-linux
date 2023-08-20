@@ -1252,10 +1252,10 @@ public:
      */
     void SwapInputs()
     {
-#ifndef NDEBUG
+#if !defined(NDEBUG) && !defined(FT_DISABLE_ASSERT)
         constexpr auto INPUTS_COUNT_2 = 2;
-#endif
         ASSERT(GetInputsCount() == INPUTS_COUNT_2);
+#endif
         auto input0 = GetInput(0).GetInst();
         auto input1 = GetInput(1).GetInst();
         SetInput(0, input1);

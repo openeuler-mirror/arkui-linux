@@ -33,7 +33,7 @@ config("arkcompiler_public_config") {
   is_x64 =
       current_cpu == "amd64" || current_cpu == "x64" || current_cpu == "x86_64"
 
-  cflags_cc = []
+  cflags_cc = [ "-Wno-unused-variable" ]
   if (is_x64 || current_cpu == "arm64") {
     if (!is_mingw) {
       cflags_cc += [

@@ -21,6 +21,9 @@ config("bytecodeopt_public_config") {
   if (enable_bytecode_optimizer && !ark_standalone_build) {
     defines = [ "ENABLE_BYTECODE_OPT" ]
   }
+  if (ft_disable_assert) {
+    defines += [ "FT_DISABLE_ASSERT" ]
+  }
 }
 
 libarkbytecodeopt_sources = [
