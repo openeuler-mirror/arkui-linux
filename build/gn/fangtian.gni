@@ -18,4 +18,5 @@ declare_args() {
   ft_defines = [ "_FANGTIAN" ]
   is_standard_system = true
   product_name = ""
+  ft_disable_assert = true
 }
