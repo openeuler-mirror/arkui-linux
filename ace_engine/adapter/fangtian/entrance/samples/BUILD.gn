@@ -31,8 +31,10 @@ config("ace_pc_preview_config") {
     "$flutter_root/engine/ace_adapter/flutter/shell/platform/glfw/public",
     "$flutter_root/skia",
     "$flutter_root/glfw/include",
-    "$flutter_root/glfw/include",
     "$flutter_root/engine/flutter/third_party/txt/src",
+    "//third_party/ft_engine/window_manager/interfaces/innerkits/",
+    "//third_party/ft_engine/window_manager/interfaces/innerkits/dm",
+    "//third_party/ft_engine/window_manager/utils/include/"
   ]
 }
 
@@ -67,6 +69,9 @@ ft_executable("hap_executor") {
         ":copy_linux_shared_library",
         "//build/gn/configs/system_libs:ft_engine",
         "//ace_engine/adapter/fangtian/external:external_source_fangtian",
+    ]
+    deps += [
+        "//build/gn/configs/system_libs:ft_engine",
     ]
     include_dirs = [ "//third_party/flutter/glfw/include" ]
     if (defined(platform_config.enable_rosen_backend) &&
