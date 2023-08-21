@@ -148,6 +148,9 @@ config("ark_config") {
   if (!is_debug) {
     defines += [ "NDEBUG" ]
   }
+  if (ft_disable_assert) {
+    defines += [ "FT_DISABLE_ASSERT" ]
+  }
 
   cflags_cc = [
     "-std=c++17",
