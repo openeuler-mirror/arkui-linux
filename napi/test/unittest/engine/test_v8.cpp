@@ -28,7 +28,7 @@ NativeEngineTest::NativeEngineTest()
 NativeEngineTest::~NativeEngineTest() {}
 
 extern const char _binary_strip_native_min_js_bin_start[];
-extern const char _binary_strip_native_min_js_bin_end[];
+extern const char *_binary_strip_native_min_js_bin_end;
 
 int main(int argc, char** argv)
 {

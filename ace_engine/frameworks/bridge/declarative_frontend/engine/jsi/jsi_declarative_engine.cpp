@@ -65,12 +65,12 @@
 
 #if defined(PREVIEW)
 // extern const char _binary_jsMockSystemPlugin_abc_start[];
-// extern const char _binary_jsMockSystemPlugin_abc_end[];
+// extern const char *_binary_jsMockSystemPlugin_abc_end;
 #endif
 extern const char _binary_stateMgmt_abc_start[];
-extern const char _binary_stateMgmt_abc_end[];
+extern const char *_binary_stateMgmt_abc_end;
 extern const char _binary_jsEnumStyle_abc_start[];
-extern const char _binary_jsEnumStyle_abc_end[];
+extern const char *_binary_jsEnumStyle_abc_end;
 
 namespace OHOS::Ace::Framework {
 namespace {
