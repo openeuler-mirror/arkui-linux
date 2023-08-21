@@ -28,6 +28,9 @@
 #include "adapter/fangtian/external/ability/fa/fa_context.h"
 #include "adapter/fangtian/external/ability/stage/stage_context.h"
 
+#include "display_type.h"
+#include "dm/display_manager.h"
+
 namespace {
 
 constexpr int32_t GET_INSPECTOR_TREE_TIMES = 12;
@@ -161,18 +164,29 @@ bool GetAceRunArgs(int argc, const char* argv[], OHOS::Ace::Platform::AceRunArgs
     args.systemResourcesPath = systemResourcesPath;
     args.appResourcesPath = hapRealPath;
     args.deviceConfig.orientation = OHOS::Ace::DeviceOrientation::LANDSCAPE;
-    args.deviceConfig.density = 1;
     args.deviceConfig.deviceType = OHOS::Ace::DeviceType::TABLET;
     args.windowTitle = "Demo";
-    args.deviceWidth = 1920;
-    args.deviceHeight = 1080;
-    args.viewWidth = 1920;
-    args.viewHeight = 1080;
     args.onRender = std::move(renderCallback);
+
+    int32_t width = 800;
+    int32_t height = 600;
+    auto defaultDisplay = OHOS::Rosen::DisplayManager::GetInstance().GetDefaultDisplay();
+    if (defaultDisplay) {
+        width = defaultDisplay->GetWidth();
+        height = defaultDisplay->GetHeight();
+        args.deviceConfig.density = defaultDisplay->GetVirtualPixelRatio();
+        LOGI("deviceWidth: %{public}d, deviceHeight: %{public}d, default density: %{public}f",
+            args.deviceWidth, args.deviceHeight, args.deviceConfig.density);
+    }
+    args.deviceWidth = width;
+    args.deviceHeight = height;
+    args.viewWidth = width;
+    args.viewHeight = height;
 
     std::cout << "args.assetPath : " << args.assetPath << std::endl;
     std::cout << "args.appResourcesPath : " << args.appResourcesPath << std::endl;
     std::cout << "args.systemResourcesPath : " << args.systemResourcesPath << std::endl;
+    std::cout << "AppWidth : " << width << "AppHeight : " << height << std::endl;
 
     return true;
 }
