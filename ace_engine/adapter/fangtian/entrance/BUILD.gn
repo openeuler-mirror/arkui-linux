@@ -47,10 +47,6 @@ ft_source_set("ace_entrance_fangtian") {
     "$ace_flutter_engine_root:third_party_flutter_engine_fangtian",
   ]
   defines += [ "ENABLE_ROSEN_BACKEND", "FT_BUILD", "SK_BUILD_FONT_MGR_FOR_PREVIEW_LINUX" ]
-  #if (defined(config.enable_rosen_backend) && config.enable_rosen_backend) {
-  #  sources -= [ "flutter_ace_view.cpp" ]
-  #  sources += [ "rs_ace_view.cpp" ]
-  #}
 
   public_deps = [
     "$ace_flutter_engine_root/glfw:flutter_glfw_fangtian",
