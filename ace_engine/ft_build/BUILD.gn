@@ -47,6 +47,9 @@ config("ace_config") {
     cflags_cc += [ "-std=c++17" ]
     defines += [ "_USE_MATH_DEFINES" ]
   }
+  if (ft_disable_assert) {
+    defines += [ "FT_DISABLE_ASSERT" ]
+  }
 }
 
 config("ace_test_config") {

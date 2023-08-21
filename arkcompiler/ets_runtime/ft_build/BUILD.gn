@@ -762,15 +762,23 @@ source_set("libark_jsruntime_set") {
   if (is_mingw || is_mac) {
     defines = [ "ECMASCRIPT_SUPPORT_DEBUGGER" ]
   }
-  cflags_cc = ["-Wno-c++20-designator"]
+  cflags_cc = ["-Wno-c++20-designator", "-Wno-unused-variable",]
   if (is_standard_system) {
     cflags_cc += [ "-fvisibility=hidden" ]
   }
+
+  cflags = [
+    "-Wno-unused-variable",
+  ]
 
   deps += [
     "$ark_root/libpandafile/ft_build:arkfile_header_deps",
     sdk_libc_secshared_dep,
   ]
+
+  if (ft_disable_assert) {
+    defines = [ "FT_DISABLE_ASSERT" ]
+  }
 
   if (is_ohos && is_standard_system) {
     defines = [ "ENABLE_EXCEPTION_BACKTRACE" ]

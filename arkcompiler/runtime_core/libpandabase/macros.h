@@ -137,7 +137,7 @@
 #define LIKELY(exp) (__builtin_expect((exp) != 0, true))  // NOLINT(cppcoreguidelines-macro-usage)
 #define UNLIKELY(exp) (__builtin_expect((exp) != 0, false))  // NOLINT(cppcoreguidelines-macro-usage)
 
-#if !defined(NDEBUG)
+#if !defined(NDEBUG) && !defined(FT_DISABLE_ASSERT)
 
 // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define ASSERT_FAIL(expr) panda::debug::AssertionFail(expr, __FILE__, __LINE__, __FUNCTION__)
