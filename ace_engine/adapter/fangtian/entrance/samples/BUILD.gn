@@ -31,6 +31,8 @@ config("ace_pc_preview_config") {
     "$flutter_root/engine/ace_adapter/flutter/shell/platform/glfw/public",
     "$flutter_root/skia",
     "$flutter_root/glfw/include",
+    "$flutter_root/glfw/include",
+    "$flutter_root/engine/flutter/third_party/txt/src",
   ]
 }
 
@@ -84,8 +86,9 @@ ft_executable("hap_executor") {
     deps += [
       "//build/gn/configs/system_libs:c_utils",
     ]
+    deps += [ "//build/gn/configs/system_libs:harfbuzz" ]
 
-    defines += [ "LINUX_PLATFORM" ]
+    defines += [ "LINUX_PLATFORM", "SK_BUILD_FONT_MGR_FOR_PREVIEW_LINUX" ]
     deps += [
        "$ace_root/adapter/fangtian/ft_build:libace_engine",
        "//resource_management/frameworks/resmgr/ft_build:global_resmgr_linux",

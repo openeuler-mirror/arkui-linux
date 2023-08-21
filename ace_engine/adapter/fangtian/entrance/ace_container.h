@@ -284,10 +284,6 @@ private:
     //app bar to use
     bool installationFree_ = false;
     int32_t labelId_;
-    std::unique_ptr<fml::Thread> platformRunner_ = nullptr;
-    std::unique_ptr<fml::Thread> gpuRunner_ = nullptr;
-    std::unique_ptr<fml::Thread> uiRunner_ = nullptr;
-    std::unique_ptr<fml::Thread> ioRunner_ = nullptr;
     ACE_DISALLOW_COPY_AND_MOVE(AceContainer);
 };
 

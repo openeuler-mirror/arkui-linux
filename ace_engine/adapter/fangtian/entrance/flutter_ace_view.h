@@ -19,6 +19,11 @@
 
 #include <memory>
 
+#include "flutter/common/settings.h"
+#include "flutter/lib/ui/compositing/scene.h"
+#include "flutter/lib/ui/compositing/scene_builder.h"
+#include "flutter/shell/platform/ohos/ohos_shell_holder.h"
+
 #include "adapter/preview/entrance/ace_resource_register.h"
 #include "base/utils/noncopyable.h"
 #include "core/common/ace_view.h"
@@ -41,6 +46,15 @@ public:
     void RegisterDragEventCallback(DragEventCallBack&& callback) override {}
 
     void Launch() override;
+
+    static FlutterAceView* CreateView(
+        int32_t instanceId, bool useCurrentEventRunner = false, bool usePlatformThread = false);
+    static void SurfaceCreated(FlutterAceView* view, OHOS::sptr<OHOS::Rosen::Window> window);
+    void SetShellHolder(std::unique_ptr<flutter::OhosShellHolder> holder);
+    flutter::OhosShellHolder* GetShellHolder() const
+    {
+        return shell_holder_.get();
+    }
 
     int32_t GetInstanceId() const override
     {
@@ -157,6 +171,7 @@ private:
     int32_t instanceId_ = 0;
     RefPtr<PlatformResRegister> resRegister_ = Referenced::MakeRefPtr<AceResourceRegister>();
 
+    std::unique_ptr<flutter::OhosShellHolder> shell_holder_;
     TouchEventCallback touchEventCallback_;
     MouseEventCallback mouseEventCallback_;
     AxisEventCallback axisEventCallback_;

@@ -68,11 +68,6 @@ const char UNICODE_SETTING_TAG[] = "unicodeSetting";
 const char LOCALE_DIR_LTR[] = "ltr";
 const char LOCALE_DIR_RTL[] = "rtl";
 const char LOCALE_KEY[] = "locale";
-const std::string LABEL = "FT_ACE_CONTAINER";
-const std::string PLATFORMRUNNER = "PLATFORMRUNNER";
-const std::string GPURUNNER = "GPURUNNER";
-const std::string UIRUNNER = "UIRUNNER";
-const std::string IORUNNER = "IORUNNER";
 } // namespace
 
 std::once_flag AceContainer::onceFlag_;
@@ -82,21 +77,12 @@ AceContainer::AceContainer(int32_t instanceId, FrontendType type, RefPtr<Context
 {
     ThemeConstants::InitDeviceType();
 
-    //auto state = flutter::UIDartState::Current()->GetStateById(instanceId);
-    //auto taskExecutor = Referenced::MakeRefPtr<FlutterTaskExecutor>(state->GetTaskRunners());
-    //if (type_ != FrontendType::DECLARATIVE_JS && type_ != FrontendType::ETS_CARD) {
-    //    taskExecutor->InitJsThread();
-    //}
+    auto state = flutter::UIDartState::Current()->GetStateById(instanceId);
+    auto taskExecutor = Referenced::MakeRefPtr<FlutterTaskExecutor>(state->GetTaskRunners());
+    if (type_ != FrontendType::DECLARATIVE_JS && type_ != FrontendType::ETS_CARD) {
+       taskExecutor->InitJsThread();
+    }
 
-    auto taskExecutor = Referenced::MakeRefPtr<FlutterTaskExecutor>();
-    taskExecutor->InitPlatformThread(false);
-    platformRunner_ = std::make_unique<fml::Thread>(PLATFORMRUNNER);
-    gpuRunner_ = std::make_unique<fml::Thread>(GPURUNNER);
-    uiRunner_ = std::make_unique<fml::Thread>(UIRUNNER);
-    ioRunner_ = std::make_unique<fml::Thread>(IORUNNER);
-    flutter::TaskRunners taskRunner(LABEL, platformRunner_->GetTaskRunner(), gpuRunner_->GetTaskRunner(),
-        uiRunner_->GetTaskRunner(), ioRunner_->GetTaskRunner());
-    taskExecutor->InitOtherThreads(taskRunner);
     taskExecutor_ = taskExecutor;
 }
 
@@ -813,7 +799,7 @@ void AceContainer::AttachView(std::unique_ptr<Window> window, RSAceView* view, d
     auto instanceId = aceView_->GetInstanceId();
 
     //auto state = flutter::UIDartState::Current()->GetStateById(instanceId);
-    ACE_DCHECK(state != nullptr);
+    // ACE_DCHECK(state != nullptr);
     auto rsTaskExecutor = AceType::DynamicCast<FlutterTaskExecutor>(taskExecutor_);
     //rsTaskExecutor->InitOtherThreads(state->GetTaskRunners());
     if (type_ == FrontendType::DECLARATIVE_JS || type_ == FrontendType::ETS_CARD) {

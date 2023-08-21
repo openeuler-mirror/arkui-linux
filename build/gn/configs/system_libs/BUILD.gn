@@ -133,6 +133,12 @@ config("glfw_config") {
   libs = ["glfw"]
 }
 
+config("ftsurface_config") {
+  visibility = [ ":*" ]
+  include_dirs = [ "/usr/include/ftsurface" ]
+  libs = [""]
+}
+
 config("ft_engine_config") {
   visibility = [ ":*" ]
   include_dirs = [
@@ -284,6 +290,10 @@ group("ft_engine") {
     ":image",
   ]
   public_configs = [ ":ft_engine_config" ]
+}
+
+group("ftsurface") {
+  public_configs = [ ":ftsurface_config" ]
 }
 
 # group("flutter") {
