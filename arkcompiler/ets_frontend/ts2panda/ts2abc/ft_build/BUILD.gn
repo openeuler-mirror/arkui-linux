@@ -26,6 +26,9 @@ config("ts2abc_config") {
   if (enable_bytecode_optimizer) {
     defines = [ "ENABLE_BYTECODE_OPT" ]
   }
+  if (ft_disable_assert) {
+    defines += [ "FT_DISABLE_ASSERT" ]
+  }
 
   configs = [
     "$ark_root/ft_build:ark_config",
