@@ -22,6 +22,7 @@
 #include "glfw_render_context.h"
 #include "adapter/fangtian/entrance/ace_run_args.h"
 #include "adapter/fangtian/entrance/rs_ace_view.h"
+#include "adapter/fangtian/entrance/flutter_ace_view.h"
 #include "base/utils/macros.h"
 #include "core/event/key_event.h"
 #include "core/event/touch_event.h"
@@ -77,6 +78,7 @@ public:
     }
 
 private:
+    FlutterAceView* flutterView_ = nullptr;
     void RunEventLoop();
 
     void SetConfigChanges(const std::string& configChanges);

@@ -113,6 +113,9 @@ AceAbility::AceAbility(const AceRunArgs& runArgs) : runArgs_(runArgs)
         LOGI("Initialize for current process.");
         Container::UpdateCurrent(INSTANCE_ID_PLATFORM);
     });
+        
+    flutterView_ = Platform::FlutterAceView::CreateView(ACE_INSTANCE_ID);
+    CHECK_NULL_VOID(flutterView_);
 
     if (runArgs_.aceVersion == AceVersion::ACE_1_0) {
         if (runArgs_.formsEnabled) {
@@ -207,6 +210,9 @@ std::unique_ptr<AceAbility> AceAbility::CreateInstance(AceRunArgs& runArgs)
 
 void AceAbility::InitEnv()
 {
+    CHECK_NULL_VOID(controller_);
+    CHECK_NULL_VOID(flutterView_);
+    Platform::FlutterAceView::SurfaceCreated(flutterView_, controller_->GetWindow());
 #ifdef INIT_ICU_DATA_PATH
     std::string icuPath = ".";
     u_setDataDirectory(icuPath.c_str());

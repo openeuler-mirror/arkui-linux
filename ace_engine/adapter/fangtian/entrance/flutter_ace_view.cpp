@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-#include "adapter/preview/entrance/flutter_ace_view.h"
+#include "adapter/fangtian/entrance/flutter_ace_view.h"
 
 #include "base/log/dump_log.h"
 #include "base/log/event_report.h"
@@ -27,6 +27,10 @@
 #include "core/event/touch_event.h"
 #include "core/image/image_cache.h"
 //#include "core/pipeline/layers/flutter_scene_builder.h"
+
+#include "flutter/fml/synchronization/waitable_event.h"
+#include "flutter/shell/common/shell_io_manager.h"
+#include "flutter/shell/gpu/gpu_surface_gl_delegate.h"
 
 namespace OHOS::Ace::Platform {
 
@@ -136,5 +140,58 @@ std::unique_ptr<PlatformWindow> FlutterAceView::GetPlatformWindow()
 const void* FlutterAceView::GetNativeWindowById(uint64_t textureId)
 {
     return nullptr;
+}
+
+void FlutterAceView::SetShellHolder(std::unique_ptr<flutter::OhosShellHolder> holder)
+{
+    shell_holder_ = std::move(holder);
+}
+
+FlutterAceView* FlutterAceView::CreateView(int32_t instanceId, bool useCurrentEventRunner, bool usePlatformThread)
+{
+    FlutterAceView* aceSurface = new Platform::FlutterAceView(instanceId);
+    if (aceSurface != nullptr) {
+        aceSurface->IncRefCount();
+    }
+    flutter::Settings settings;
+    settings.instanceId = instanceId;
+    settings.platform = flutter::AcePlatform::ACE_PLATFORM_OHOS;
+    settings.enable_software_rendering = true;
+#ifdef ENABLE_ROSEN_BACKEND
+    settings.use_system_render_thread = SystemProperties::GetRosenBackendEnabled();
+#endif
+    settings.platform_as_ui_thread = usePlatformThread;
+    settings.use_current_event_runner = useCurrentEventRunner;
+    LOGD("software render: %{public}s ", settings.enable_software_rendering ? "true" : "false");
+    LOGD("use platform as ui thread: %{public}s", settings.platform_as_ui_thread ? "true" : "false");
+    settings.idle_notification_callback = [instanceId](int64_t deadline) {
+        ContainerScope scope(instanceId);
+        auto container = Container::Current();
+        CHECK_NULL_VOID_NOLOG(container);
+        auto context = container->GetPipelineContext();
+        CHECK_NULL_VOID_NOLOG(context);
+        context->GetTaskExecutor()->PostTask(
+            [context, deadline]() { context->OnIdle(deadline); }, TaskExecutor::TaskType::UI);
+    };
+    auto shell_holder = std::make_unique<flutter::OhosShellHolder>(settings, false);
+    if (aceSurface != nullptr) {
+        aceSurface->SetShellHolder(std::move(shell_holder));
+    }
+    return aceSurface;
+}
+
+void FlutterAceView::SurfaceCreated(FlutterAceView* view, OHOS::sptr<OHOS::Rosen::Window> window)
+{
+    CHECK_NULL_VOID(window);
+    CHECK_NULL_VOID(view);
+    LOGD(">>> FlutterAceView::SurfaceCreated, pWnd:%{public}p", &(*window));
+    auto platformView = view->GetShellHolder()->GetPlatformView();
+    LOGD("FlutterAceView::SurfaceCreated, GetPlatformView");
+    if (platformView && !SystemProperties::GetRosenBackendEnabled()) {
+        LOGD("FlutterAceView::SurfaceCreated, call NotifyCreated");
+        platformView->NotifyCreated(window);
+    }
+
+    LOGD("<<< FlutterAceView::SurfaceCreated, end");
 }
 } // namespace OHOS::Ace::Platform
