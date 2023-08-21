@@ -56,7 +56,7 @@
 
 #if !defined(USE_EXTERNAL_V8_SNAPSHOT)
 extern const char _binary_strip_native_min_js_bin_start[];
-extern const char _binary_strip_native_min_js_bin_end[];
+extern const char *_binary_strip_native_min_js_bin_end;
 #endif
 
 namespace OHOS::Ace::Framework {
