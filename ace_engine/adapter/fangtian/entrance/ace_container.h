@@ -255,7 +255,7 @@ public:
 
     void SetWindow(sptr<OHOS::Rosen::Window> window)
     {
-        ftWindow_ = window;
+        window_ = window;
     }
 
 private:
