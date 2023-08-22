@@ -39,6 +39,7 @@ constexpr char FILE_NAME[] = "InspectorTree.txt";
 constexpr char ACE_VERSION_2[] = "2.0";
 constexpr char MODEL_STAGE[] = "stage";
 constexpr char MAX_ARGS_COUNT = 2;
+constexpr size_t MAX_LEN_PID_NAME = 15;
 #ifdef WINDOWS_PLATFORM
 constexpr char DELIMITER[] = "\\";
 constexpr char ASSET_PATH_SHARE_STAGE[] = "resources\\base\\profile";
@@ -52,6 +53,8 @@ auto&& renderCallback = [](const void*, const size_t bufferSize, const int32_t w
 };
 
 } // namespace
+extern char **environ;
+void SetProcName(int argc, const char* argv[]);
 bool GetAceRunArgs(int argc, const char* argv[], OHOS::Ace::Platform::AceRunArgs &args);
 
 int main(int argc, const char* argv[])
@@ -62,6 +65,7 @@ int main(int argc, const char* argv[])
         std::cout << "Please run in the following format: ./hap_executor packagepath" << std::endl;
         return 0;
     }
+    SetProcName(argc, argv);
 
     auto ability = OHOS::Ace::Platform::AceAbility::CreateInstance(args);
     if (!ability) {
@@ -189,4 +193,78 @@ bool GetAceRunArgs(int argc, const char* argv[], OHOS::Ace::Platform::AceRunArgs
     std::cout << "AppWidth : " << width << "AppHeight : " << height << std::endl;
 
     return true;
+}
+
+std::string Trim(std::string &str)
+{
+    if (str.empty()) {
+        return str;
+    }
+    str.erase(0, str.find_first_not_of(" "));
+    str.erase(str.find_last_not_of(" ") + 1);
+    return str;
+}
+
+std::vector<std::string> SplitStr(std::string str, std::string spSymbol)
+{
+    std::vector<std::string> result;
+    std::string::size_type i = 0;
+    Trim(str);
+    std::string::size_type found = str.find(spSymbol);
+    if (found != std::string::npos) {
+        while (found != std::string::npos) {
+            std::string value = str.substr(i, found - i);
+            Trim(value);
+            if (!value.empty()) {
+                result.push_back(value);
+            }
+            i = found + spSymbol.size();
+            found = str.find(spSymbol, i);
+        }
+        std::string lastv = str.substr(i, str.size() - i);
+        Trim(lastv);
+        if (!lastv.empty()) {
+            result.push_back(lastv);
+        }
+    }
+    return result;
+}
+
+void SetProcName(int argc, const char* argv[])
+{
+    if (argc < 2) { // ./hap_executor + package path + procname
+        return;
+    }
+
+    std::string procName; 
+    if (argc >= 3) {
+        procName = argv[2];
+    } else {
+        std::string happath(argv[1]);
+        std::vector<std::string> strVector = SplitStr(happath, DELIMITER);
+        auto vectorSize = strVector.size();
+        if (vectorSize > 0) {
+            procName = strVector[vectorSize - 1];
+        } else {
+            std::cout << "get name failed!" << std::endl;
+            return;
+        }
+    }
+    std::cout << "get procname: "<< procName << std::endl;
+
+    if (procName.size() > MAX_LEN_PID_NAME) {
+        procName = procName.substr(0, MAX_LEN_PID_NAME);
+    }
+    
+    int32_t ret = prctl(PR_SET_NAME, procName.c_str());
+    if (ret != 0) {
+        std::cout << "call the system API prctl failed!" << std::endl;
+        return;
+    }
+
+    memset(const_cast<char *>(argv[0]), 0, environ[0] - argv[0]);
+    std::sprintf(const_cast<char *>(argv[0]), "%s", procName.c_str());
+
+    std::cout << "set procname: "<< procName << std::endl;
+    return;
 }
