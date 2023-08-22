@@ -354,7 +354,7 @@ bool NativeModuleManager::GetNativeModulePath(const char* moduleName, const char
     const char* zfix = ".z";
 #elif defined(LINUX_PLATFORM)
     const char* soPostfix = ".so";
-    const char* sysPrefix = "./module";
+    const char* sysPrefix = "/usr/lib64";
     const char* zfix = "";
 #else
     const char* soPostfix = ".so";
@@ -437,8 +437,8 @@ bool NativeModuleManager::GetNativeModulePath(const char* moduleName, const char
             }
         }
         if (!isAppModule || !IsExistedPath(path)) {
-            if (sprintf_s(nativeModulePath[0], pathLength, "%s/%s/lib%s%s%s",
-                prefix, dupModuleName, afterDot, zfix, soPostfix) == -1) {
+            if (sprintf_s(nativeModulePath[0], pathLength, "%s/lib%s%s%s",
+                prefix, afterDot, zfix, soPostfix) == -1) {
                 return false;
             }
             if (sprintf_s(nativeModulePath[1], pathLength, "%s/%s/lib%s_napi%s%s",
