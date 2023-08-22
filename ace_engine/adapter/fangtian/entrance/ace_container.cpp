@@ -790,6 +790,13 @@ void AceContainer::SetView(RSAceView* view, double density, int32_t width, int32
     CHECK_NULL_VOID(taskExecutor);
     std::unique_ptr<Window> window = std::make_unique<NG::RosenWindow>(ftWindow, taskExecutor, view->GetInstanceId());
     container->AttachView(std::move(window), view, density, width, height, onRender);
+    taskExecutor->PostSyncTask(
+        [container]() {
+            auto pipelineContext = container->GetPipelineContext();
+            CHECK_NULL_VOID(pipelineContext);
+            pipelineContext->ShowContainerTitle(true);
+        },
+        TaskExecutor::TaskType::UI);
 }
 
 void AceContainer::InitWindowCallback()
