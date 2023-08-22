@@ -435,14 +435,6 @@ void AceAbility::SurfaceChanged(
     runArgs_.deviceConfig.density = resolution;
     runArgs_.deviceWidth = width;
     runArgs_.deviceHeight = height;
-
-    context->GetTaskExecutor()->PostSyncTask(
-        [container]() {
-            auto pipelineContext = container->GetPipelineContext();
-            CHECK_NULL_VOID(pipelineContext);
-            pipelineContext->ShowContainerTitle(true);
-        },
-        TaskExecutor::TaskType::UI);
 }
 
 void AceAbility::ReplacePage(const std::string& url, const std::string& params)
