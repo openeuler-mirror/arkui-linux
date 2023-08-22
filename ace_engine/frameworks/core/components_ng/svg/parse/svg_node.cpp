@@ -182,11 +182,10 @@ bool SvgNode::OnCanvas(RSCanvas& canvas)
 {
     // drawing.h api 不完善，直接取用SkCanvas，后续要重写
     /* Fangtian TODO */
-    LOGW("SvgNode::OnCanvas not implemented.");
-    // auto rsCanvas = canvas.GetImpl<RSSkCanvas>();
-    // CHECK_NULL_RETURN_NOLOG(rsCanvas, false);
-    // skCanvas_ = rsCanvas->ExportSkCanvas();
-    // return skCanvas_ != nullptr;
+    auto rsCanvas = canvas.GetImpl<RSSkCanvas>();
+    CHECK_NULL_RETURN_NOLOG(rsCanvas, false);
+    skCanvas_ = rsCanvas->ExportSkCanvas();
+    return skCanvas_ != nullptr;
 }
 
 void SvgNode::OnClipPath(RSCanvas& canvas, const Size& viewPort)

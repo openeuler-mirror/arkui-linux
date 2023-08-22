@@ -179,6 +179,15 @@ OHOS::sptr<OHOS::Rosen::Window> GlfwRenderContext::GetWindow()
     return window_;
 }
 
+bool GlfwRenderContext::IsDecorEnable()
+{
+    if (window_ != nullptr) {
+        return window_->IsDecorEnable();
+    }
+
+    return false;
+}
+
 void GlfwRenderContext::OnMouseButton(const OnMouseButtonFunc &onMouseBotton)
 {
     onMouseBotton_ = onMouseBotton;
