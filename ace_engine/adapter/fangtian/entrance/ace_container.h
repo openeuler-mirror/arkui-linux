@@ -253,9 +253,15 @@ public:
         return it->second;
     }
 
+    void SetWindow(sptr<OHOS::Rosen::Window> window)
+    {
+        window_ = window;
+    }
+
 private:
     void InitializeFrontend();
     void InitializeCallback();
+    void InitWindowCallback();
 
     void AttachView(
         std::unique_ptr<Window> window, RSAceView* view, double density, int32_t width, int32_t height, SendRenderDataCallback onRender);
@@ -280,6 +286,7 @@ private:
     mutable std::mutex cardFrontMutex_;
     mutable std::mutex cardPipelineMutex_;
     RefPtr<Context> context_;
+    sptr<OHOS::Rosen::Window> window_;
 
     //app bar to use
     bool installationFree_ = false;

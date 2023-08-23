@@ -54,6 +54,7 @@ public:
     void SetWindowSize(int32_t width, int32_t height);
     void SetWindowTitle(const std::string &title);
     OHOS::sptr<OHOS::Rosen::Window> GetWindow();
+    bool IsDecorEnable();
 
     /* input event */
     void OnMouseButton(const OnMouseButtonFunc &onMouseBotton);
