@@ -785,10 +785,40 @@ void AceContainer::SetView(RSAceView* view, double density, int32_t width, int32
     CHECK_NULL_VOID(view);
     auto container = AceType::DynamicCast<AceContainer>(AceEngine::Get().GetContainer(view->GetInstanceId()));
     CHECK_NULL_VOID(container);
+    container->SetWindow(ftWindow);
     auto taskExecutor = container->GetTaskExecutor();
     CHECK_NULL_VOID(taskExecutor);
     std::unique_ptr<Window> window = std::make_unique<NG::RosenWindow>(ftWindow, taskExecutor, view->GetInstanceId());
     container->AttachView(std::move(window), view, density, width, height, onRender);
+    taskExecutor->PostSyncTask(
+        [container]() {
+            auto pipelineContext = container->GetPipelineContext();
+            CHECK_NULL_VOID(pipelineContext);
+            pipelineContext->ShowContainerTitle(true);
+        },
+        TaskExecutor::TaskType::UI);
+}
+
+void AceContainer::InitWindowCallback()
+{
+    LOGD("AceContainer InitWindowCallback");
+    if (windowModal_ == WindowModal::CONTAINER_MODAL && pipelineContext_) {
+        auto& windowManager = pipelineContext_->GetWindowManager();
+        windowManager->SetAppIconId(0x1000001); // 0x1000001 is icon's id
+        windowManager->SetWindowMinimizeCallBack([window = window_]() { window->Minimize(); });
+        windowManager->SetWindowMaximizeCallBack([window = window_]() { window->Maximize(); });
+        windowManager->SetWindowRecoverCallBack([window = window_]() { window->Recover(); });
+        windowManager->SetWindowCloseCallBack([window = window_]() { window->Close(); });
+        windowManager->SetWindowStartMoveCallBack([window = window_]() { window->StartMove(); });
+    }
+
+    pipelineContext_->SetGetWindowRectImpl([window = window_]() -> Rect {
+        Rect rect;
+        CHECK_NULL_RETURN_NOLOG(window, rect);
+        auto windowRect = window->GetRect();
+        rect.SetRect(windowRect.posX_, windowRect.posY_, windowRect.width_, windowRect.height_);
+        return rect;
+    });
 }
 
 void AceContainer::AttachView(std::unique_ptr<Window> window, RSAceView* view, double density, int32_t width,
@@ -829,6 +859,9 @@ void AceContainer::AttachView(std::unique_ptr<Window> window, RSAceView* view, d
     pipelineContext_->SetWindowModal(windowModal_);
     pipelineContext_->SetDrawDelegate(aceView_->GetDrawDelegate());
     pipelineContext_->SetIsJsCard(type_ == FrontendType::JS_CARD);
+
+    InitWindowCallback();
+
     if (installationFree_) {
         LOGD("installationFree:%{public}d, labelId:%{public}d", installationFree_, labelId_);
         pipelineContext_->SetInstallationFree(installationFree_);

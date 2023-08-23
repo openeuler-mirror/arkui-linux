@@ -113,7 +113,7 @@ AceAbility::AceAbility(const AceRunArgs& runArgs) : runArgs_(runArgs)
         LOGI("Initialize for current process.");
         Container::UpdateCurrent(INSTANCE_ID_PLATFORM);
     });
-        
+
     flutterView_ = Platform::FlutterAceView::CreateView(ACE_INSTANCE_ID);
     CHECK_NULL_VOID(flutterView_);
 
@@ -245,6 +245,12 @@ void AceAbility::InitEnv()
     }
     AceContainer::SetResourcesPathAndThemeStyle(ACE_INSTANCE_ID, runArgs_.systemResourcesPath,
         runArgs_.appResourcesPath, runArgs_.themeId, runArgs_.deviceConfig.colorMode);
+
+    auto controller = GetGlfwWindowController();
+    if (controller != nullptr && controller->IsDecorEnable()) {
+        LOGI("Container modal is enabled.");
+        container->SetWindowModal(WindowModal::CONTAINER_MODAL);
+    }
 
     auto view = new RSAceView(ACE_INSTANCE_ID);
     if (runArgs_.aceVersion == AceVersion::ACE_2_0) {
