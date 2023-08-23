@@ -776,9 +776,13 @@ source_set("libark_jsruntime_set") {
     sdk_libc_secshared_dep,
   ]
 
+  defines = []
+
   if (ft_disable_assert) {
-    defines = [ "FT_DISABLE_ASSERT" ]
+    defines += [ "FT_DISABLE_ASSERT" ]
   }
+
+  defines += [ "FT_BUILD" ]
 
   if (is_ohos && is_standard_system) {
     defines = [ "ENABLE_EXCEPTION_BACKTRACE" ]
