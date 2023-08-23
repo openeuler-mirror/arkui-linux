@@ -132,7 +132,7 @@ ArkNativeEngineImpl::ArkNativeEngineImpl(
                         moduleManager->LoadNativeModule(moduleName->ToString().c_str(), nullptr, isAppModule, false,
                             true);
                 }
-                    
+
                 Local<JSValueRef> exports(JSValueRef::Undefined(ecmaVm));
                 if (module != nullptr) {
                     auto it = engineImpl->loadedModules_.find(module);
@@ -236,13 +236,8 @@ ArkNativeEngineImpl::ArkNativeEngineImpl(
             requireData);
 
     Local<ObjectRef> global = panda::JSNApi::GetGlobalObject(vm);
-#if !defined(PREVIEW)
     Local<StringRef> requireName = StringRef::NewFromUtf8(vm, "requireNapi");
     global->Set(vm, requireName, requireNapi);
-#else
-    Local<StringRef> requireNapiPreview = StringRef::NewFromUtf8(vm, "requireNapiPreview");
-    global->Set(vm, requireNapiPreview, requireNapi);
-#endif
     global->Set(vm, requireInternalName, requireInternal);
     JSNApi::SetNativePtrGetter(vm, reinterpret_cast<void*>(ArkNativeFunction::GetNativePtrCallBack));
     // need to call init of base class.
@@ -691,7 +686,7 @@ NativeValue* ArkNativeEngineImpl::RunScriptBuffer(
     } else {
         ret = panda::JSNApi::ExecuteModuleBuffer(vm_, buffer.data(), buffer.size(), path);
     }
-    
+
     if (panda::JSNApi::HasPendingException(vm_)) {
         HandleUncaughtException(engine);
         return nullptr;
