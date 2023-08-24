@@ -106,6 +106,22 @@ std::string GetCustomAssetPath(std::string assetPath)
 
 } // namespace
 
+void AceWindowListener::OnSizeChange(OHOS::Rosen::Rect rect, OHOS::Rosen::WindowSizeChangeReason reason)
+{
+    auto callbackOwner = callbackOwner_.lock();
+    if (callbackOwner != nullptr) {
+        callbackOwner->OnSizeChange(rect, reason);
+    }
+}
+
+void AceWindowListener::OnModeChange(OHOS::Rosen::WindowMode mode)
+{
+    auto callbackOwner = callbackOwner_.lock();
+    if (callbackOwner != nullptr) {
+        callbackOwner->OnModeChange(mode);
+    }
+}
+
 AceAbility::AceAbility(const AceRunArgs& runArgs) : runArgs_(runArgs)
 {
     static std::once_flag onceFlag;
@@ -183,7 +199,7 @@ inline void DumpAceRunArgs(const AceRunArgs& runArgs)
 }
 } // namespace
 
-std::unique_ptr<AceAbility> AceAbility::CreateInstance(AceRunArgs& runArgs)
+std::shared_ptr<AceAbility> AceAbility::CreateInstance(AceRunArgs& runArgs)
 {
     DumpAceRunArgs(runArgs);
     LOGI("Start create AceAbility instance");
@@ -203,8 +219,15 @@ std::unique_ptr<AceAbility> AceAbility::CreateInstance(AceRunArgs& runArgs)
     //    runArgs.deviceWidth, runArgs.deviceHeight, runArgs.windowTitle.c_str(), runArgs.onRender);
     //EventDispatcher::GetInstance().SetGlfwWindowController(controller);
     EventDispatcher::GetInstance().Initialize();
-    auto aceAbility = std::make_unique<AceAbility>(runArgs);
+    auto aceAbility = std::make_shared<AceAbility>(runArgs);
     aceAbility->SetGlfwWindowController(controller);
+
+    OHOS::sptr<AceWindowListener> aceWindowListener = new AceWindowListener(aceAbility);
+    auto window = controller->GetWindow();
+    if (window != nullptr) {
+        window->RegisterWindowChangeListener(aceWindowListener);
+    }
+
     return aceAbility;
 }
 
@@ -435,6 +458,24 @@ void AceAbility::SurfaceChanged(
     runArgs_.deviceConfig.density = resolution;
     runArgs_.deviceWidth = width;
     runArgs_.deviceHeight = height;
+}
+
+void AceAbility::OnSizeChange(const OHOS::Rosen::Rect& rect, OHOS::Rosen::WindowSizeChangeReason reason)
+{
+    LOGI("width: %{public}u, height: %{public}u, left: %{public}d, top: %{public}d",
+        rect.width_, rect.height_, rect.posX_, rect.posY_);
+    auto container = AceContainer::GetContainerInstance(ACE_INSTANCE_ID);
+    CHECK_NULL_VOID(container);
+    auto viewPtr = container->GetAceView();
+    CHECK_NULL_VOID(viewPtr);
+    viewPtr->NotifySurfaceChanged(rect.width_, rect.height_);
+    CHECK_NULL_VOID(controller_);
+    controller_->UpdateOffset(rect.posX_, rect.posY_);
+}
+
+void AceAbility::OnModeChange(OHOS::Rosen::WindowMode mode)
+{
+    LOGI("OnModeChange, window mode is %{public}d", mode);
 }
 
 void AceAbility::ReplacePage(const std::string& url, const std::string& params)

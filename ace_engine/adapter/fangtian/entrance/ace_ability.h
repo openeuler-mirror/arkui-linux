@@ -53,14 +53,26 @@ struct SystemParams {
 
 using GlfwController = std::shared_ptr<FT::Rosen::GlfwRenderContext>;
 
+class AceAbility;
+class AceWindowListener : public OHOS::Rosen::IWindowChangeListener {
+public:
+    AceWindowListener(std::weak_ptr<AceAbility> owner) : callbackOwner_(owner) {}
+    ~AceWindowListener() = default;
+    void OnSizeChange(OHOS::Rosen::Rect rect, OHOS::Rosen::WindowSizeChangeReason reason) override;
+    void OnModeChange(OHOS::Rosen::WindowMode mode) override;
+
+private:
+    std::weak_ptr<AceAbility> callbackOwner_;
+};
+
 class ACE_FORCE_EXPORT_WITH_PREVIEW AceAbility {
 public:
     explicit AceAbility(const AceRunArgs& runArgs);
     ~AceAbility();
 
-    // Be called in Previewer frontend thread, which is not ACE platform thread.    
-    static std::unique_ptr<AceAbility> CreateInstance(AceRunArgs& runArgs);    
-    void InitEnv();    
+    // Be called in Previewer frontend thread, which is not ACE platform thread.
+    static std::shared_ptr<AceAbility> CreateInstance(AceRunArgs& runArgs);
+    void InitEnv();
     void Start();
     static void Stop();
     void OnConfigurationChanged(const DeviceConfig& newConfig);
@@ -68,6 +80,8 @@ public:
         const DeviceOrientation& orientation, const double& resolution, int32_t& width, int32_t& height);
     void ReplacePage(const std::string& url, const std::string& params);
     void LoadDocument(const std::string& url, const std::string& componentName, SystemParams& systemParams);
+    void OnSizeChange(const OHOS::Rosen::Rect& rect, OHOS::Rosen::WindowSizeChangeReason reason);
+    void OnModeChange(OHOS::Rosen::WindowMode mode);
 
     std::string GetJSONTree();
     std::string GetDefaultJSONTree();
@@ -76,6 +90,8 @@ public:
     {
         return controller_;
     }
+
+    friend class AceWindowListener;
 
 private:
     FlutterAceView* flutterView_ = nullptr;
