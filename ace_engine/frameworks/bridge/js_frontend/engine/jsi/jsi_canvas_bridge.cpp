@@ -35,7 +35,7 @@ constexpr char CANVAS_TYPE_WEBGL[] = "webgl";
 constexpr char CANVAS_TYPE_WEBGL2[] = "webgl2";
 constexpr char CANVAS_WEBGL_SO[] = "webglnapi";
 
-#if !defined(PREVIEW)
+// #if !defined(PREVIEW)
 RefPtr<PixelMap> CreatePixelMapFromNapiValue(const shared_ptr<JsRuntime>& runtime, shared_ptr<JsValue> jsValue)
 {
     auto engine = static_cast<JsiEngineInstance*>(runtime->GetEmbedderData());
@@ -77,7 +77,7 @@ RefPtr<PixelMap> CreatePixelMapFromNapiValue(const shared_ptr<JsRuntime>& runtim
     }
     return PixelMap::CreatePixelMap(pixmapPtrAddr);
 }
-#endif
+// #endif
 
 template<typename T>
 inline T ConvertStrToEnum(const char* key, const LinearMapNode<T>* map, size_t length, T defaultValue)

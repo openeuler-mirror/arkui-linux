@@ -266,9 +266,7 @@ public:
     }
 
     virtual void RunNativeEngineLoop();
-#if !defined(PREVIEW)
     static PixelMapNapiEntry GetPixelMapNapiEntry();
-#endif
 
 #if defined(PREVIEW)
     virtual RefPtr<Component> GetNewComponentWithJsCode(const std::string& jsCode, const std::string& viewID)

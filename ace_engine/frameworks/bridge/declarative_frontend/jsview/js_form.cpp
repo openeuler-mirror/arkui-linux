@@ -61,7 +61,9 @@ void JSForm::Create(const JSCallbackInfo& info)
     }
     fomInfo.temporary = temporary->ToBoolean();
     if (!wantValue->IsNull() && wantValue->IsObject()) {
+#ifdef WANT_WRAP
         fomInfo.wantWrap = CreateWantWrapFromNapiValue(wantValue);
+#endif
     }
 
     if (Container::IsCurrentUseNewPipeline()) {
