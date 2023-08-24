@@ -80,7 +80,7 @@ static int32_t globalNodeId = 100000;
 std::map<const std::string, std::string> JsiEngineInstance::dataMap_;
 RefPtr<Clipboard> clipboard;
 
-#if !defined(PREVIEW)
+// #if !defined(PREVIEW)
 RefPtr<PixelMap> CreatePixelMapFromNapiValue(const shared_ptr<JsRuntime>& runtime, shared_ptr<JsValue> jsValue)
 {
     auto engine = static_cast<JsiEngineInstance*>(runtime->GetEmbedderData());
@@ -122,7 +122,7 @@ RefPtr<PixelMap> CreatePixelMapFromNapiValue(const shared_ptr<JsRuntime>& runtim
     }
     return PixelMap::CreatePixelMap(pixmapPtrAddr);
 }
-#endif
+// #endif
 
 RefPtr<JsAcePage> GetStagingPage(const shared_ptr<JsRuntime>& runtime)
 {

@@ -91,6 +91,8 @@ template("js_engine_ark") {
     #if (defined(config.build_for_preview) && config.build_for_preview) {
       deps += [
         ":gen_obj_src_abc_strip_native_min",
+          "//build/gn/configs/system_libs:image",
+          "//third_party/ft_multimedia/image_framework/interfaces/kits/js/common/ft_build:image"
         #"$napi/native_engine/impl/ark:ace_napi_impl_ark",
       ]
     #} else {
