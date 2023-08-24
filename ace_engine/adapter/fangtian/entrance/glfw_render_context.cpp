@@ -188,6 +188,12 @@ bool GlfwRenderContext::IsDecorEnable()
     return false;
 }
 
+void GlfwRenderContext::UpdateOffset(int32_t posX, int32_t posY)
+{
+    posX_ = posX;
+    posY_ = posY;
+}
+
 void GlfwRenderContext::OnMouseButton(const OnMouseButtonFunc &onMouseBotton)
 {
     onMouseBotton_ = onMouseBotton;
@@ -218,7 +224,7 @@ void GlfwRenderContext::OnMouseButton(int button, int action, int mods)
 void GlfwRenderContext::OnCursorPos(double x, double y)
 {
     if (onCursorPos_ != nullptr) {
-        onCursorPos_(x, y);
+        onCursorPos_(x - posX_, y - posY_);
     }
 }
 
