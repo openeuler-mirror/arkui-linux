@@ -15,6 +15,7 @@ import("//build/gn/fangtian.gni")
 import("//ace_engine/ft_build/ace_config.gni")
 import("//ace_engine/ft_build/build/ace_gen_obj.gni")
 import("//ace_engine/ft_build/build/uicast.gni")
+import("//config.gni")
 
 # declarative frontend source
 template("declarative_frontend") {
@@ -427,10 +428,7 @@ template("declarative_js_engine") {
       } else {
         deps += [
           "//build/gn/configs/system_libs:image",
-          "//third_party/ft_multimedia/image_framework/interfaces/kits/js/common/ft_build:image"
-
-          # "multimedia_image_framework:image",
-          # "multimedia_image_framework:image_native",
+          "${image_napi_root}/image_framework/interfaces/kits/js/common/ft_build:image"
         ]
       }
     }
