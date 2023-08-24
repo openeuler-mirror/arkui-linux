@@ -24,7 +24,7 @@
 #include "native_engine/native_engine.h"
 #endif
 
-#if !defined(PREVIEW)
+// #if !defined(PREVIEW)
 namespace OHOS::Rosen {
 class RSNode;
 }
@@ -36,7 +36,9 @@ class WantWrap;
 namespace OHOS::Ace::Framework {
     RefPtr<PixelMap> CreatePixelMapFromNapiValue(JSRef<JSVal> obj);
     const std::shared_ptr<Rosen::RSNode> CreateRSNodeFromNapiValue(JSRef<JSVal> obj);
+#ifdef WANT_WRAP
     RefPtr<OHOS::Ace::WantWrap> CreateWantWrapFromNapiValue(JSRef<JSVal> obj);
-} // namespace OHOS::Ace::Framework
 #endif
+} // namespace OHOS::Ace::Framework
+// #endif
 #endif // FRAMEWORKS_BRIDGE_DECLARATIVE_FRONTEND_JS_VIEW_JS_UTILS_H
