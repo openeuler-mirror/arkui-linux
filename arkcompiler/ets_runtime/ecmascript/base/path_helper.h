@@ -151,7 +151,9 @@ public:
                 entryPoint = inputFileName.substr(PREFIX_BUNDLE_LEN);
                 outFileName = ParseUrl(vm, entryPoint);
             } else {
-#if !defined(PANDA_TARGET_WINDOWS) && !defined(PANDA_TARGET_MACOS)
+#ifdef FT_BUILD
+                entryPoint = vm->GetBundleName() + "/" + vm->GetModuleName() + MODULE_DEFAULE_ETS + inputFileName;
+#elif !defined(PANDA_TARGET_WINDOWS) && !defined(PANDA_TARGET_MACOS)
                 entryPoint = vm->GetBundleName() + "/" +  inputFileName;
 #else
                 entryPoint = vm->GetBundleName() + "/" + vm->GetModuleName() + MODULE_DEFAULE_ETS + inputFileName;
