@@ -54,7 +54,7 @@ ft_executable("hap_executor") {
       "//napi/ft_build:ace_napi_ark",
       "//napi/ft_build:ace_container_scope",
       "//arkcompiler/ets_runtime/ft_build:libark_jsruntime",
-      "//third_party/flutter/glfw:glfw",
+      "//build/gn/configs/system_libs:glfw",
       "//build/gn/configs/system_libs:ft_engine",
       "//build/gn/configs/system_libs:c_utils",
       "//build/gn/configs/system_libs:harfbuzz",
