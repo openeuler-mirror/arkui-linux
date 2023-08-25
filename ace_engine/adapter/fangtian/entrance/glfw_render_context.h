@@ -55,6 +55,7 @@ public:
     void SetWindowTitle(const std::string &title);
     OHOS::sptr<OHOS::Rosen::Window> GetWindow();
     bool IsDecorEnable();
+    void UpdateOffset(int32_t posX, int32_t posY);
 
     /* input event */
     void OnMouseButton(const OnMouseButtonFunc &onMouseBotton);
@@ -75,6 +76,8 @@ private:
     OnCursorPosFunc onCursorPos_ = nullptr;
     OnKeyFunc onKey_ = nullptr;
     OnCharFunc onChar_ = nullptr;
+    int32_t posX_ = 0;
+    int32_t posY_ = 0;
 };
 }
 #endif // GLFW_RENDER_CONTEXT_EXPORT_GLFW_RENDER_CONTEXT
