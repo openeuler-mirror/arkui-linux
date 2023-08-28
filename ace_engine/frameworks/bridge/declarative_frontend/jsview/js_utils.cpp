@@ -17,7 +17,9 @@
 
 #include "scope_manager/native_scope_manager.h"
 
+#if !defined(PREVIEW) || defined(_FANGTIAN)
 #include <dlfcn.h>
+#endif
 
 #include "base/image/pixel_map.h"
 #include "base/log/ace_trace.h"
@@ -28,6 +30,7 @@
 #include "frameworks/bridge/js_frontend/engine/common/js_engine.h"
 
 namespace OHOS::Ace::Framework {
+#if !defined(PREVIEW) || defined(_FANGTIAN)
 class ScopeRAII {
 public:
     explicit ScopeRAII(NativeScopeManager* manager) : manager_(manager)
@@ -161,5 +164,6 @@ RefPtr<OHOS::Ace::WantWrap> CreateWantWrapFromNapiValue(JSRef<JSVal> obj)
 
     return WantWrap::CreateWantWrap(reinterpret_cast<void*>(nativeEngine), reinterpret_cast<void*>(nativeValue));
 }
+#endif
 #endif
 } // namespace OHOS::Ace::Framework
