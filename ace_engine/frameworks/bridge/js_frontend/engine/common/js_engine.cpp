@@ -12,7 +12,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#if !defined(PREVIEW) || defined(_FANGTIAN)
 #include <dlfcn.h>
+#endif
 
 #include "frameworks/bridge/js_frontend/engine/common/js_engine.h"
 
@@ -29,6 +31,7 @@ void JsEngine::RunNativeEngineLoop()
     }
 }
 
+#if !defined(PREVIEW) || defined(_FANGTIAN)
 PixelMapNapiEntry JsEngine::GetPixelMapNapiEntry()
 {
     static PixelMapNapiEntry pixelMapNapiEntry_ = nullptr;
@@ -48,5 +51,5 @@ PixelMapNapiEntry JsEngine::GetPixelMapNapiEntry()
     }
     return pixelMapNapiEntry_;
 }
-
+#endif
 } // namespace OHOS::Ace::Framework
