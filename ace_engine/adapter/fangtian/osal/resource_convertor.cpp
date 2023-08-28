@@ -30,6 +30,8 @@ Global::Resource::DeviceType ConvertDeviceTypeToGlobal(DeviceType type)
             return Global::Resource::DeviceType::DEVICE_CAR;
         case DeviceType::TABLET:
             return Global::Resource::DeviceType::DEVICE_TABLET;
+        case DeviceType::PC:
+            return Global::Resource::DeviceType::DEVICE_PAD;
         default:
             return Global::Resource::DeviceType::DEVICE_NOT_SET;
     }

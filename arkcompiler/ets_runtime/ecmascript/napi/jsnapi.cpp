@@ -197,6 +197,9 @@ EcmaVM *JSNApi::CreateJSVM(const RuntimeOption &option)
     runtimeOptions.SetEnableAOT(option.GetEnableAOT());
     runtimeOptions.SetEnablePGOProfiler(option.GetEnableProfile());
     runtimeOptions.SetPGOProfilerPath(option.GetProfileDir());
+#ifdef NO_FORCE_GC
+    runtimeOptions.SetEnableForceGC(false);
+#endif
 
     // Dfx
     runtimeOptions.SetLogLevel(option.GetLogLevel());
