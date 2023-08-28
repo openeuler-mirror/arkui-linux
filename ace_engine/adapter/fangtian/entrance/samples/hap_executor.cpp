@@ -168,7 +168,7 @@ bool GetAceRunArgs(int argc, const char* argv[], OHOS::Ace::Platform::AceRunArgs
     args.systemResourcesPath = systemResourcesPath;
     args.appResourcesPath = hapRealPath;
     args.deviceConfig.orientation = OHOS::Ace::DeviceOrientation::LANDSCAPE;
-    args.deviceConfig.deviceType = OHOS::Ace::DeviceType::PC;
+    args.deviceConfig.deviceType = OHOS::Ace::DeviceType::TABLET;
     args.windowTitle = "Demo";
     args.onRender = std::move(renderCallback);
 

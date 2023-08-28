@@ -270,8 +270,7 @@ RefPtr<DOMNode> DOMDocument::CreateNodeWithId(const std::string& tag, NodeId nod
 #ifndef WEARABLE_PRODUCT
     } else {
         if (SystemProperties::GetDeviceType() == DeviceType::PHONE ||
-            SystemProperties::GetDeviceType() == DeviceType::TABLET ||
-            SystemProperties::GetDeviceType() == DeviceType::PC) {
+            SystemProperties::GetDeviceType() == DeviceType::TABLET) {
             creatorIndex = BinarySearchFindIndex(phoneNodeCreators, ArraySize(phoneNodeCreators), tag.c_str());
             if (creatorIndex >= 0) {
                 domNode = phoneNodeCreators[creatorIndex].value(nodeId, tag, itemIndex);
