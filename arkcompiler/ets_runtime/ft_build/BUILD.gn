@@ -177,7 +177,7 @@ config("ark_jsruntime_public_config") {
     sdk_libc_secshared_config,
   ]
 
-  defines = ["NO_FORCE_GC"]
+  defines = []
   if (!is_mingw && !is_mac && target_os != "android" && target_os != "ios") {
     defines += [
       "ECMASCRIPT_SUPPORT_CPUPROFILER",

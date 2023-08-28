@@ -30,7 +30,6 @@ const char PROPERTY_DEVICE_TYPE_TV[] = "tv";
 const char PROPERTY_DEVICE_TYPE_TABLET[] = "tablet";
 const char PROPERTY_DEVICE_TYPE_WEARABLE[] = "wearable";
 const char PROPERTY_DEVICE_TYPE_CAR[] = "car";
-const char PROPERTY_DEVICE_TYPE_PC[] = "pc";
 
 static constexpr char UNDEFINED_PARAM[] = "undefined parameter";
 
@@ -45,7 +44,7 @@ void Swap(int32_t& deviceWidth, int32_t& deviceHeight)
 
 void SystemProperties::InitDeviceType(DeviceType type)
 {
-    // Properties: "phone", "tv", "tablet", "watch", "car", "pc"
+    // Properties: "phone", "tv", "tablet", "watch", "car"
     if (type == DeviceType::TV) {
         deviceType_ = DeviceType::TV;
         paramDeviceType_ = PROPERTY_DEVICE_TYPE_TV;
@@ -58,9 +57,6 @@ void SystemProperties::InitDeviceType(DeviceType type)
     } else if (type == DeviceType::TABLET) {
         deviceType_ = DeviceType::TABLET;
         paramDeviceType_ = PROPERTY_DEVICE_TYPE_TABLET;
-    } else if (type == DeviceType::PC){
-        deviceType_ = DeviceType::PC;
-        paramDeviceType_ = PROPERTY_DEVICE_TYPE_PC;
     } else {
         deviceType_ = DeviceType::PHONE;
         paramDeviceType_ = PROPERTY_DEVICE_TYPE_PHONE;
@@ -75,7 +71,7 @@ bool SystemProperties::isDeviceAccess_ = false;
 int32_t SystemProperties::deviceWidth_ = 0;
 int32_t SystemProperties::deviceHeight_ = 0;
 double SystemProperties::resolution_ = 1.0;
-DeviceType SystemProperties::deviceType_ { DeviceType::PC };
+DeviceType SystemProperties::deviceType_ { DeviceType::PHONE };
 DeviceOrientation SystemProperties::orientation_ { DeviceOrientation::PORTRAIT };
 std::string SystemProperties::brand_ = UNDEFINED_PARAM;
 std::string SystemProperties::manufacturer_ = UNDEFINED_PARAM;
@@ -116,7 +112,7 @@ bool SystemProperties::IsSyscapExist(const char* cap)
 
 void SystemProperties::InitDeviceTypeBySystemProperty()
 {
-    deviceType_ = DeviceType::PC;
+    deviceType_ = DeviceType::PHONE;
 }
 
 void SystemProperties::InitDeviceInfo(
