@@ -108,10 +108,6 @@ public:
     {
         return SystemProperties::GetDeviceType() == DeviceType::TABLET;
     }
-    bool IsPC() const
-    {
-        return SystemProperties::GetDeviceType() == DeviceType::PC;
-    }
     void CalculateRatingSize();
     void FireChangeEvent();
     void SetFocusAnimation(const RefPtr<RenderFocusAnimation>& focusAnimation)

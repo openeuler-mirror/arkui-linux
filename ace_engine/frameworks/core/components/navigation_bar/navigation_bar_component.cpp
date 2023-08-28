@@ -478,7 +478,6 @@ RefPtr<Component> NavigationBarComponent::Build(const WeakPtr<PipelineContext>& 
             builder = AceType::MakeRefPtr<TVTitleBarBuilder>(data_);
             break;
         case DeviceType::PHONE:
-	case DeviceType::PC:
         case DeviceType::TABLET:
             if (data_->type == NavigationBarType::EMPHASIZE) {
                 builder = AceType::MakeRefPtr<EmphasizeTitleBarBuilder>(data_);
