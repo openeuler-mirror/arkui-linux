@@ -184,6 +184,7 @@ protected:
     bool isTv_ = false;
     bool isPhone_ = false;
     bool isTablet_ = false;
+    bool isPC_ = false;
     bool widthDefined_ = false;
     bool heightDefined_ = false;
     bool progressDisplay_ = false;
