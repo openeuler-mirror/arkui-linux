@@ -332,7 +332,7 @@ void RenderButton::OnMouseHoverEnterTest()
         return;
     }
     ButtonType type = buttonComponent_->GetType();
-    if ((isPhone_ || isTablet_) && ((type == ButtonType::TEXT) || (type == ButtonType::NORMAL))) {
+    if ((isPhone_ || isTablet_ || isPC_) && ((type == ButtonType::TEXT) || (type == ButtonType::NORMAL))) {
         needHoverColor_ = true;
         MarkNeedRender();
     } else {
@@ -472,6 +472,7 @@ void RenderButton::Update(const RefPtr<Component>& component)
     isTv_ = (SystemProperties::GetDeviceType() == DeviceType::TV);
     isPhone_ = (SystemProperties::GetDeviceType() == DeviceType::PHONE);
     isTablet_ = (SystemProperties::GetDeviceType() == DeviceType::TABLET);
+    isPC_ = (SystemProperties::GetDeviceType() == DeviceType::PC);
     auto catchMode =
         buttonComponent_->GetClickedEventId().IsEmpty() || buttonComponent_->GetClickedEventId().GetCatchMode();
     static const int32_t bubbleModeVersion = 6;
@@ -833,7 +834,7 @@ void RenderButton::PlayClickScaleAnimation(float keyTime, int32_t duration)
 
 void RenderButton::PlayClickAnimation()
 {
-    if (isPhone_ || isWatch_ || isTablet_) {
+    if (isPhone_ || isWatch_ || isTablet_ || isPC_) {
         return;
     }
     if (!isFocus_) {
