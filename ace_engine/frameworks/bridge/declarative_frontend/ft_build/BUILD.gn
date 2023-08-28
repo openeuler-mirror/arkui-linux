@@ -101,7 +101,7 @@ template("declarative_js_engine") {
     deps = []
     public_deps = []
     configs = [ "$ace_root/ft_build:ace_config" ]
-
+    defines += ft_defines
     sources = [
       "../engine/bindings_implementation.cpp",
       "../engine/declarative_engine_loader.cpp",
