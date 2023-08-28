@@ -24,7 +24,6 @@ enum class DeviceType {
     WATCH,
     CAR,
     TABLET,
-    PC,
     UNKNOWN,
 };
 

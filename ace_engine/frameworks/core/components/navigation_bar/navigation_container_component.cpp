@@ -116,8 +116,7 @@ RefPtr<ComposedComponent> NavigationContainerComponent::BuildToolBar(
 
 bool NavigationContainerComponent::NeedSection() const
 {
-    auto type = SystemProperties::GetDeviceType();
-    bool isSupportDeviceType = (type == DeviceType::TABLET || type == DeviceType::PC);
+    bool isSupportDeviceType = SystemProperties::GetDeviceType() == DeviceType::TABLET;
     bool isWideScreen = SystemProperties::GetDeviceOrientation() == DeviceOrientation::LANDSCAPE;
     return isSupportDeviceType && isWideScreen;
 }
