@@ -626,7 +626,8 @@ Offset RenderTabBar::MakeIndicatorOffset(const RefPtr<RenderNode>& item) const
     }
     if (indicatorStyle_ == TabBarIndicatorStyle::DEFAULT &&
         (!onFocused_ || SystemProperties::GetDeviceType() == DeviceType::PHONE ||
-        SystemProperties::GetDeviceType() == DeviceType::TABLET)) {
+        SystemProperties::GetDeviceType() == DeviceType::TABLET ||
+        SystemProperties::GetDeviceType() == DeviceType::PC)) {
         Size childSize = GetTabItemChildLayoutSize(item);
         offset +=
             Offset(0.0, childSize.Height() / DOUBLE_FACTOR) + indicatorPadding_.GetOffsetInPx(context->GetDipScale());
