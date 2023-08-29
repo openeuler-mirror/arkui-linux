@@ -20,6 +20,7 @@ template("js_engine") {
 
   ft_source_set(target_name) {
     defines += invoker.defines
+    defines += ft_defines
     if (target_cpu == "arm64") {
       if (!is_mingw) {
         defines += [ "_ARM64_" ]
