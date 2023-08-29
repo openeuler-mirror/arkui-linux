@@ -19,12 +19,12 @@
 #include "frameworks/bridge/declarative_frontend/jsview/js_interactable_view.h"
 #include "frameworks/bridge/declarative_frontend/jsview/js_view_abstract.h"
 
-#if !defined(PREVIEW)
+#if !defined(PREVIEW) || defined(_FANGTIAN)
 #include "napi/native_api.h"
 #include "native_engine/native_engine.h"
 #endif
 
-#if !defined(PREVIEW)
+#if !defined(PREVIEW) || defined(_FANGTIAN)
 namespace OHOS::Rosen {
 class RSNode;
 }
@@ -36,7 +36,9 @@ class WantWrap;
 namespace OHOS::Ace::Framework {
     RefPtr<PixelMap> CreatePixelMapFromNapiValue(JSRef<JSVal> obj);
     const std::shared_ptr<Rosen::RSNode> CreateRSNodeFromNapiValue(JSRef<JSVal> obj);
+#ifdef WANT_WRAP
     RefPtr<OHOS::Ace::WantWrap> CreateWantWrapFromNapiValue(JSRef<JSVal> obj);
+#endif
 } // namespace OHOS::Ace::Framework
 #endif
 #endif // FRAMEWORKS_BRIDGE_DECLARATIVE_FRONTEND_JS_VIEW_JS_UTILS_H
