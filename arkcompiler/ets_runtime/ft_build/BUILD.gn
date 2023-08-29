@@ -782,7 +782,7 @@ source_set("libark_jsruntime_set") {
     defines += [ "FT_DISABLE_ASSERT" ]
   }
 
-  defines += [ "FT_BUILD" ]
+  defines += ft_defines
 
   if (is_ohos && is_standard_system) {
     defines = [ "ENABLE_EXCEPTION_BACKTRACE" ]
