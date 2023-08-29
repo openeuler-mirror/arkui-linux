@@ -12,5 +12,5 @@
 # limitations under the License
 
 declare_args() {
-
+  image_napi_root = "//napi_library/ft_multimedia"
 }

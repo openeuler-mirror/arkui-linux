@@ -15,6 +15,7 @@ import("//build/gn/fangtian.gni")
 import("//ace_engine/ft_build/ace_config.gni")
 import("//ace_engine/ft_build/build/ace_gen_obj.gni")
 import("//ace_engine/ft_build/build/uicast.gni")
+import("//config.gni")
 
 # declarative frontend source
 template("declarative_frontend") {
@@ -100,7 +101,7 @@ template("declarative_js_engine") {
     deps = []
     public_deps = []
     configs = [ "$ace_root/ft_build:ace_config" ]
-
+    defines += ft_defines
     sources = [
       "../engine/bindings_implementation.cpp",
       "../engine/declarative_engine_loader.cpp",
@@ -315,7 +316,7 @@ template("declarative_js_engine") {
 
     sources += uicast_configs.uicast_frontend_sources
     deps += [ "$ace_root/frameworks/core/components/qrcode/ft_build:ace_core_components_qrcode_$platform", ]
-    
+
     # rich components needed by phone and TV. wearable like watch do not need them
     if (defined(config.rich_components_support) &&
         config.rich_components_support) {
@@ -407,14 +408,14 @@ template("declarative_js_engine") {
 
     include_dirs = [
         # Fangtian TODO
-        # "//foundation/window/window_manager/interfaces/innerkits", 
+        # "//foundation/window/window_manager/interfaces/innerkits",
         "//arkcompiler/ets_runtime",
         "//arkcompiler/runtime_core"
     ]
 #include_dirs += uicast_configs.uicast_root_include
 
-    if (platform == "windows" || platform == "mac" || platform == "linux" || platform == "fangtian") {
-#deps += [ ":gen_obj_src_js_mock_system_plugin" ]
+    if (platform == "windows" || platform == "mac" || platform == "linux") {
+        deps += [ ":gen_obj_src_js_mock_system_plugin" ]
     } else {
       if (defined(config.plugin_components_support) &&
           config.plugin_components_support) {
@@ -425,9 +426,9 @@ template("declarative_js_engine") {
           ]
         }
       } else {
-        external_deps = [
-          "multimedia_image_framework:image",
-          "multimedia_image_framework:image_native",
+        deps += [
+          "//build/gn/configs/system_libs:image",
+          "${image_napi_root}/image_framework/interfaces/kits/js/common/ft_build:image"
         ]
       }
     }

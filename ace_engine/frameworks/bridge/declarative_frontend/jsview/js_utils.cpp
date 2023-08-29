@@ -17,7 +17,7 @@
 
 #include "scope_manager/native_scope_manager.h"
 
-#if !defined(PREVIEW)
+#if !defined(PREVIEW) || defined(_FANGTIAN)
 #include <dlfcn.h>
 #endif
 
@@ -30,7 +30,7 @@
 #include "frameworks/bridge/js_frontend/engine/common/js_engine.h"
 
 namespace OHOS::Ace::Framework {
-#if !defined(PREVIEW)
+#if !defined(PREVIEW) || defined(_FANGTIAN)
 class ScopeRAII {
 public:
     explicit ScopeRAII(NativeScopeManager* manager) : manager_(manager)
@@ -137,6 +137,7 @@ const std::shared_ptr<Rosen::RSNode> CreateRSNodeFromNapiValue(JSRef<JSVal> obj)
 #endif
 }
 
+#ifdef WANT_WRAP
 RefPtr<OHOS::Ace::WantWrap> CreateWantWrapFromNapiValue(JSRef<JSVal> obj)
 {
     if (!obj->IsObject()) {
@@ -163,6 +164,6 @@ RefPtr<OHOS::Ace::WantWrap> CreateWantWrapFromNapiValue(JSRef<JSVal> obj)
 
     return WantWrap::CreateWantWrap(reinterpret_cast<void*>(nativeEngine), reinterpret_cast<void*>(nativeValue));
 }
-
+#endif
 #endif
 } // namespace OHOS::Ace::Framework

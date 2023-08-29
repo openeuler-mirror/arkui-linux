@@ -20,6 +20,7 @@ template("js_frontend") {
   ft_source_set(target_name) {
     defines += invoker.defines
     configs = [ "$ace_root/ft_build:ace_config" ]
+    defines += ft_defines
 
     sources = [
       "../engine/common/base_animation_bridge.cpp",

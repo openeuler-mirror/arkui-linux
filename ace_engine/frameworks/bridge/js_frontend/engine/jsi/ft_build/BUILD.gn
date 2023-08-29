@@ -15,6 +15,7 @@ import("//arkcompiler/ets_frontend/ts2panda/ft_build/ts2abc_config.gni")
 import("//build/gn/fangtian.gni")
 import("//ace_engine/ft_build/ace_config.gni")
 import("//ace_engine/ft_build/build/ace_gen_obj.gni")
+import("//config.gni")
 
 base_output_path = get_label_info(":gen_abc_proxyclass", "target_out_dir")
 abcstrip_native_min_obj_path = base_output_path + "strip.native.min.abc"
@@ -91,6 +92,8 @@ template("js_engine_ark") {
     #if (defined(config.build_for_preview) && config.build_for_preview) {
       deps += [
         ":gen_obj_src_abc_strip_native_min",
+          "//build/gn/configs/system_libs:image",
+          "${image_napi_root}/image_framework/interfaces/kits/js/common/ft_build:image"
         #"$napi/native_engine/impl/ark:ace_napi_impl_ark",
       ]
     #} else {
