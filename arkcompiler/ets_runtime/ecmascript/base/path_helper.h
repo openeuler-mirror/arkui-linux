@@ -151,7 +151,7 @@ public:
                 entryPoint = inputFileName.substr(PREFIX_BUNDLE_LEN);
                 outFileName = ParseUrl(vm, entryPoint);
             } else {
-#ifdef FT_BUILD
+#ifdef _FANGTIAN
                 entryPoint = vm->GetBundleName() + "/" + vm->GetModuleName() + MODULE_DEFAULE_ETS + inputFileName;
 #elif !defined(PANDA_TARGET_WINDOWS) && !defined(PANDA_TARGET_MACOS)
                 entryPoint = vm->GetBundleName() + "/" +  inputFileName;
@@ -242,7 +242,7 @@ public:
             CString moduleName = vec[1];
             CropNamespaceIfAbsent(moduleName);
 
-#if !defined(PANDA_TARGET_WINDOWS) && !defined(PANDA_TARGET_MACOS)
+#if !defined(PANDA_TARGET_WINDOWS) && !defined(PANDA_TARGET_MACOS) && !defined(_FANGTIAN)
             if (bundleName != vm->GetBundleName()) {
                 baseFileName =
                     BUNDLE_INSTALL_PATH + bundleName + '/' + moduleName + '/' + moduleName + MERGE_ABC_ETS_MODULES;
