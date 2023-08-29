@@ -98,7 +98,7 @@ if [ ! -d ${FT_PREBUILD_DIR}/inc ]; then
 git clone https://gitee.com/yanansong/devel_inc.git ${FT_PREBUILD_DIR}/inc
 fi
 
-# copy include files to /usr/include. 
+# copy include files to /usr/include.
 cd ${FT_PREBUILD_DIR}/inc
 sudo cp -fr * /usr/local/include
 
@@ -148,6 +148,12 @@ if [ ! -e /usr/lib64/libace_skia_fangtian.so ]; then
     ./project_build/prebuild.sh
     ./build.sh $*
     cd ${PROJECT_DIR}
+fi
+
+if [ ! -d ${PROJECT_DIR}/napi_library ]; then
+    echo "start pull naip library code"
+    mkdir -p  ${PROJECT_DIR}/napi_library
+    git clone https://gitee.com/openeuler/ft_multimedia.git ${PROJECT_DIR}/napi_library/ft_multimedia
 fi
 
 echo -e "\033[32m[*] Pre-build Done. You need exec 'build.sh'.\033[0m"
