@@ -20,6 +20,11 @@
 namespace FT::Rosen {
 const std::string MAIN_WINDOW_NAME = "main window";
 
+// the value of WINDOW_TITLE_BAR_HEIGHT must be the same as the WINDOW_TITLE_BAR_HEIGHT which defined in ft_engine
+constexpr uint32_t WINDOW_TITLE_BAR_HEIGHT = 37;
+// the value of WINDOW_FRAME_WIDTH must be the same as the WINDOW_FRAME_WIDTH which defined in ft_engine
+constexpr uint32_t WINDOW_FRAME_WIDTH = 5;
+
 InputEventConsumer::InputEventConsumer(std::weak_ptr<GlfwRenderContext> context)
 {
     context_ = context;
@@ -122,6 +127,16 @@ int GlfwRenderContext::CreateWindow(int32_t width, int32_t height, bool visible)
         window_->Show();
     }
 
+    /* Set a proportion parameter for the mouse position,
+     * which is the ratio of the original window size to the original window size plus the decorative bar and the border.
+     *
+     * The purpose of setting this parameter is to calibrate the mouse click area of the window.
+     * For example, there is a deviation between the drawing area of the button and its corresponding mouse area,
+     * so we need to set this parameter to calibrate.
+     */
+    float xScale = (float)width / (float)(width + WINDOW_FRAME_WIDTH + WINDOW_FRAME_WIDTH);
+    float yScale = (float)height / (float)(height + WINDOW_FRAME_WIDTH + WINDOW_TITLE_BAR_HEIGHT);
+    UpdateScale(xScale, yScale);
     return 0;
 }
 
@@ -194,6 +209,12 @@ void GlfwRenderContext::UpdateOffset(int32_t posX, int32_t posY)
     posY_ = posY;
 }
 
+void GlfwRenderContext::UpdateScale(float xScale, float yScale)
+{
+    xScale_ = xScale;
+    yScale_ = yScale;
+}
+
 void GlfwRenderContext::OnMouseButton(const OnMouseButtonFunc &onMouseBotton)
 {
     onMouseBotton_ = onMouseBotton;
@@ -224,7 +245,7 @@ void GlfwRenderContext::OnMouseButton(int button, int action, int mods)
 void GlfwRenderContext::OnCursorPos(double x, double y)
 {
     if (onCursorPos_ != nullptr) {
-        onCursorPos_(x - posX_, y - posY_);
+        onCursorPos_((x - posX_) * (double)xScale_, (y - posY_) * (double)yScale_);
     }
 }
 

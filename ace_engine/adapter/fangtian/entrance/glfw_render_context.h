@@ -56,6 +56,7 @@ public:
     OHOS::sptr<OHOS::Rosen::Window> GetWindow();
     bool IsDecorEnable();
     void UpdateOffset(int32_t posX, int32_t posY);
+    void UpdateScale(float xScale, float yScale);
 
     /* input event */
     void OnMouseButton(const OnMouseButtonFunc &onMouseBotton);
@@ -78,6 +79,8 @@ private:
     OnCharFunc onChar_ = nullptr;
     int32_t posX_ = 0;
     int32_t posY_ = 0;
+    float xScale_ = 1.0f;
+    float yScale_ = 1.0f;
 };
 }
 #endif // GLFW_RENDER_CONTEXT_EXPORT_GLFW_RENDER_CONTEXT
