@@ -810,6 +810,8 @@ void AceContainer::InitWindowCallback()
         windowManager->SetWindowRecoverCallBack([window = window_]() { window->Recover(); });
         windowManager->SetWindowCloseCallBack([window = window_]() { window->Close(); });
         windowManager->SetWindowStartMoveCallBack([window = window_]() { window->StartMove(); });
+        windowManager->SetWindowGetModeCallBack(
+            [window = window_]() -> WindowMode { return static_cast<WindowMode>(window->GetMode()); });
     }
 
     pipelineContext_->SetGetWindowRectImpl([window = window_]() -> Rect {
