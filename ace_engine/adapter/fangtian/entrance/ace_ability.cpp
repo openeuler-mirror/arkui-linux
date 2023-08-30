@@ -474,6 +474,12 @@ void AceAbility::OnSizeChange(const OHOS::Rosen::Rect& rect, OHOS::Rosen::Window
     viewPtr->NotifySurfaceChanged(rect.width_, rect.height_);
     CHECK_NULL_VOID(controller_);
     controller_->UpdateOffset(rect.posX_, rect.posY_);
+
+    /* Reset the scale parameter to 1.0f
+     * Because the drawing area of the button does not deviate from the corresponding mouse click area,
+     * there is no need to calibrate the mouse position
+     */
+    controller_->UpdateScale(1.0f, 1.0f);
 }
 
 void AceAbility::OnModeChange(OHOS::Rosen::WindowMode mode)
