@@ -18,6 +18,7 @@ group("base") {
 group("arkui") {
   deps = [
     "//ace_engine/frameworks/core/ft_build:ace_core_fangtian",
+    "//ace_engine/interfaces/napi/kits/ft_build:napi_group",
     "//ace_engine/ft_build/build:libace_static_fangtian",
     "//ace_engine/adapter/fangtian/ft_build:libace_engine",
     "//ace_engine/adapter/fangtian/entrance/samples:hap_executor",
