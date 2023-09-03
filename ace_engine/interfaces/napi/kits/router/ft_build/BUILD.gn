@@ -47,7 +47,7 @@ template("napi_router_static") {
 
 foreach(item, ace_platforms) {
   napi_router_static("router_static_" + item.name) {
-    platform = item.name
+    # platform = item.name
 
     if (defined(item.config)) {
       config = item.config
