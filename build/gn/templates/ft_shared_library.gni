@@ -210,7 +210,8 @@ template("ft_shared_library") {
     }
 
     module_type_napi = false
-    if (defined(invoker.relative_install_dir) && product_name != "ohos-sdk") {
+    # if (defined(invoker.relative_install_dir) && product_name != "ohos-sdk") {
+    if (defined(invoker.relative_install_dir)) {
       relative_paths = string_split(invoker.relative_install_dir, "/")
       foreach(p, relative_paths) {
         if (p == "module") {
@@ -250,7 +251,7 @@ template("ft_shared_library") {
     if (module_type_napi) {
       if (!defined(invoker.version_script)) {
         _version_script =
-            rebase_path("//build/templates/cxx/napi.versionscript")
+            rebase_path("//build/gn/templates/napi.versionscript")
         inputs += [ _version_script ]
         ldflags += [ "-Wl,--version-script=${_version_script}" ]
       }
