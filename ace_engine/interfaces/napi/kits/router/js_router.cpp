@@ -18,11 +18,11 @@
 #include <string>
 
 #include "interfaces/napi/kits/utils/napi_utils.h"
-#include "../../../../../third_party/node/src/js_native_api.h"
-#include "../../../../../third_party/node/src/js_native_api_types.h"
-#include "../../../../../napi/interfaces/kits/napi/native_api.h"
-#include "../../../../../napi/native_engine/native_value.h"
-#include "../../../../../napi/interfaces/inner_api/napi/native_node_api.h"
+#include "third_party/node/src/js_native_api.h"
+#include "third_party/node/src/js_native_api_types.h"
+#include "napi/interfaces/kits/napi/native_api.h"
+#include "napi/native_engine/native_value.h"
+#include "napi/interfaces/inner_api/napi/native_node_api.h"
 #include <uv.h>
 
 #include "frameworks/base/log/log.h"
