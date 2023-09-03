@@ -38,7 +38,6 @@ template("napi_router_static") {
       deps += [ config.libace_target ]
     }
 
-    # deps += [ "../../utils/ft_build:napi_utils_static_${platform}" ]
     deps += [ "../../utils/ft_build:napi_utils_static_fangtian" ]
 
     part_name = "ace_engine"
