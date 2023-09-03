@@ -13,59 +13,26 @@
 
 import("//build/gn/fangtian.gni")
 import("//ace_engine/ft_build/ace_config.gni")
+import("./napi_lib.gni")
 
-template("napi_router_static") {
-  forward_variables_from(invoker, "*")
-
-  ft_source_set(target_name) {
-    defines += invoker.defines
-    cflags_cc += invoker.cflags_cc
-
-    include_dirs = [
-      "$ace_root",
-      "$ace_root/frameworks",
-      "$root_out_dir/arkui/framework",
-    ]
-
-    sources = [ "../js_router.cpp" ]
-
-    deps = [
-      "$ace_napi/ft_build:ace_napi",
-      "//build/gn/configs/system_libs:libuv",
-    ]
-
-    if (defined(config.libace_target)) {
-      deps += [ config.libace_target ]
+common_targets = []
+foreach(module, common_napi_libs) {
+  if (use_linux) {
+    ace_napi_lib(module) {
+      # platform = "linux"
     }
-
-    deps += [ "../utils/ft_build:napi_utils_static_fangtian" ]
-
-    part_name = "ace_engine"
-    subsystem_name = "arkui"
+  } else {
+    # Fangtian TODO
+    assert(false, "Fangtian TODO")
   }
+  common_targets += [ ":$module" ]
 }
 
-foreach(item, ace_platforms) {
-  napi_router_static("router_static_" + item.name) {
-    platform = item.name
-
-    if (defined(item.config)) {
-      config = item.config
-    } else {
-      config = {
-      }
-    }
-
-    if (defined(config.defines)) {
-      defines = config.defines
-    } else {
-      defines = []
-    }
-
-    if (defined(config.cflags_cc)) {
-      cflags_cc = config.cflags_cc
-    } else {
-      cflags_cc = []
-    }
+group("napi_group") {
+  if (use_mac || use_mingw_win || use_linux) {
+    public_deps = common_targets
+  } else {
+    deps = common_targets
+    deps += [ "$ace_root/interfaces/napi/kits/plugincomponent/ft_build:plugincomponent" ]
   }
 }
