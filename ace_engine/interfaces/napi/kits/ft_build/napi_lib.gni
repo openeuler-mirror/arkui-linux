@@ -31,7 +31,7 @@ template("ace_napi_lib") {
 
   ft_shared_library(target_name) {
     defines = ft_defines
-    # deps = [ "$ace_root/interfaces/napi/kits/${target_name}/ft_build:${target_name}_static_${platform}" ]
+    
     deps = [ "$ace_root/interfaces/napi/kits/${target_name}/ft_build:${target_name}_static_fangtian" ]
 
     relative_install_dir = "module"
