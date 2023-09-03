@@ -59,6 +59,14 @@ class Builder:
         # Install librarys and binarys into specify dir
         if self.args.install:
             logger.info(f"Installing to {self.args.install}.")
+
+            ace_engine_output_dir = os.path.join(self.build_output_dir, 'arkui/ace_engine/')
+            output_files = [entry for entry in os.listdir(ace_engine_output_dir) if os.path.isfile(os.path.join(ace_engine_output_dir, entry))]
+            for output_file in output_files:
+                if output_file.endswith('.so'):
+                    rst = exec_sys_command(['sudo', 'cp', '-f', os.path.join(self.build_output_dir, 'arkui/ace_engine/', output_file), os.path.join(self.args.install, 'lib64')])
+                    if rst[0] == False : return False
+
             common_output_dir = os.path.join(self.build_output_dir, 'common/common/')
             output_files = [entry for entry in os.listdir(common_output_dir) if os.path.isfile(os.path.join(common_output_dir, entry))]
             for output_file in output_files:
