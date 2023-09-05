@@ -38,7 +38,7 @@ template("napi_router_static") {
       deps += [ config.libace_target ]
     }
 
-    deps += [ "../../utils/ft_build:napi_utils_static_fangtian" ]
+    deps += [ "../../utils/ft_build:napi_utils_static_${platform}" ]
 
     part_name = "ace_engine"
     subsystem_name = "arkui"
@@ -46,26 +46,25 @@ template("napi_router_static") {
 }
 
 foreach(item, ace_platforms) {
-  napi_router_static("router_static_" + item.name) {
-    # platform = item.name
-
-    if (defined(item.config)) {
-      config = item.config
-    } else {
+  if(item.name == "fangtian"){
+    napi_router_static("router_static_" + item.name) {
+      defines = []
+      cflags_cc = []
       config = {
       }
-    }
+      platform = item.name
 
-    if (defined(config.defines)) {
-      defines = config.defines
-    } else {
-      defines = []
-    }
+      if (defined(item.config)) {
+        config = item.config
+      }
 
-    if (defined(config.cflags_cc)) {
-      cflags_cc = config.cflags_cc
-    } else {
-      cflags_cc = []
+      if (defined(config.defines)) {
+        defines = config.defines
+      }
+
+      if (defined(config.cflags_cc)) {
+        cflags_cc = config.cflags_cc
+      }
     }
   }
 }
