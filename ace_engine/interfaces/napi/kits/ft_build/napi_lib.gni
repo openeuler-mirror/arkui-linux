@@ -16,14 +16,14 @@ import("//ace_engine/ft_build/ace_config.gni")
 
 common_napi_libs = [
 #  "configuration",
-#  "device",
+  "device",
 #  "grid",
 #  "measure",
 #  "mediaquery",
 #  "prompt",
 #  "promptaction",
   "router",
-#  "animator",
+  "animator",
 ]
 
 template("ace_napi_lib") {
