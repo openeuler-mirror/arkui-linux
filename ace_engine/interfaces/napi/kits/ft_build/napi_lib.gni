@@ -16,7 +16,7 @@ import("//ace_engine/ft_build/ace_config.gni")
 
 common_napi_libs = [
 #  "configuration",
- "device",
+  "device",
 #  "grid",
 #  "measure",
 #  "mediaquery",
