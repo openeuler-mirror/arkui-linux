@@ -42,13 +42,13 @@ template("napi_animator_static") {
 }
 
 foreach(item, ace_platforms) {
-  if(item.name == "fangtian"){
+  if (defined(current_platform.name)) {
     napi_animator_static("animator_static_" + item.name) {
       defines = []
       cflags_cc = []
       config = {
       }
-      platform = item.name
+      platform = current_platform.name
 
       if (defined(item.config)) {
         config = item.config
