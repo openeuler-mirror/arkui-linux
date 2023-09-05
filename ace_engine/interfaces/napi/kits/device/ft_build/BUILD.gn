@@ -10,32 +10,52 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+ 
 import("//build/gn/fangtian.gni")
 import("//ace_engine/ft_build/ace_config.gni")
 
-common_napi_libs = [
-#  "configuration",
-  "device",
-#  "grid",
-#  "measure",
-#  "mediaquery",
-#  "prompt",
-#  "promptaction",
-  "router",
-  "animator",
-]
-
-template("ace_napi_lib") {
+template("napi_device_static") {
   forward_variables_from(invoker, "*")
 
-  ft_shared_library(target_name) {
-    defines = ft_defines
-    
-    deps = [ "$ace_root/interfaces/napi/kits/${target_name}/ft_build:${target_name}_static_fangtian" ]
+  ft_source_set(target_name) {
+    defines += invoker.defines
+    cflags_cc += invoker.cflags_cc
 
-    relative_install_dir = "module"
+    include_dirs = [
+      "$ace_root",
+      "$ace_root/frameworks",
+    ]
+
+    sources = [ "../js_device.cpp" ]
+
+    deps = [ "$ace_napi/ft_build:ace_napi" ]
+
+    if (defined(config.libace_target)) {
+      deps += [ config.libace_target ]
+    }
+
     part_name = "ace_engine"
     subsystem_name = "arkui"
+  }
+}
+
+foreach(item, ace_platforms) {
+  napi_device_static("device_static_" + item.name) {
+    defines = []
+    cflags_cc = []
+    config = {
+    }
+
+    if (defined(item.config)) {
+      config = item.config
+    }
+
+    if (defined(config.defines)) {
+      defines = config.defines
+    }
+
+    if (defined(config.cflags_cc)) {
+      cflags_cc = config.cflags_cc
+    }
   }
 }
