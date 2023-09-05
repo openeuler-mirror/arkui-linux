@@ -17,15 +17,13 @@ import("./napi_lib.gni")
 
 common_targets = []
 foreach(module, common_napi_libs) {
-  if (use_linux) {
+  if (defined(current_platform.name)) {
     ace_napi_lib(module) {
-      # platform = "linux"
+      platform = current_platform.name
     }
-  } else {
-    # Fangtian TODO
-    assert(false, "Fangtian TODO")
-  }
-  common_targets += [ ":$module" ]
+
+    common_targets += [ ":$module" ]
+  } 
 }
 
 group("napi_group") {
