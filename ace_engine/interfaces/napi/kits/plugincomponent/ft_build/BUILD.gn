@@ -40,6 +40,4 @@ ft_shared_library("plugincomponent") {
     "//build/gn/configs/system_libs:ipc_core",
     "//build/gn/configs/system_libs:hilog",
   ]
-
-  relative_install_dir = "module"
 }
