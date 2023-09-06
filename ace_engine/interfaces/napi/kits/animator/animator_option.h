@@ -20,12 +20,12 @@
 #include <memory>
 #include <string>
 
-#include "../napi/interfaces/kits/napi/native_api.h"
-#include "../napi/native_engine/native_value.h"
-#include "../napi/interfaces/inner_api/napi/native_node_api.h"
+#include "napi/native_api.h"
+#include "native_engine/native_value.h"
+#include "napi/native_node_api.h"
 
-#include "frameworks/base/memory/referenced.h"
-#include "frameworks/core/animation/animator.h"
+#include "base/memory/referenced.h"
+#include "core/animation/animator.h"
 
 namespace OHOS::Ace::Napi {
 
