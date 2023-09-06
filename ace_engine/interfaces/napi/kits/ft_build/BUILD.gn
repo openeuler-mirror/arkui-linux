@@ -21,8 +21,6 @@ foreach(module, common_napi_libs) {
     ace_napi_lib(module) {
       platform = current_platform.name
     }
-
-    common_targets += [ ":$module" ]
   } 
 }
 
