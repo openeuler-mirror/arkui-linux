@@ -15,9 +15,9 @@
 
 #include <string>
 
-#include "../napi/interfaces/kits/napi/native_api.h"
-#include "../napi/native_engine/native_value.h"
-#include "../napi/interfaces/inner_api/napi/native_node_api.h"
+#include "napi/native_api.h"
+#include "napi/native_engine/native_value.h"
+#include "napi/native_node_api.h"
 
 #include "frameworks/base/log/log.h"
 #include "frameworks/bridge/common/plugin_adapter/plugin_bridge.h"
