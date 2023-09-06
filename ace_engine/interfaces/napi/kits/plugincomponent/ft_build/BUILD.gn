@@ -34,18 +34,12 @@ ft_shared_library("plugincomponent") {
   ]
 
   deps = [
-    "$ability_runtime_path/frameworks/native/ability/native:abilitykit_native",
     "$ace_root/build:libace",
     "//build/gn/configs/system_libs:c_utils",
     "//napi/ft_build:ace_napi",
     "//build/gn/configs/system_libs:ipc_core",
     "//build/gn/configs/system_libs:hilog",
-    "../ability_base:base",
-    "../ability_base:want",
-    "../bundle_framework:appexecfwk_core",
   ]
 
   relative_install_dir = "module"
-  part_name = "ace_engine"
-  subsystem_name = "arkui"
 }

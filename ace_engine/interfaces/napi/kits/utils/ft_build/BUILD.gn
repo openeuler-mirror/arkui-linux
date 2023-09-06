@@ -22,10 +22,8 @@ template("napi_utils_static") {
     cflags_cc += invoker.cflags_cc
 
     include_dirs = [
-      # "//foundation/arkui",
       "$ace_root",
       "$ace_root/frameworks",
-      "$root_out_dir/arkui/framework",
     ]
 
     sources = [ "../napi_utils.cpp" ]
@@ -35,9 +33,6 @@ template("napi_utils_static") {
     if (defined(config.libace_target)) {
       deps += [ config.libace_target ]
     }
-
-    part_name = "ace_engine"
-    subsystem_name = "arkui"
   }
 }
 

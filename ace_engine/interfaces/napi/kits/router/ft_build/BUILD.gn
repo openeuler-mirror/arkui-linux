@@ -25,6 +25,8 @@ template("napi_router_static") {
       "$ace_root",
       "$ace_root/frameworks",
       "$root_out_dir/arkui/framework",
+      "$ace_napi",
+      "//third_party/node/src",
     ]
 
     sources = [ "../js_router.cpp" ]
@@ -39,9 +41,6 @@ template("napi_router_static") {
     }
 
     deps += [ "../../utils/ft_build:napi_utils_static_${platform}" ]
-
-    part_name = "ace_engine"
-    subsystem_name = "arkui"
   }
 }
 
