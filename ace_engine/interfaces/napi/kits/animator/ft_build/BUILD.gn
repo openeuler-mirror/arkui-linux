@@ -35,9 +35,6 @@ template("napi_animator_static") {
     }
 
     deps += [ "../../utils/ft_build:napi_utils_static_${platform}" ]
-
-    part_name = "ace_engine"
-    subsystem_name = "arkui"
   }
 }
 
