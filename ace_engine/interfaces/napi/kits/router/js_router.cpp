@@ -23,7 +23,7 @@
 #include "napi/native_api.h"
 #include "napi/native_engine/native_value.h"
 #include "napi/native_node_api.h"
-#include "uv.h"
+#include <uv.h>
 
 #include "frameworks/base/log/log.h"
 #include "frameworks/bridge/common/utils/engine_helper.h"
