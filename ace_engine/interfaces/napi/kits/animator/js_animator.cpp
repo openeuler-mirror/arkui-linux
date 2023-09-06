@@ -18,17 +18,17 @@
 
 #include "animator_option.h"
 #include "interfaces/napi/kits/utils/napi_utils.h"
-#include "../napi/interfaces/kits/napi/native_api.h"
-#include "../napi/native_engine/native_value.h"
-#include "../napi/interfaces/inner_api/napi/native_node_api.h"
+#include "napi/native_api.h"
+#include "native_engine/native_value.h"
+#include "napi/native_node_api.h"
 
-#include "frameworks/base/log/log.h"
-#include "frameworks/base/memory/ace_type.h"
-#include "frameworks/base/memory/referenced.h"
-#include "frameworks/bridge/common/utils/utils.h"
-#include "frameworks/core/animation/animator.h"
-#include "frameworks/core/animation/curve.h"
-#include "frameworks/core/animation/curve_animation.h"
+#include "base/log/log.h"
+#include "base/memory/ace_type.h"
+#include "base/memory/referenced.h"
+#include "bridge/common/utils/utils.h"
+#include "core/animation/animator.h"
+#include "core/animation/curve.h"
+#include "core/animation/curve_animation.h"
 
 namespace OHOS::Ace::Napi {
 
