@@ -26,7 +26,6 @@ foreach(module, common_napi_libs) {
   } 
 }
 
-
 group("napi_group") {
   if (use_mac || use_mingw_win || use_linux) {
     public_deps = common_targets
