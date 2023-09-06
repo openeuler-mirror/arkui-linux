@@ -46,6 +46,4 @@ ft_shared_library("plugincomponent") {
   ]
 
   relative_install_dir = "module"
-  part_name = "ace_engine"
-  subsystem_name = "arkui"
 }
