@@ -33,9 +33,6 @@ template("napi_device_static") {
     if (defined(config.libace_target)) {
       deps += [ config.libace_target ]
     }
-
-    part_name = "ace_engine"
-    subsystem_name = "arkui"
   }
 }
 
