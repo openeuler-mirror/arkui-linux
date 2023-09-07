@@ -20,7 +20,7 @@
 #include "js_native_api.h"
 #include "js_native_api_types.h"
 #include "napi/native_api.h"
-#include "napi/native_engine/native_value.h"
+#include "native_engine/native_value.h"
 #include "napi/native_node_api.h"
 
 #include "base/geometry/dimension.h"
