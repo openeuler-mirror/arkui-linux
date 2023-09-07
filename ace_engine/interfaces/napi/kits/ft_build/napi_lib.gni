@@ -15,12 +15,12 @@ import("//build/gn/fangtian.gni")
 import("//ace_engine/ft_build/ace_config.gni")
 
 common_napi_libs = [
-#  "configuration",
+  "configuration",
   "device",
-#  "grid",
-#  "measure",
-#  "mediaquery",
-#  "prompt",
+  "grid",
+  "measure",
+  "mediaquery",
+  "prompt",
 #  "promptaction",
   "router",
   "animator",
