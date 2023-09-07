@@ -18,7 +18,7 @@
 
 #include "interfaces/napi/kits/utils/napi_utils.h"
 #include "napi/native_api.h"
-#include "napi/native_engine/native_value.h"
+#include "native_engine/native_value.h"
 #include "napi/native_node_api.h"
 
 #include "base/subwindow/subwindow_manager.h"
