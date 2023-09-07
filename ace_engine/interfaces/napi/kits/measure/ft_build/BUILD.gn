@@ -40,23 +40,25 @@ template("napi_measure_static") {
 }
 
 foreach(item, ace_platforms) {
-  napi_measure_static("measure_static_" + item.name) {
-    defines = []
-    cflags_cc = []
-    config = {
-    }
-    platform = current_platform.name
+  if (defined(current_platform.name)) {
+    napi_measure_static("measure_static_" + item.name) {
+      defines = []
+      cflags_cc = []
+      config = {
+      }
+      platform = current_platform.name
 
-    if (defined(item.config)) {
-      config = item.config
-    }
+      if (defined(item.config)) {
+        config = item.config
+      }
 
-    if (defined(config.defines)) {
-      defines = config.defines
-    }
+      if (defined(config.defines)) {
+        defines = config.defines
+      }
 
-    if (defined(config.cflags_cc)) {
-      cflags_cc = config.cflags_cc
+      if (defined(config.cflags_cc)) {
+        cflags_cc = config.cflags_cc
+      }
     }
   }
 }
