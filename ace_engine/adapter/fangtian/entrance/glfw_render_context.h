@@ -37,7 +37,7 @@ private:
     std::weak_ptr<GlfwRenderContext> context_;
 };
 
-class GlfwRenderContext : public std::enable_shared_from_this<GlfwRenderContext> {
+class __attribute__((visibility("default"))) GlfwRenderContext : public std::enable_shared_from_this<GlfwRenderContext> {
 public:
     using OnMouseButtonFunc = std::function<void(int button, bool pressed, int mods)>;
     using OnCursorPosFunc = std::function<void(double x, double y)>;

@@ -50,6 +50,11 @@
 #endif
 #endif
 
+#ifdef FT_BUILD
+#undef ACE_EXPORT_WITH_PREVIEW
+#define ACE_EXPORT_WITH_PREVIEW ACE_FORCE_EXPORT
+#endif
+
 #ifdef ACE_DEBUG
 
 #ifdef NDEBUG
