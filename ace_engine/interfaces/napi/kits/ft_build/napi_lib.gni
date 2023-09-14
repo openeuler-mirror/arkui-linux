@@ -21,7 +21,7 @@ common_napi_libs = [
   "measure",
   "mediaquery",
   "prompt",
-#  "promptaction",
+  "promptaction",
   "router",
   "animator",
 ]
