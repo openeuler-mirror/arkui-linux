@@ -14,23 +14,18 @@
 import("//build/gn/fangtian.gni")
 import("//ace_engine/ft_build/ace_config.gni")
 
-common_napi_libs = [
-  "configuration",
-  "device",
-  "grid",
-  "measure",
-  "mediaquery",
-  "prompt",
-  "promptaction",
-  "router",
-  "animator",
-]
-
-template("ace_napi_lib") {
+template("napi_promptaction_static") {
   forward_variables_from(invoker, "*")
 
-  ft_shared_library(target_name) {
-    defines = ft_defines
-    deps = [ "$ace_root/interfaces/napi/kits/${target_name}/ft_build:${target_name}_static_${platform}" ]
+  ft_source_set(target_name) {
+    deps = [ "../../prompt/ft_build:prompt_static_${platform}" ]
+  }
+}
+
+foreach(item, ace_platforms) {
+  if (defined(current_platform.name)) {
+    napi_promptaction_static("promptaction_static_" + item.name) {
+      platform = current_platform.name
+    }
   }
 }
