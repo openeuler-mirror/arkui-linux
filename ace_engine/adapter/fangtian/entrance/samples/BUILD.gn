@@ -1,4 +1,4 @@
-# Copyright (c) 2021-2023 Huawei Device Co., Ltd.
+# Copyright (c) 2021-2023 Huawei Technologies Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -12,9 +12,10 @@
 # limitations under the License.
 
 import("//build/gn/fangtian.gni")
+import("//config.gni")
 import("//ace_engine/ft_build/ace_config.gni")
 
-config("ace_pc_preview_config") {
+config("ace_fangtian_config") {
   cflags_cc = [
     "-std=c++17",
     "-Wno-c99-designator",
@@ -31,14 +32,14 @@ config("ace_pc_preview_config") {
     "$flutter_root/engine/flutter/third_party/txt/src",
     "//third_party/ft_engine/window_manager/interfaces/innerkits/",
     "//third_party/ft_engine/window_manager/interfaces/innerkits/dm",
-    "//third_party/ft_engine/window_manager/utils/include/"
+    "//third_party/ft_engine/window_manager/utils/include/",
+    "//third_party/flutter/glfw/include",
   ]
 }
 
 ft_executable("hap_executor") {
     defines = [ "USE_GLFW_WINDOW", "ENABLE_ROSEN_BACKEND", "LINUX_PLATFORM", "SK_BUILD_FONT_MGR_FOR_PREVIEW_LINUX" ]
-    configs = [ ":ace_pc_preview_config" ]
-    include_dirs = [ "//third_party/flutter/glfw/include" ]
+    configs = [ ":ace_fangtian_config" ]
 
     sources = [
       "hap_executor.cpp",
@@ -46,7 +47,6 @@ ft_executable("hap_executor") {
       "touch_event_handler_rs.cpp",
     ]
     deps = [
-      ":copy_linux_shared_library",
       "$ace_root/adapter/fangtian/external:external_source_fangtian",
       "$ace_root/adapter/fangtian/ft_build:libace_engine",
       "$ace_napi/ft_build:ace_napi",
@@ -54,37 +54,14 @@ ft_executable("hap_executor") {
       "//napi/ft_build:ace_napi_ark",
       "//napi/ft_build:ace_container_scope",
       "//arkcompiler/ets_runtime/ft_build:libark_jsruntime",
+      "//third_party/flutter/glfw:glfw",
       "//build/gn/configs/system_libs:ft_engine",
       "//build/gn/configs/system_libs:c_utils",
       "//build/gn/configs/system_libs:harfbuzz",
+      "${image_napi_root}/image_framework/interfaces/kits/js/common/ft_build:image",
     ]
 
     libs = ["z", "icui18n", "icuuc"]
-}
-
-# All dynamic libraries to be copied to the path "/common/bin/",
-# which are related to the previewer, can be added to this script.
-ft_copy("copy_linux_shared_library") {
-    deps = []
-    sources = []
-
-    deps += [
-      "//build/gn/configs/system_libs:c_utils",
-    ]
-
-    # Add dynamic libraries
-    glfw_path = get_label_info("//third_party/flutter/glfw:glfw",
-                                    "root_out_dir") + "/graphic/graphic_standard/libglfw.so"
-    deps += [
-        "//arkcompiler/ets_runtime/ft_build:libark_jsruntime",
-        "//third_party/flutter/glfw:glfw",
-    ]
-    sources += [
-        glfw_path,
-    ]
-
-    # Set the output directory for all dynamic libraries.
-    outputs = [ root_out_dir + "/common/common/{{source_file_part}}" ]
 }
 
 group("arkui") {
