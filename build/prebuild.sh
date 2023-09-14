@@ -55,10 +55,6 @@ pip3 install -r ${SCRIPT_DIR}/configs/requirements.txt
 # Remove out dir
 rm -rf ${PROJECT_DIR}/out
 
-# prebuilts_download
-cd ${PROJECT_DIR}
-build/prebuilts_download.sh --skip-ssl
-
 # =============================================================================
 # System Packages
 # =============================================================================
@@ -70,11 +66,15 @@ echo -e "\e[36m[-] Prepare system packages...\e[0m"
 # Check & Install required system packages
 python3 ${PROJECT_DIR}/build/builder.py check --install-packages
 
+
 # =============================================================================
 # Prebuild
 # =============================================================================
 #
 # download prebuild files
+cd ${PROJECT_DIR}
+build/prebuilts_download.sh --skip-ssl
+
 cd $home
 PREBUILD_DIR="ft_prebuild"
 if [ ! -d ${PREBUILD_DIR} ]; then
