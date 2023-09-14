@@ -74,9 +74,10 @@ def read_row(row):
         row = row[:-1]
         values = spitrow(row)
     param = {}
+    if len(row) == 0:
+        return
     if len(values) != 16:
-        print('error')
-        print(row)
+        print('read row failed:', row)
         return
 
     if values[1] != '':
