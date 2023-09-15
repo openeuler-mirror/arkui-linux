@@ -19,10 +19,10 @@
 #include <thread>
 #include <unistd.h>
 
-#include "adapter/fangtian/entrance/ace_ability.h"
-#include "adapter/fangtian/entrance/ace_run_args.h"
-#include "adapter/fangtian/entrance/samples/key_input_handler.h"
-#include "adapter/fangtian/entrance/samples/touch_event_handler.h"
+#include "ace_ability.h"
+#include "ace_run_args.h"
+#include "samples/key_input_handler.h"
+#include "samples/touch_event_handler.h"
 
 #include "adapter/fangtian/external/ability/context.h"
 #include "adapter/fangtian/external/ability/fa/fa_context.h"
