@@ -85,8 +85,8 @@ template("ace_base_source_set") {
 foreach(item, ace_platforms) {
   ace_base_source_set("ace_base_" + item.name) {
     platform = item.name
-    defines = []
     cflags_cc = []
+    defines = []
     config = {
     }
 
@@ -96,6 +96,9 @@ foreach(item, ace_platforms) {
 
     if (defined(config.defines)) {
       defines = config.defines
+      if (platform == "fangtian") {
+        defines += ["FT_BUILD"]
+      }
     }
 
     if (defined(config.cflags_cc)) {
