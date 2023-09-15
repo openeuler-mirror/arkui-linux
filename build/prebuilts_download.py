@@ -128,6 +128,7 @@ def _hwcloud_download(args, config, bin_dir, code_dir):
             md5_huaweicloud_url = parse_dict.get('md5_huaweicloud_url')
             bin_file = parse_dict.get('bin_file')
             abs_unzip_dir = os.path.join(code_dir, unzip_dir)
+            _run_cmd('rm -rf ' + abs_unzip_dir)
             if not os.path.exists(abs_unzip_dir):
                 os.makedirs(abs_unzip_dir)
             if _check_sha256_by_mark(args, huaweicloud_url, code_dir, unzip_dir, unzip_filename):
