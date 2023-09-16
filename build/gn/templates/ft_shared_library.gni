@@ -54,7 +54,7 @@ template("ft_shared_library") {
          "[GN ERROR] Internal error, please contact maintainer.")
 
   # Change output dir
-    output_dir = "${root_out_dir}/${subsystem_name}/${part_name}"
+  output_dir = "${root_out_dir}/${subsystem_name}/${part_name}"
 
   # Call `shared_library()`
   shared_library("${target_name}") {
