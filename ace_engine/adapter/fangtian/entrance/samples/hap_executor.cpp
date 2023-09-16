@@ -18,16 +18,13 @@
 #include <sstream>
 #include <thread>
 #include <unistd.h>
-
 #include "ace_ability.h"
 #include "ace_run_args.h"
 #include "samples/key_input_handler.h"
 #include "samples/touch_event_handler.h"
-
 #include "adapter/fangtian/external/ability/context.h"
 #include "adapter/fangtian/external/ability/fa/fa_context.h"
 #include "adapter/fangtian/external/ability/stage/stage_context.h"
-
 #include "display_type.h"
 #include "dm/display_manager.h"
 
@@ -35,7 +32,9 @@ namespace {
 
 constexpr int32_t GET_INSPECTOR_TREE_TIMES = 12;
 constexpr int32_t GET_INSPECTOR_TREE_INTERVAL = 5000;
+#ifdef INSPECTOR_TREE
 constexpr char FILE_NAME[] = "InspectorTree.txt";
+#endif
 constexpr char ACE_VERSION_2[] = "2.0";
 constexpr char MODEL_STAGE[] = "stage";
 constexpr char MAX_ARGS_COUNT = 2;
@@ -79,6 +78,7 @@ int main(int argc, const char* argv[])
     // OHOS::Ace::Platform::KeyInputHandler::InitialTextInputCallback(ability->GetGlfwWindowController());
     OHOS::Ace::Platform::TouchEventHandler::InitialTouchEventCallback(ability->GetGlfwWindowController());
     bool runFlag = true;
+#ifdef INSPECTOR_TREE
     std::thread timer([&ability, &runFlag]() {
         int32_t getJSONTreeTimes = GET_INSPECTOR_TREE_TIMES;
         while (getJSONTreeTimes-- && runFlag) {
@@ -92,11 +92,14 @@ int main(int argc, const char* argv[])
             fileWriter.close();
         }
     });
+#endif
     ability->InitEnv();
     std::cout << "Ace initialize done. run loop now" << std::endl;
     ability->Start();
     runFlag = false;
+#ifdef INSPECTOR_TREE
     timer.join();
+#endif
     std::cout << "hap executor exit" << std::endl;
     return 0;
 }
