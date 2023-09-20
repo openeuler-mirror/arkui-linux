@@ -25,8 +25,6 @@ template("napi_animator_static") {
       "$ace_root",
       "$ace_root/frameworks",
       "$ace_napi",
-      "$ace_napi/interfaces/kits",
-      "$ace_napi/interfaces/inner_api",
     ]    
 
     sources = [ "../js_animator.cpp" ]
