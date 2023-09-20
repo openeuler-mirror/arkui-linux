@@ -14,7 +14,7 @@
 import("//build/gn/fangtian.gni")
 import("//ace_engine/ft_build/ace_config.gni")
 
-template("napi_animator_static") {
+template("napi_grid_static") {
   forward_variables_from(invoker, "*")
 
   ft_source_set(target_name) {
@@ -24,41 +24,35 @@ template("napi_animator_static") {
     include_dirs = [
       "$ace_root",
       "$ace_root/frameworks",
-      "$ace_napi",
-    ]    
+    ]
 
-    sources = [ "../js_animator.cpp" ]
+    sources = [ "../js_grid.cpp" ]
 
     deps = [ "$ace_napi/ft_build:ace_napi" ]
 
     if (defined(config.libace_target)) {
       deps += [ config.libace_target ]
     }
-
-    deps += [ "../../utils/ft_build:napi_utils_static_${platform}" ]
   }
 }
 
 foreach(item, ace_platforms) {
-  if (defined(current_platform.name)) {
-    napi_animator_static("animator_static_" + item.name) {
-      defines = []
-      cflags_cc = []
-      config = {
-      }
-      platform = current_platform.name
+  napi_grid_static("grid_static_" + item.name) {
+    defines = []
+    cflags_cc = []
+    config = {
+    }
 
-      if (defined(item.config)) {
-        config = item.config
-      }
+    if (defined(item.config)) {
+      config = item.config
+    }
 
-      if (defined(config.defines)) {
-        defines = config.defines
-      }
+    if (defined(config.defines)) {
+      defines = config.defines
+    }
 
-      if (defined(config.cflags_cc)) {
-        cflags_cc = config.cflags_cc
-      }
+    if (defined(config.cflags_cc)) {
+      cflags_cc = config.cflags_cc
     }
   }
 }

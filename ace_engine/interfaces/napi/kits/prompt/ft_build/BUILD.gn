@@ -14,7 +14,7 @@
 import("//build/gn/fangtian.gni")
 import("//ace_engine/ft_build/ace_config.gni")
 
-template("napi_animator_static") {
+template("napi_prompt_static") {
   forward_variables_from(invoker, "*")
 
   ft_source_set(target_name) {
@@ -25,11 +25,14 @@ template("napi_animator_static") {
       "$ace_root",
       "$ace_root/frameworks",
       "$ace_napi",
-    ]    
+    ]
 
-    sources = [ "../js_animator.cpp" ]
+    sources = [ "../js_prompt.cpp" ]
 
-    deps = [ "$ace_napi/ft_build:ace_napi" ]
+    deps = [ 
+      "$ace_napi/ft_build:ace_napi",
+      "//build/gn/configs/system_libs:libuv", 
+    ]
 
     if (defined(config.libace_target)) {
       deps += [ config.libace_target ]
@@ -41,7 +44,7 @@ template("napi_animator_static") {
 
 foreach(item, ace_platforms) {
   if (defined(current_platform.name)) {
-    napi_animator_static("animator_static_" + item.name) {
+    napi_prompt_static("prompt_static_" + item.name) {
       defines = []
       cflags_cc = []
       config = {
