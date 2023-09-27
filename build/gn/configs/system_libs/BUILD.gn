@@ -130,7 +130,7 @@ config("harfbuzz_config") {
 config("glfw_config") {
   visibility = [ ":*" ]
   include_dirs = [ "//third_party/flutter/glfw/include" ]
-  libs = ["glfw"]
+  libs = ["ft_glfw"]
 }
 
 config("ftsurface_config") {
