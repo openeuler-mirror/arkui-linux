@@ -1,0 +1,9 @@
+{
+  "src": [
+    "pages/MainPage",
+    "pages/NetTest",
+    "pages/SocketTest",
+    "pages/WebSocketTest",
+    "pages/NetworkStateTest"
+  ]
+}

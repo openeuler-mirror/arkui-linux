@@ -1,0 +1,10 @@
+{
+  "src": [
+    "pages/MainPage",
+    "pages/NavigationTest",
+    "pages/RouterTest",
+    "pages/PatternLockTest",
+    "pages/VideoTest",
+    "pages/WebTest"
+  ]
+}
