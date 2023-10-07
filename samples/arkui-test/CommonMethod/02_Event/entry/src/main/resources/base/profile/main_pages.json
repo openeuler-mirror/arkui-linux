@@ -1,0 +1,11 @@
+{
+  "src": [
+    "pages/MainPage",
+    "pages/ClickTest",
+    "pages/TouchTest",
+    "pages/DragTest",
+    "pages/AppearTest",
+    "pages/AreaTest",
+    "pages/FocusTest"
+  ]
+}

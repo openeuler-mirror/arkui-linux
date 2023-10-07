@@ -1,0 +1,10 @@
+{
+  "src": [
+    "pages/MainPage",
+    "pages/ScrollTest",
+    "pages/ListTest",
+    "pages/GridTest",
+    "pages/SwiperTest",
+    "pages/RefreshTest"
+  ]
+}
