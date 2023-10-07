@@ -72,6 +72,8 @@ struct ACE_FORCE_EXPORT_WITH_PREVIEW AceRunArgs {
     bool isRound = false;
     int32_t viewWidth = 0;
     int32_t viewHeight = 0;
+    int32_t viewPosX = 0;
+    int32_t viewPosY = 0;
     int32_t deviceWidth = 0;
     int32_t deviceHeight = 0;
 
