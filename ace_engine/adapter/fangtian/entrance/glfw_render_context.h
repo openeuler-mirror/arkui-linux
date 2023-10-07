@@ -46,7 +46,7 @@ public:
 
     int Init();
     void Terminate();
-    int CreateWindow(int32_t width, int32_t height, bool visible);
+    int CreateWindow(int32_t x, int32_t y, int32_t width, int32_t height, bool visible);
     void DestroyWindow();
     int WindowShouldClose();
     void PollEvents();
