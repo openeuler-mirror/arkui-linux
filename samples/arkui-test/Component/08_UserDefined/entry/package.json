@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@ohos/mini_canvas": "git+https://gitee.com/ark-ui/MiniCanvas.git"
+  }
+}

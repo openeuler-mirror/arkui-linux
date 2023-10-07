@@ -1,0 +1,12 @@
+{
+  "src": [
+    "pages/MainPage",
+    "pages/SizeTest",
+    "pages/LocationTest",
+    "pages/BackgroundTest",
+    "pages/BorderTest",
+    "pages/VisibilityTest",
+    "pages/StyleTest",
+    "pages/LinearGradientTest"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@ohos/lottieETS": "^1.0.3"
+  },
+  "devDependencies": {
+    "rollup-plugin-ignore": "^1.0.10"
+  }
+}

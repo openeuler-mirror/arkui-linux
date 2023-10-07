@@ -1,0 +1,8 @@
+{
+  "src": [
+    "pages/MainPage",
+    "pages/CutTest",
+    "pages/BindTest",
+    "pages/DisplayTest"
+  ]
+}

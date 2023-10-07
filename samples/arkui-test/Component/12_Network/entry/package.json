@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@ohos/httpclient": "^2.0.0"
+  }
+}
