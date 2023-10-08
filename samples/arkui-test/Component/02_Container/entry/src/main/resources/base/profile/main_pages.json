@@ -1,0 +1,14 @@
+{
+  "src": [
+    "pages/MainPage",
+    "pages/LinearLayoutTest",
+    "pages/FlexLayoutTest",
+    "pages/StackLayoutTest",
+    "pages/GridContainerTest",
+    "pages/SideBarContainerTest",
+    "pages/TabsTest",
+    "pages/BadgeTest",
+    "pages/CounterTest",
+    "pages/RelativeContainerTest"
+  ]
+}
