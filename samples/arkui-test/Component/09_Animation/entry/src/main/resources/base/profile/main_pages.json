@@ -1,0 +1,13 @@
+{
+  "src": [
+    "pages/MainPage",
+    "pages/ImageAnimatorTest",
+    "pages/AnimationTest",
+    "pages/AnimateToTest",
+    "pages/TransitionTest",
+    "pages/SharedTransitionDest",
+    "pages/second_",
+    "pages/SharedTransitionTest",
+    "pages/PageTransitionTest"
+  ]
+}
