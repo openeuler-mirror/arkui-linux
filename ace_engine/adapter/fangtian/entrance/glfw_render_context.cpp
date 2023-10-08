@@ -94,21 +94,22 @@ void GlfwRenderContext::Terminate()
     DestroyWindow();
 }
 
-int GlfwRenderContext::CreateWindow(int32_t width, int32_t height, bool visible)
+int GlfwRenderContext::CreateWindow(int32_t x, int32_t y, int32_t width, int32_t height, bool visible)
 {
     if (window_ != nullptr) {
         return 0;
     }
 
-    if (width <= 0 || height <= 0) {
-        LOGE("Invalid param, width:%{public}d height:%{public}d", width, height);
+    if (x < 0 || y < 0 || width <= 0 || height <= 0) {
+        LOGE("Invalid param, x:%{public}d, y:%{public}d, width:%{public}d, height:%{public}d", x, y, width, height);
         return -1;
     }
 
     OHOS::sptr<OHOS::Rosen::WindowOption> option(new OHOS::Rosen::WindowOption());
     option->SetWindowType(OHOS::Rosen::WindowType::WINDOW_TYPE_APP_MAIN_WINDOW);
     option->SetWindowMode(OHOS::Rosen::WindowMode::WINDOW_MODE_FLOATING);
-    option->SetWindowRect({0, 0, static_cast<uint32_t>(width), static_cast<uint32_t>(height)});
+    option->SetWindowRect({static_cast<uint32_t>(x), static_cast<uint32_t>(y),
+        static_cast<uint32_t>(width), static_cast<uint32_t>(height)});
     option->SetMainHandlerAvailable(false);
 
     static int cnt = 0;

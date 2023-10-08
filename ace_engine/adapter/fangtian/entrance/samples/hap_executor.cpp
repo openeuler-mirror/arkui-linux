@@ -104,9 +104,53 @@ int main(int argc, const char* argv[])
     return 0;
 }
 
+void UpdateAceRunRect(int argc, const char* argv[], int32_t &viewPosX, int32_t &viewPosY, int32_t &viewWidth, int32_t &viewHeight)
+{
+    if (argc < 7) {
+        return;
+    }
+
+    std::string posX = "null";
+    std::string posY = "null";
+    std::string width = "null";
+    std::string height = "null";
+
+    // argc >=7, at least ./hap_executor + package path + procName + x + y + width + height
+    posX = argv[3];
+    posY = argv[4];
+    width = argv[5];
+    height = argv[6];
+
+    if (width != "null" && height != "null") {
+        if (stoi(width) > 0) {
+            viewWidth = stoi(width);
+        } else {
+            LOGE("invalid input width!");
+        }
+        if (stoi(height) > 0) {
+            viewHeight = stoi(height);
+        } else {
+            LOGE("invalid input height!");
+        }
+    }
+
+    if (posX != "null" && posY != "null") {
+        if (stoi(posX) >= 0) {
+            viewPosX = stoi(posX);
+        } else {
+            LOGE("invalid input posX!");
+        }
+        if (stoi(posY) >= 0) {
+            viewPosY = stoi(posY);
+        } else {
+            LOGE("invalid input posY!");
+        }
+    }
+}
+
 bool GetAceRunArgs(int argc, const char* argv[], OHOS::Ace::Platform::AceRunArgs &args)
 {
-    if (argc < 2) { // ./hap_executor + package path
+    if (argc < 2) { // at least ./hap_executor + package path
         return false;
     }
 
@@ -175,25 +219,32 @@ bool GetAceRunArgs(int argc, const char* argv[], OHOS::Ace::Platform::AceRunArgs
     args.windowTitle = "Demo";
     args.onRender = std::move(renderCallback);
 
-    int32_t width = 800;
-    int32_t height = 600;
+    int32_t viewPosX = 0;
+    int32_t viewPosY = 0;
+    int32_t viewWidth = 800;
+    int32_t viewHeight = 600;
     auto defaultDisplay = OHOS::Rosen::DisplayManager::GetInstance().GetDefaultDisplay();
     if (defaultDisplay) {
-        width = defaultDisplay->GetWidth();
-        height = defaultDisplay->GetHeight();
+        viewWidth = defaultDisplay->GetWidth();
+        viewHeight = defaultDisplay->GetHeight();
         args.deviceConfig.density = defaultDisplay->GetVirtualPixelRatio();
         LOGI("deviceWidth: %{public}d, deviceHeight: %{public}d, default density: %{public}f",
             args.deviceWidth, args.deviceHeight, args.deviceConfig.density);
     }
-    args.deviceWidth = width;
-    args.deviceHeight = height;
-    args.viewWidth = width;
-    args.viewHeight = height;
+
+    UpdateAceRunRect(argc, argv, viewPosX, viewPosY, viewWidth, viewHeight);
+
+    args.deviceWidth = viewWidth;
+    args.deviceHeight = viewHeight;
+    args.viewWidth = viewWidth;
+    args.viewHeight = viewHeight;
+    args.viewPosX = viewPosX;
+    args.viewPosY = viewPosY;
 
     std::cout << "args.assetPath : " << args.assetPath << std::endl;
     std::cout << "args.appResourcesPath : " << args.appResourcesPath << std::endl;
     std::cout << "args.systemResourcesPath : " << args.systemResourcesPath << std::endl;
-    std::cout << "AppWidth : " << width << "AppHeight : " << height << std::endl;
+    std::cout << "AppWidth : " << args.viewWidth << "AppHeight : " << args.viewHeight << std::endl;
 
     return true;
 }
@@ -239,7 +290,7 @@ void SetProcName(int argc, const char* argv[])
         return;
     }
 
-    std::string procName; 
+    std::string procName;
     if (argc >= 3) {
         procName = argv[2];
     } else {
@@ -258,7 +309,7 @@ void SetProcName(int argc, const char* argv[])
     if (procName.size() > MAX_LEN_PID_NAME) {
         procName = procName.substr(0, MAX_LEN_PID_NAME);
     }
-    
+
     int32_t ret = prctl(PR_SET_NAME, procName.c_str());
     if (ret != 0) {
         std::cout << "call the system API prctl failed!" << std::endl;
