@@ -216,7 +216,7 @@ std::shared_ptr<AceAbility> AceAbility::CreateInstance(AceRunArgs& runArgs)
         return nullptr;
     }
 
-    controller->CreateWindow(runArgs.viewWidth, runArgs.viewHeight, true);
+    controller->CreateWindow(runArgs.viewPosX, runArgs.viewPosY, runArgs.viewWidth, runArgs.viewHeight, true);
 
     //auto controller = FlutterDesktopCreateWindow(
     //    runArgs.deviceWidth, runArgs.deviceHeight, runArgs.windowTitle.c_str(), runArgs.onRender);
