@@ -1,0 +1,12 @@
+{
+  "src": [
+    "pages/MainPage",
+    "pages/PromptTest",
+    "pages/SliderTest",
+    "pages/ToggleTest",
+    "pages/ProgressTest",
+    "pages/RatingTest",
+    "pages/PickerTest",
+    "pages/OtherTest"
+  ]
+}
