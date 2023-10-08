@@ -11,7 +11,7 @@ arkui-linux/samples/arkui-test/CommonMethod
 ├── 02_Event
 └── 03_Other
 ```
-生成的 hap 包存放在 `/hap/CommonMethod` 中。
+生成的 hap 包存放在 `arkui-test/hap/CommonMethod` 中。
 
 ### Component
 存放测试组件的源码，目录结构如下所示。
@@ -30,7 +30,7 @@ arkui-linux/samples/arkui-test/Component
 ├── 11_File
 └── 12_Network
 ```
-生成的 hap 包存放在 `/hap/Component` 中。
+生成的 hap 包存放在 `arkui-test/hap/Component` 中。
 
 ### hap
 该目录下包含测试组件 `Component` 与公共属性 `CommonMethod` 的 hap 包。
