@@ -6,4 +6,4 @@
 应用示例敲木鱼。
 
 ### arkui-test
- 遍历arkui下各组件，测试各控件功能。该目录下存放测试 `arkui-linux` 的代码与 hap 包。从组件 `Component` 与公共属性 `CommonMethod` 两方面进行测试。
+遍历arkui下各组件，从组件与公共属性两方面进行测试。该目录下存放测试 `arkui-linux` 的代码与 hap 包。
