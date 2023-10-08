@@ -103,6 +103,7 @@ private:
     {
         controller_ = controller;
     }
+    void HandleSizeChange();
 
 #ifndef ENABLE_ROSEN_BACKEND
     void SetFlutterWindowControllerRef(const FlutterDesktopWindowControllerRef &controller)
@@ -119,6 +120,9 @@ private:
     AceRunArgs runArgs_;
     ConfigChanges configChanges_;
     GlfwController controller_ = nullptr;
+    OHOS::Rosen::Rect ChangedRect_;
+    bool sizeChanged_ = false;
+    mutable std::mutex sizeChangedMutex_;
 };
 
 } // namespace OHOS::Ace::Platform
