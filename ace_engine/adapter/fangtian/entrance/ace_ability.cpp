@@ -216,7 +216,7 @@ std::shared_ptr<AceAbility> AceAbility::CreateInstance(AceRunArgs& runArgs)
         return nullptr;
     }
 
-    controller->CreateWindow(runArgs.viewPosX, runArgs.viewPosY, runArgs.viewWidth, runArgs.viewHeight, true);
+    controller->CreateWindow(runArgs.viewPosX, runArgs.viewPosY, runArgs.viewWidth, runArgs.viewHeight);
 
     //auto controller = FlutterDesktopCreateWindow(
     //    runArgs.deviceWidth, runArgs.deviceHeight, runArgs.windowTitle.c_str(), runArgs.onRender);
@@ -229,6 +229,7 @@ std::shared_ptr<AceAbility> AceAbility::CreateInstance(AceRunArgs& runArgs)
     auto window = controller->GetWindow();
     if (window != nullptr) {
         window->RegisterWindowChangeListener(aceWindowListener);
+        window->Show();
     }
 
     return aceAbility;
@@ -298,8 +299,30 @@ void AceAbility::InitEnv()
     view->NotifyDensityChanged(runArgs_.deviceConfig.density);
 }
 
+void AceAbility::HandleSizeChange()
+{
+    std::lock_guard<std::mutex> lock(sizeChangedMutex_);
+    if (!sizeChanged_) {
+        return;
+    }
+    auto container = AceContainer::GetContainerInstance(ACE_INSTANCE_ID);
+    if (!container) {
+        return;
+    }
+    auto viewPtr = container->GetAceView();
+    if (!viewPtr) {
+        return;
+    }
+    viewPtr->NotifySurfaceChanged(ChangedRect_.width_, ChangedRect_.height_);
+    if (controller_) {
+        controller_->UpdateOffset(ChangedRect_.posX_, ChangedRect_.posY_);
+        controller_->UpdateScale(1.0f, 1.0f);
+    }
+}
+
 void AceAbility::Start()
 {
+    HandleSizeChange();
     RunEventLoop();
 }
 
@@ -465,12 +488,24 @@ void AceAbility::SurfaceChanged(
 
 void AceAbility::OnSizeChange(const OHOS::Rosen::Rect& rect, OHOS::Rosen::WindowSizeChangeReason reason)
 {
+    std::lock_guard<std::mutex> lock(sizeChangedMutex_);
     LOGI("width: %{public}u, height: %{public}u, left: %{public}d, top: %{public}d",
         rect.width_, rect.height_, rect.posX_, rect.posY_);
     auto container = AceContainer::GetContainerInstance(ACE_INSTANCE_ID);
-    CHECK_NULL_VOID(container);
+    if (!container) {
+        LOGW("window size change! but get ace view fail, record the new rect and reason!");
+        ChangedRect_ = rect;
+        sizeChanged_ = true;
+        return;
+    }
     auto viewPtr = container->GetAceView();
-    CHECK_NULL_VOID(viewPtr);
+    if (!viewPtr) {
+        LOGW("window size change! but get ace view fail, record the new rect and reason!");
+        ChangedRect_ = rect;
+        sizeChanged_ = true;
+        return;
+    }
+
     viewPtr->NotifySurfaceChanged(rect.width_, rect.height_);
     CHECK_NULL_VOID(controller_);
     controller_->UpdateOffset(rect.posX_, rect.posY_);
