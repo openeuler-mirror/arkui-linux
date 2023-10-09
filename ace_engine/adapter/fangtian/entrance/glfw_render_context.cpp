@@ -94,7 +94,7 @@ void GlfwRenderContext::Terminate()
     DestroyWindow();
 }
 
-int GlfwRenderContext::CreateWindow(int32_t x, int32_t y, int32_t width, int32_t height, bool visible)
+int GlfwRenderContext::CreateWindow(int32_t x, int32_t y, int32_t width, int32_t height)
 {
     if (window_ != nullptr) {
         return 0;
@@ -123,10 +123,6 @@ int GlfwRenderContext::CreateWindow(int32_t x, int32_t y, int32_t width, int32_t
 
     auto listener = std::make_shared<InputEventConsumer>(shared_from_this());
     window_->SetInputEventConsumer(listener);
-
-    if (visible) {
-        window_->Show();
-    }
 
     /* Set a proportion parameter for the mouse position,
      * which is the ratio of the original window size to the original window size plus the decorative bar and the border.
