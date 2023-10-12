@@ -126,7 +126,7 @@ if [ ! -d ${PROJECT_DIR}/third_party/flutter ]; then
 fi
 
 if [ ! -d ${PROJECT_DIR}/third_party/ft_engine ]; then
-    git clone https://gitee.com/openeuler/ft_engine.git-b weekly_20231012 ${PROJECT_DIR}/third_party/ft_engine
+    git clone https://gitee.com/openeuler/ft_engine.git -b weekly_20231012 ${PROJECT_DIR}/third_party/ft_engine
 fi
 
 if [ ! -d /usr/include/ft/wm ]; then
