@@ -122,11 +122,11 @@ fi
 # third_party
 # =============================================================================
 if [ ! -d ${PROJECT_DIR}/third_party/flutter ]; then
-    git clone https://gitee.com/openeuler/ft_flutter.git ${PROJECT_DIR}/third_party/flutter
+    git clone https://gitee.com/openeuler/ft_flutter.git -b weekly_20231012 ${PROJECT_DIR}/third_party/flutter
 fi
 
 if [ ! -d ${PROJECT_DIR}/third_party/ft_engine ]; then
-    git clone https://gitee.com/openeuler/ft_engine.git ${PROJECT_DIR}/third_party/ft_engine
+    git clone https://gitee.com/openeuler/ft_engine.git-b weekly_20231012 ${PROJECT_DIR}/third_party/ft_engine
 fi
 
 if [ ! -d /usr/include/ft/wm ]; then
@@ -150,7 +150,7 @@ fi
 if [ ! -d ${PROJECT_DIR}/napi_library ]; then
     echo "start pull naip library code"
     mkdir -p  ${PROJECT_DIR}/napi_library
-    git clone https://gitee.com/openeuler/ft_multimedia.git ${PROJECT_DIR}/napi_library/ft_multimedia
+    git clone https://gitee.com/openeuler/ft_multimedia.git -b weekly_20231012 ${PROJECT_DIR}/napi_library/ft_multimedia
 fi
 
 echo -e "\033[32m[*] Pre-build Done. You need exec 'build.sh'.\033[0m"
