@@ -144,7 +144,6 @@ config("ft_engine_config") {
   include_dirs = [
     "/usr/include/ft",
     "/usr/include/ftsurface",
-    # "/usr/include/ft/utils",
     "/usr/include/ft/render_service_client",
     "/usr/include/ft/render_service_client/base",
     "/usr/include/ft/render_service_client/core",
