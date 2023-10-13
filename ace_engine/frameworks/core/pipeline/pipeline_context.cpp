@@ -27,7 +27,7 @@
 #include "core/event/touch_event.h"
 
 #ifdef ENABLE_ROSEN_BACKEND
-#include "render_service_base/include/platform/common/rs_system_properties.h"
+#include "render_service_client/base/platform/common/rs_system_properties.h"
 #include "render_service_client/core/ui/rs_node.h"
 #include "render_service_client/core/ui/rs_surface_node.h"
 #include "render_service_client/core/ui/rs_ui_director.h"
