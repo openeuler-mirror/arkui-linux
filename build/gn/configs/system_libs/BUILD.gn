@@ -144,17 +144,14 @@ config("ft_engine_config") {
   include_dirs = [
     "/usr/include/ft",
     "/usr/include/ftsurface",
-    # TODO use system header files
-    "//third_party/ft_engine/display_server/rosen/modules",
-    "//third_party/ft_engine/display_server/rosen/modules/render_service_base/include",
-    "//third_party/ft_engine/display_server/interfaces/inner_api/composer",
-    "//third_party/ft_engine/display_server/rosen/modules/composer/vsync/include",
-    "//third_party/ft_engine/display_server/interfaces/inner_api/common",
-    "//third_party/ft_engine/display_server/rosen/modules/render_service_client/core",
-    "//third_party/ft_engine/display_server/interfaces/inner_api/surface",
-    "//third_party/ft_engine/display_server/drivers/interfaces",
-    "//third_party/ft_engine/display_server/utils/buffer_handle/export",
-    "//third_party/ft_engine/display_server/rosen/modules/frame_analyzer/export",
+    "/usr/include/ft/render_service_client",
+    "/usr/include/ft/render_service_client/base",
+    "/usr/include/ft/render_service_client/core",
+    "/usr/include/ft/render_service_client/surface",
+    "/usr/include/ft/render_service_client/common",
+    "/usr/include/ft/render_service_client/composer",
+    "/usr/include/ft/render_service_client/buffer_handle",
+    "/usr/include/ft/render_service_client/frame_analyzer",
   ]
   libs = [ "wm", "dm", "render_service_client", "render_service_base", "frame_analyzer", "surface" ]
 }
