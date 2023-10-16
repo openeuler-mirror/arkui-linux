@@ -129,7 +129,7 @@ if [ ! -d ${PROJECT_DIR}/third_party/ft_engine ]; then
     git clone https://gitee.com/openeuler/ft_engine.git ${PROJECT_DIR}/third_party/ft_engine
 fi
 
-if [ ! -d /usr/include/ft/wm ]; then
+if [ ! -d /usr/include/ft/render_service_client ]; then
     echo "start build ft_engine"
     cd ${PROJECT_DIR}/third_party/ft_engine
     if [ ! -d ${PROJECT_DIR}/third_party/ft_engine/third_party ]; then
