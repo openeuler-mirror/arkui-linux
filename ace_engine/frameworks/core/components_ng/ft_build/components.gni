@@ -14,8 +14,6 @@
 import("//build/gn/fangtian.gni")
 import("//ace_engine/ft_build/ace_config.gni")
 
-render_server_dir = "//third_party/ft_engine/display_server"
-
 template("build_component_ng") {
   forward_variables_from(invoker, "*")
 
@@ -112,19 +110,16 @@ template("build_component_ng") {
         "-Wno-unused-lambda-capture",
         "-Wno-c++11-narrowing"
       ]
+
       # using graphcis_2d drawing lib
       include_dirs = [
-        # Fangtian TODO
-        # "//base/hiviewdfx/hilog/interfaces/native/innerkits/include",
-        "$render_server_dir/rosen/modules/2d_engine",
-        "$render_server_dir/rosen/modules/2d_engine/rosen_text",
-        "$render_server_dir/rosen/modules/2d_graphics/include",
-        "$render_server_dir/rosen/modules/2d_graphics/src",
-        "$render_server_dir/rosen/modules/2d_graphics/src/drawing/engine_adapter",
-        # "//third_party/bounds_checking_function/include",
+        "/usr/include/ft/render_service_client/2d_graphics",
+        "/usr/include/ft/render_service_client/2d_graphics/drawing/engine_adapter/impl_interface",
+        "/usr/include/ft/render_service_client/2d_graphics/drawing/engine_adapter",
+        "/usr/include/ft/render_service_client/2d_engine",
       ]
 
-      deps += [ "$render_server_dir/rosen/modules/2d_graphics/ft_build:2d_graphics_source_$platform" ]
+      libs = ["2d_graphics" ]
 
       deps += [
         "//build/gn/configs/system_libs:c_utils",
