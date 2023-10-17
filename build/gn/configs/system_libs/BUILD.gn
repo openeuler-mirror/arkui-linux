@@ -142,8 +142,10 @@ config("ftsurface_config") {
 config("ft_engine_config") {
   visibility = [ ":*" ]
   include_dirs = [
-    "/usr/include/ft",
     "/usr/include/ftsurface",
+    "/usr/include/ft",
+    "/usr/include/ft/dm",
+    "/usr/include/ft/utils",
     "/usr/include/ft/render_service_client",
     "/usr/include/ft/render_service_client/base",
     "/usr/include/ft/render_service_client/core",
