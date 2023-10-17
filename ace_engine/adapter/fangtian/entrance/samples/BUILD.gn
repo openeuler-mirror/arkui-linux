@@ -30,9 +30,6 @@ config("ace_fangtian_config") {
     "$flutter_root/engine/flutter/shell/platform/common/cpp/public",
     "$flutter_root/skia",
     "$flutter_root/engine/flutter/third_party/txt/src",
-    "//third_party/ft_engine/window_manager/interfaces/innerkits/",
-    "//third_party/ft_engine/window_manager/interfaces/innerkits/dm",
-    "//third_party/ft_engine/window_manager/utils/include/",
     "//third_party/flutter/glfw/include",
   ]
 }
