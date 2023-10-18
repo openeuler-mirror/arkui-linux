@@ -1,0 +1,12 @@
+[
+  {
+    "first_introduced": "1",
+    "name": "OH_GetImageInfo"
+  },
+  {
+    "name": "OH_AccessPixels"
+  },
+  {
+    "name": "OH_UnAccessPixels"
+  }
+]
