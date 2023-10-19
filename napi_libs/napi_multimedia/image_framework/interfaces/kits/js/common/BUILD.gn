@@ -1,0 +1,250 @@
+# Copyright (C) 2022 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/ohos.gni")
+import("//build/ohos/ace/ace.gni")
+import("//foundation/graphic/graphic_2d/graphic_config.gni")
+import("//foundation/multimedia/image_framework/ide/image_decode_config.gni")
+
+config("image_external_config") {
+  include_dirs = [
+    "include",
+    "//utils/system/safwk/native/include",
+    "//foundation/ability/ability_runtime/interfaces/inner_api/runtime/include/",
+    "//foundation/multimedia/image_framework/frameworks/innerkitsimpl/receiver/include",
+    "//foundation/multimedia/image_framework/frameworks/innerkitsimpl/creator/include",
+    "//foundation/multimedia/image_framework/frameworks/innerkitsimpl/pixelconverter/include",
+    "//foundation/multimedia/image_framework/frameworks/innerkitsimpl/converter/include",
+    "//foundation/multimedia/image_framework/frameworks/innerkitsimpl/codec/include",
+    "//foundation/multimedia/image_framework/frameworks/innerkitsimpl/common/include",
+    "//foundation/multimedia/image_framework/frameworks/innerkitsimpl/stream/include",
+    "//foundation/multimedia/image_framework/frameworks/innerkitsimpl/utils/include",
+    "//foundation/multimedia/image_framework/frameworks/kits/js/common/include",
+    "//foundation/multimedia/image_framework/interfaces/kits/js/common/include",
+    "//foundation/multimedia/utils/include",
+    "//foundation/multimedia/image_framework/plugins/common/libs/image/libjpegplugin",
+    "//foundation/multimedia/image_framework/plugins/manager/include",
+    "//foundation/multimedia/image_framework/plugins/manager/include/image",
+    "//foundation/multimedia/image_framework/interfaces/innerkits/include",
+    "//foundation/multimedia/image_framework/interfaces/kits/native/include",
+    "//utils/jni/jnikit/include",
+    "//base/hiviewdfx/hilog/interfaces/native/innerkits/include",
+    "//foundation/graphic/graphic_2d/interfaces/inner_api/surface",
+    "//foundation/graphic/graphic_2d/interfaces/inner_api/common",
+    "//foundation/graphic/graphic_2d/interfaces/kits/napi/graphic/color_manager/color_space_object_convertor",
+    "//foundation/communication/ipc/interfaces/innerkits/ipc_core/include",
+    "//foundation/graphic/graphic_2d/utils/buffer_handle/export",
+    "//foundation/graphic/graphic_2d/utils/color_manager/export",
+    "//drivers/peripheral/display/interfaces/include",
+    "//drivers/peripheral/base",
+    "//third_party/flutter/skia/third_party/externals/libjpeg-turbo",
+  ]
+
+  include_dirs += [
+    "//foundation/multimedia/image_framework/plugins/manager/include/pluginbase",
+    "//foundation/multimedia/image_framework/plugins/common/libs/image/libjpegplugin/include",
+    "//foundation/multimedia/image_framework/frameworks/innerkitsimpl/utils/include",
+    "//foundation/multimedia/image_framework/frameworks/innerkitsimpl/converter/include",
+    "//third_party/flutter/skia/include/codec",
+    "//third_party/flutter/skia",
+    "//third_party/flutter/skia/include/core",
+    "//third_party/flutter/skia/third_party/libjpeg-turbo",
+    "//third_party/skia/third_party/externals/libjpeg-turbo",
+    "//third_party/flutter/skia/third_party/skcms",
+    "//third_party/libexif",
+  ]
+
+  if (use_mingw_win) {
+    include_dirs +=
+        [ "//foundation/multimedia/image_framework/mock/native/include" ]
+  } else if (use_clang_mac) {
+    include_dirs += [
+      "//foundation/multimedia/image_framework/mock/native/include",
+      "//third_party/bounds_checking_function/include",
+      "//commonlibrary/c_utils/base/include",
+      "//base/hiviewdfx/hilog/interfaces/native/innerkits/include",
+    ]
+  } else if (use_clang_ios) {
+    include_dirs += [
+      "//third_party/libpng",
+      "//foundation/multimedia/image_framework/mock/native/include",
+      "//foundation/multimedia/image_framework/mock/native/include/secure",
+    ]
+    include_dirs -= [
+      "//foundation/multimedia/image_framework/frameworks/innerkitsimpl/receiver/include",
+      "//foundation/multimedia/image_framework/frameworks/innerkitsimpl/creator/include",
+      "//foundation/graphic/graphic_2d/interfaces/inner_api/surface",
+      "//foundation/graphic/graphic_2d/interfaces/inner_api/common",
+      "//foundation/graphic/graphic_2d/utils/buffer_handle/export",
+      "//foundation/graphic/graphic_2d/utils/color_manager/export",
+    ]
+  } else if (use_clang_android) {
+    include_dirs += [
+      "//commonlibrary/c_utils/base/include",
+      "//third_party/libpng",
+      "//foundation/multimedia/image_framework/mock/native/include",
+    ]
+
+    include_dirs -= [
+      "//foundation/multimedia/image_framework/frameworks/innerkitsimpl/receiver/include",
+      "//foundation/multimedia/image_framework/frameworks/innerkitsimpl/creator/include",
+      "//foundation/graphic/graphic_2d/interfaces/inner_api/surface",
+      "//foundation/graphic/graphic_2d/interfaces/inner_api/common",
+      "//foundation/graphic/graphic_2d/utils/buffer_handle/export",
+      "//foundation/graphic/graphic_2d/utils/color_manager/export",
+    ]
+  } else {
+    include_dirs += [
+      "//commonlibrary/c_utils/base/include",
+      "//third_party/libpng",
+      "//base/hiviewdfx/hilog/interfaces/native/innerkits/include",
+    ]
+  }
+}
+
+js_declaration("image_js") {
+  part_name = "multimedia_image_framework"
+  sources = [ "//foundation/multimedia/image_framework/interfaces/kits/js/@ohos.multimedia.image.d.ts" ]
+}
+
+ohos_copy("image_declaration") {
+  sources = [ "//foundation/multimedia/image_framework/interfaces/kits/js/@ohos.multimedia.image.d.ts" ]
+  outputs = [ target_out_dir + "/$target_name/" ]
+  module_source_dir = target_out_dir + "/$target_name"
+  module_install_name = ""
+}
+
+if (use_clang_ios) {
+  ohos_source_set("image") {
+    public_configs = [ ":image_external_config" ]
+    sources = [
+      "//foundation/multimedia/image_framework/frameworks/kits/js/common/image_napi_utils.cpp",
+      "//foundation/multimedia/image_framework/frameworks/kits/js/common/image_packer_napi.cpp",
+      "//foundation/multimedia/image_framework/frameworks/kits/js/common/image_source_napi.cpp",
+      "//foundation/multimedia/image_framework/frameworks/kits/js/common/native_module_ohos_image.cpp",
+      "//foundation/multimedia/image_framework/frameworks/kits/js/common/pixel_map_napi.cpp",
+    ]
+
+    cflags = [ "-DIMAGE_DEBUG_FLAG" ]
+
+    defines = image_decode_ios_defines
+    deps = [
+      "//foundation/arkui/napi:ace_napi",
+      "//foundation/multimedia/image_framework/frameworks/innerkitsimpl/pixelconverter:pixelconvertadapter",
+      "//foundation/multimedia/image_framework/frameworks/innerkitsimpl/utils:image_utils",
+      "//foundation/multimedia/image_framework/interfaces/innerkits:image_native",
+      "//foundation/multimedia/image_framework/mock/native:log_mock_static",
+      "//foundation/multimedia/image_framework/mock/native:utils_mock_static",
+      "//foundation/multimedia/image_framework/plugins/manager:pluginmanager",
+    ]
+
+    #relative_install_dir = "module/multimedia"
+    subsystem_name = "multimedia"
+    part_name = "multimedia_image_framework"
+  }
+} else {
+  ohos_shared_library("image") {
+    sanitize = {
+      cfi = true
+      debug = false
+    }
+    public_configs = [ ":image_external_config" ]
+    sources = [
+      "//foundation/multimedia/image_framework/frameworks/kits/js/common/image_creator_napi.cpp",
+      "//foundation/multimedia/image_framework/frameworks/kits/js/common/image_napi.cpp",
+      "//foundation/multimedia/image_framework/frameworks/kits/js/common/image_napi_utils.cpp",
+      "//foundation/multimedia/image_framework/frameworks/kits/js/common/image_packer_napi.cpp",
+      "//foundation/multimedia/image_framework/frameworks/kits/js/common/image_receiver_napi.cpp",
+      "//foundation/multimedia/image_framework/frameworks/kits/js/common/image_source_napi.cpp",
+      "//foundation/multimedia/image_framework/frameworks/kits/js/common/native_module_ohos_image.cpp",
+      "//foundation/multimedia/image_framework/frameworks/kits/js/common/pixel_map_napi.cpp",
+    ]
+
+    cflags = [
+      "-DIMAGE_DEBUG_FLAG",
+      "-DIMAGE_COLORSPACE_FLAG",
+    ]
+
+    if (use_clang_android) {
+      defines = image_decode_android_defines
+      cflags -= [ "-DIMAGE_COLORSPACE_FLAG" ]
+      sources -= [
+        "//foundation/multimedia/image_framework/frameworks/kits/js/common/image_creator_napi.cpp",
+        "//foundation/multimedia/image_framework/frameworks/kits/js/common/image_napi.cpp",
+        "//foundation/multimedia/image_framework/frameworks/kits/js/common/image_receiver_napi.cpp",
+      ]
+      deps = [
+        "//commonlibrary/c_utils/base:utils",
+        "//foundation/arkui/napi:ace_napi",
+        "//foundation/multimedia/image_framework/frameworks/innerkitsimpl/pixelconverter:pixelconvertadapter",
+        "//foundation/multimedia/image_framework/frameworks/innerkitsimpl/utils:image_utils",
+        "//foundation/multimedia/image_framework/interfaces/innerkits:image_native",
+        "//foundation/multimedia/image_framework/mock/native:log_mock_static",
+        "//foundation/multimedia/image_framework/mock/native:utils_mock_static",
+        "//foundation/multimedia/image_framework/plugins/manager:pluginmanager",
+      ]
+    } else {
+      deps = [
+        "//foundation/arkui/napi:ace_napi",
+        "//foundation/graphic/graphic_2d:libsurface",
+        "//foundation/graphic/graphic_2d/interfaces/kits/napi/graphic/color_manager:color_space_object_convertor",
+        "//foundation/graphic/graphic_2d/utils/color_manager:color_manager",
+        "//foundation/multimedia/image_framework/frameworks/innerkitsimpl/pixelconverter:pixelconvertadapter",
+        "//foundation/multimedia/image_framework/interfaces/innerkits:image_native",
+      ]
+    }
+
+    external_deps = [
+      "c_utils:utils",
+      "hichecker_native:libhichecker",
+      "hitrace_native:hitrace_meter",
+    ]
+    relative_install_dir = "module/multimedia"
+    subsystem_name = "multimedia"
+    part_name = "multimedia_image_framework"
+  }
+
+  ohos_shared_library("multimedia_image") {
+    public_configs = [ ":image_external_config" ]
+    sources = [
+      "//foundation/multimedia/image_framework/frameworks/kits/js/common/image_napi_utils.cpp",
+      "//foundation/multimedia/image_framework/frameworks/kits/js/common/image_packer_napi.cpp",
+      "//foundation/multimedia/image_framework/frameworks/kits/js/common/image_source_napi.cpp",
+      "//foundation/multimedia/image_framework/frameworks/kits/js/common/native_module_ohos_image.cpp",
+      "//foundation/multimedia/image_framework/frameworks/kits/js/common/pixel_map_napi.cpp",
+    ]
+
+    cflags = [ "-DIMAGE_DEBUG_FLAG" ]
+
+    defines = image_decode_android_defines
+    deps = [
+      "//commonlibrary/c_utils/base:utils",
+      "//foundation/arkui/napi:ace_napi",
+      "//foundation/multimedia/image_framework/frameworks/innerkitsimpl/pixelconverter:pixelconvertadapter",
+      "//foundation/multimedia/image_framework/frameworks/innerkitsimpl/utils:image_utils",
+      "//foundation/multimedia/image_framework/interfaces/innerkits:image_native",
+      "//foundation/multimedia/image_framework/mock/native:log_mock_static",
+      "//foundation/multimedia/image_framework/mock/native:utils_mock_static",
+      "//foundation/multimedia/image_framework/plugins/manager:pluginmanager",
+    ]
+
+    external_deps = [
+      "c_utils:utils",
+      "hichecker_native:libhichecker",
+      "hitrace_native:hitrace_meter",
+    ]
+    relative_install_dir = "module/multimedia"
+    subsystem_name = "multimedia"
+    part_name = "multimedia_image_framework"
+  }
+}

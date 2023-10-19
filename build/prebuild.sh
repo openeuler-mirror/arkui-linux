@@ -147,10 +147,4 @@ if [ ! -e /usr/lib64/libace_skia_fangtian.so ]; then
     cd ${PROJECT_DIR}
 fi
 
-if [ ! -d ${PROJECT_DIR}/napi_library ]; then
-    echo "start pull naip library code"
-    mkdir -p  ${PROJECT_DIR}/napi_library
-    git clone https://gitee.com/openeuler/ft_multimedia.git ${PROJECT_DIR}/napi_library/ft_multimedia
-fi
-
 echo -e "\033[32m[*] Pre-build Done. You need exec 'build.sh'.\033[0m"
