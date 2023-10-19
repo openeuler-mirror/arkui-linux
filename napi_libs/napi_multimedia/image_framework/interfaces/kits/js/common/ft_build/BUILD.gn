@@ -1,0 +1,82 @@
+# Copyright (C) 2023 Huawei Technologies Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/gn/fangtian.gni")
+import("//config.gni")
+
+config("image_external_config") {
+  include_dirs = [
+    "../include",
+    "$image_napi_root/image_framework/frameworks/innerkitsimpl/receiver/include",
+    "$image_napi_root/image_framework/frameworks/innerkitsimpl/creator/include",
+    "$image_napi_root/image_framework/frameworks/kits/js/common/include",
+    "$image_napi_root/image_framework/interfaces/kits/js/common/include",
+    "$image_napi_root/image_framework/interfaces/kits/native/include",
+  ]
+
+}
+
+template("js_declaration") {
+  group(target_name) {
+    not_needed(invoker, "*")
+  }
+}
+
+js_declaration("image_js") {
+  part_name = "multimedia_image_framework"
+  sources = [ "$image_napi_root/image_framework/interfaces/kits/js/@ohos.multimedia.image.d.ts" ]
+}
+
+ft_copy("image_declaration") {
+  sources = [ "$image_napi_root/image_framework/interfaces/kits/js/@ohos.multimedia.image.d.ts" ]
+  outputs = [ target_out_dir + "/$target_name/" ]
+}
+
+
+ft_shared_library("image") {
+  defines = ft_defines
+  public_configs = [ ":image_external_config" ]
+  sources = [
+    "$image_napi_root/image_framework/frameworks/kits/js/common/image_creator_napi.cpp",
+    "$image_napi_root/image_framework/frameworks/kits/js/common/image_napi.cpp",
+    "$image_napi_root/image_framework/frameworks/kits/js/common/image_napi_utils.cpp",
+    "$image_napi_root/image_framework/frameworks/kits/js/common/image_packer_napi.cpp",
+    "$image_napi_root/image_framework/frameworks/kits/js/common/image_receiver_napi.cpp",
+    "$image_napi_root/image_framework/frameworks/kits/js/common/image_source_napi.cpp",
+    "$image_napi_root/image_framework/frameworks/kits/js/common/native_module_ohos_image.cpp",
+    "$image_napi_root/image_framework/frameworks/kits/js/common/pixel_map_napi.cpp",
+    "$image_napi_root/image_framework/frameworks/innerkitsimpl/creator/src/image_creator.cpp",
+    "$image_napi_root/image_framework/frameworks/innerkitsimpl/creator/src/image_creator_manager.cpp",
+    "$image_napi_root/image_framework/frameworks/innerkitsimpl/receiver/src/image_receiver.cpp",
+    "$image_napi_root/image_framework/frameworks/innerkitsimpl/receiver/src/image_receiver_manager.cpp",
+  ]
+
+  cflags = [
+    "-DIMAGE_DEBUG_FLAG",
+  ]
+
+  public_deps = [
+    "//napi/ft_build:ace_napi",
+  ]
+
+  deps = [
+    "//build/gn/configs/system_libs:ft_engine",
+    "//build/gn/configs/system_libs:hilog",
+    "//build/gn/configs/system_libs:c_utils",
+    "//build/gn/configs/system_libs:skia",
+    "//build/gn/configs/system_libs:ipc_core",
+    "//build/gn/configs/system_libs:hitrace_meter",
+    "//build/gn/configs/system_libs:libuv",
+  ]
+
+}

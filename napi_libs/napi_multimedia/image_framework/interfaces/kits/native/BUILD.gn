@@ -1,4 +1,4 @@
-# Copyright (c) 2023 Huawei Technologies Co., Ltd. All rights reserved.
+# Copyright (C) 2022 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -9,8 +9,17 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
-# limitations under the License
+# limitations under the License.
 
-declare_args() {
-  image_napi_root = "//napi_libs/napi_multimedia"
+import("//build/ohos.gni")
+
+ohos_ndk_library("libpixelmap_ndk") {
+  ndk_description_file = "./libimage_pixelmap_napi.ndk.json"
+  min_compact_version = "1"
+  output_name = "pixelmap_ndk"
+}
+
+ohos_ndk_headers("image_header") {
+  dest_dir = "$ndk_headers_out_dir/multimedia/image_framework"
+  sources = [ "./include/image_pixel_map_napi.h" ]
 }

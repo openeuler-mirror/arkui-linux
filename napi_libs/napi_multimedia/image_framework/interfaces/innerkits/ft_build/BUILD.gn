@@ -1,0 +1,83 @@
+# Copyright (c) 2023 Huawei Technologies Co., Ltd. All rights reserved.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License
+
+import("//build/gn/fangtian.gni")
+
+config("image_external_config") {
+  include_dirs = [
+    "../include",
+    "//image_framework/frameworks/innerkitsimpl/receiver/include",
+    "//image_framework/frameworks/innerkitsimpl/creator/include",
+    "//image_framework/frameworks/innerkitsimpl/pixelconverter/include",
+    "//image_framework/frameworks/innerkitsimpl/converter/include",
+    "//image_framework/frameworks/innerkitsimpl/codec/include",
+    "//image_framework/frameworks/innerkitsimpl/common/include",
+    "//image_framework/frameworks/innerkitsimpl/stream/include",
+    "//image_framework/frameworks/innerkitsimpl/utils/include",
+    "//image_framework/plugins/common/libs/image/libjpegplugin",
+    "//image_framework/plugins/manager/include",
+    "//image_framework/plugins/manager/include/image",
+    "//image_framework/interfaces/innerkits/include",
+    "//image_framework/interfaces/kits/native/include",
+    "//image_framework/plugins/manager/include/pluginbase",
+    "//image_framework/plugins/common/libs/image/libjpegplugin/include",
+    "//image_framework/frameworks/innerkitsimpl/utils/include",
+    "//image_framework/frameworks/innerkitsimpl/converter/include",
+  ]
+}
+
+ft_shared_library("image_native") {
+  public_configs = [ ":image_external_config" ]
+
+  sources = [
+    "//image_framework/frameworks/innerkitsimpl/codec/src/image_packer.cpp",
+    "//image_framework/frameworks/innerkitsimpl/codec/src/image_packer_ex.cpp",
+    "//image_framework/frameworks/innerkitsimpl/codec/src/image_source.cpp",
+    "//image_framework/frameworks/innerkitsimpl/common/src/incremental_pixel_map.cpp",
+    "//image_framework/frameworks/innerkitsimpl/common/src/pixel_map.cpp",
+    "//image_framework/frameworks/innerkitsimpl/common/src/pixel_map_parcel.cpp",
+    "//image_framework/frameworks/innerkitsimpl/converter/src/basic_transformer.cpp",
+    "//image_framework/frameworks/innerkitsimpl/converter/src/matrix.cpp",
+    "//image_framework/frameworks/innerkitsimpl/converter/src/pixel_convert.cpp",
+    "//image_framework/frameworks/innerkitsimpl/converter/src/pixel_map_rosen_utils.cpp",
+    "//image_framework/frameworks/innerkitsimpl/converter/src/post_proc.cpp",
+    "//image_framework/frameworks/innerkitsimpl/converter/src/scan_line_filter.cpp",
+    "//image_framework/frameworks/innerkitsimpl/stream/src/buffer_packer_stream.cpp",
+    "//image_framework/frameworks/innerkitsimpl/stream/src/buffer_source_stream.cpp",
+    "//image_framework/frameworks/innerkitsimpl/stream/src/file_packer_stream.cpp",
+    "//image_framework/frameworks/innerkitsimpl/stream/src/file_source_stream.cpp",
+    "//image_framework/frameworks/innerkitsimpl/stream/src/incremental_source_stream.cpp",
+    "//image_framework/frameworks/innerkitsimpl/stream/src/istream_source_stream.cpp",
+    "//image_framework/frameworks/innerkitsimpl/stream/src/ostream_packer_stream.cpp",
+  ]
+
+  cflags = [
+    "-DIMAGE_DEBUG_FLAG",
+    "-Wno-c++11-narrowing",
+  ]
+  defines = [ "DUAL_ADAPTER" ]
+
+  configs = [
+    "//build/gn/configs/system_libs:hilog_config",
+    "//build/gn/configs/system_libs:c_utils_config",
+    "//build/gn/configs/system_libs:skia_config",
+    "//build/gn/configs/system_libs:ipc_core_config",
+    "//build/gn/configs/system_libs:hitrace_meter_config",
+  ]
+
+  deps = [
+    "//image_framework/frameworks/innerkitsimpl/pixelconverter/ft_build:pixelconvertadapter",
+    "//image_framework/frameworks/innerkitsimpl/utils/ft_build:image_utils",
+    "//image_framework/plugins/manager/ft_build:pluginmanager",
+  ]
+}
