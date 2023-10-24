@@ -96,7 +96,7 @@ config("safwk_config") {
 config("libz_config") {
   visibility = [ ":*" ]
 
-  include_dirs = [ "${sys_inc}/libz" ]
+  include_dirs = [ "/usr/local/include/libz" ]
   libs = [ "shared_libz" ]
 }
 
@@ -108,7 +108,7 @@ config("uv_config") {
 config("cjson_config") {
   visibility = [ ":*" ]
   libs = [ "cjson" ]
-  include_dirs = [ "${sys_inc}/cJSON" ]
+  include_dirs = [ "/usr/local/include/cJSON" ]
 }
 
 config("jsoncpp_config") {
