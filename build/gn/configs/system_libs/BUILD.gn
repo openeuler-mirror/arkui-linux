@@ -14,15 +14,16 @@
 config("c_utils_config") {
   visibility = [ ":*" ]
 
-  include_dirs = [ "${sys_inc}/c_utils" ]
-  libs = [ "utils", "sec_shared" ]
+  include_dirs = [ "/opt/distributed-middleware-build/openeuler/compiler_include" ]
+  include_dirs += [ "${sys_inc}/c_utils" ]
+  libs = [ "utils.z", "boundscheck" ]
 }
 
 config("ipc_core_config") {
   visibility = [ ":*" ]
 
-  include_dirs = [ "${sys_inc}/ipc_core" ]
-  libs = [ "ipc_core" ]
+  include_dirs = [ "${sys_inc}/ipc" ]
+  libs = [ "ipc_core.z" ]
 }
 
 config("hilog_config") {
@@ -43,7 +44,7 @@ config("eventhandler_config") {
   visibility = [ ":*" ]
 
   include_dirs = [ "${sys_inc}/eventhandler" ]
-  libs = [ "eventhandler" ]
+  libs = [ "eventhandler.z" ]
 }
 
 config("skia_config") {
@@ -61,7 +62,7 @@ config("samgr_config") {
   visibility = [ ":*" ]
 
   include_dirs = [ "${sys_inc}/samgr" ]
-  libs = [ "samgr_proxy" ]
+  libs = [ "samgr_proxy.z" ]
 }
 
 config("image_config") {
@@ -81,15 +82,15 @@ config("mmi_config") {
 config("syspara_config") {
   visibility = [ ":*" ]
 
-  include_dirs = [ "${sys_inc}/syspara" ]
-  libs = [ "beget_proxy", "begetutil" ]
+  include_dirs = [ "${sys_inc}/init" ]
+  libs = [ "beget_proxy.z", "begetutil.z" ]
 }
 
 config("safwk_config") {
   visibility = [ ":*" ]
 
   include_dirs = [ "${sys_inc}/safwk" ]
-  libs = [ "system_ability_fwk" ]
+  libs = [ "system_ability_fwk.z" ]
 }
 
 config("libz_config") {
