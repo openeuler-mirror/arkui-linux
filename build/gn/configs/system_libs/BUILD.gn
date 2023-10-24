@@ -45,6 +45,7 @@ config("eventhandler_config") {
   visibility = [ ":*" ]
 
   include_dirs = [ "${sys_inc}/eventhandler" ]
+  include_dirs += [ "//mock/eventhandler" ]
   libs = [ "eventhandler.z" ]
 }
 
