@@ -39,9 +39,9 @@ const char *HapParser::RES_FILE_NAME = "/resources.index";
 
 int32_t LocateFile(unzFile &uf, const char *fileName)
 {
-    if (unzLocateFile2(uf, fileName, 1)) { // try to locate file inside zip, 1 = case sensitive
+    // if (unzLocateFile2(uf, fileName, 1)) { // try to locate file inside zip, 1 = case sensitive
         return UNKNOWN_ERROR;
-    }
+    // }
     return OK;
 }
 
@@ -125,9 +125,9 @@ std::string GetModuleName(const char *configStr, size_t len)
 bool HapParser::IsStageMode(unzFile &uf)
 {
     // stage mode contains "module.json", The 1 means the case sensitive
-    if (unzLocateFile2(uf, "module.json", 1) != UNZ_OK) {
+    // if (unzLocateFile2(uf, "module.json", 1) != UNZ_OK) {
         return false;
-    }
+    // }
     return true;
 }
 

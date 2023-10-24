@@ -30,7 +30,7 @@ config("hilog_config") {
   visibility = [ ":*" ]
 
   include_dirs = [ "${sys_inc}/hilog" ]
-  libs = [ "hilog" ]
+  libs = [ "hilog.z" ]
 }
 
 config("hitrace_meter_config") {
@@ -98,8 +98,8 @@ config("safwk_config") {
 config("libz_config") {
   visibility = [ ":*" ]
 
-  include_dirs = [ "/usr/local/include/libz" ]
-  libs = [ "shared_libz" ]
+  include_dirs = [ "${sys_inc}/minizip" ]
+  libs = [ "minizip", "z"]
 }
 
 config("uv_config") {
@@ -110,7 +110,7 @@ config("uv_config") {
 config("cjson_config") {
   visibility = [ ":*" ]
   libs = [ "cjson" ]
-  include_dirs = [ "/usr/local/include/cJSON" ]
+  include_dirs = [ "${sys_inc}/cjson"  ]
 }
 
 config("jsoncpp_config") {
