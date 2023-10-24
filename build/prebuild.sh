@@ -109,7 +109,10 @@ if [ ! -d ${PROJECT_DIR}/third_party/flutter ]; then
 fi
 
 if [ ! -d ${PROJECT_DIR}/third_party/ft_engine ]; then
-    git clone https://gitee.com/huangyuxin2023/ft_engine.git ${PROJECT_DIR}/third_party/ft_engine
+    git clone -b 2203sp2_20231023 https://gitee.com/openeuler/ft_engine.git ${PROJECT_DIR}/third_party/ft_engine
+    cd ${PROJECT_DIR}/third_party/ft_engine
+    git fetch https://gitee.com/openeuler/ft_engine.git pull/182/head:pr_182
+    git checkout pr_182
 fi
 
 if [ ! -d /usr/include/ft/render_service_client ]; then
