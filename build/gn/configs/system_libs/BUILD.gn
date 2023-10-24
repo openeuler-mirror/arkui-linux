@@ -38,7 +38,7 @@ config("hitrace_meter_config") {
 
   # include_dirs = [ "${sys_inc}/hitrace_meter" ]
   # libs = [ "hitrace_meter" ]
-  include_dirs = [ "//include/hitrace_meter" ]
+  include_dirs = [ "//mock/hitrace_meter" ]
 }
 
 config("eventhandler_config") {
@@ -98,7 +98,7 @@ config("libz_config") {
   visibility = [ ":*" ]
 
   include_dirs = [ "/usr/local/include/libz" ]
-  # libs = [ "shared_libz" ]
+  libs = [ "shared_libz" ]
 }
 
 config("uv_config") {
