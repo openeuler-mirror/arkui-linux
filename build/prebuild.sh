@@ -80,24 +80,7 @@ fi
 cd ${PREBUILD_DIR}
 FT_PREBUILD_DIR=$(pwd)
 
-# install prebuild library
-if [ ! -d ${FT_PREBUILD_DIR}/libs ]; then
-git clone https://gitee.com/yanansong/ft_engine_prebuild.git -b rpms ${FT_PREBUILD_DIR}/libs
-fi
-
 ARCHNAME=`uname -m`
-
-cd ${FT_PREBUILD_DIR}/libs/rpms/${ARCHNAME}
-sudo ./installRPM
-
-# install prebuild include.
-if [ ! -d ${FT_PREBUILD_DIR}/inc ]; then
-git clone https://gitee.com/yanansong/devel_inc.git ${FT_PREBUILD_DIR}/inc
-fi
-
-# copy include files to /usr/include.
-cd ${FT_PREBUILD_DIR}/inc
-sudo cp -fr * /usr/local/include
 
 # install prebuild include.
 if [ ! -d ${FT_PREBUILD_DIR}/inc_libz ]; then
@@ -122,11 +105,14 @@ fi
 # third_party
 # =============================================================================
 if [ ! -d ${PROJECT_DIR}/third_party/flutter ]; then
-    git clone https://gitee.com/openeuler/ft_flutter.git ${PROJECT_DIR}/third_party/flutter
+    git clone -b 2203sp2_20231023 https://gitee.com/openeuler/ft_flutter.git ${PROJECT_DIR}/third_party/flutter
 fi
 
 if [ ! -d ${PROJECT_DIR}/third_party/ft_engine ]; then
-    git clone https://gitee.com/openeuler/ft_engine.git ${PROJECT_DIR}/third_party/ft_engine
+    git clone -b 2203sp2_20231023 https://gitee.com/openeuler/ft_engine.git ${PROJECT_DIR}/third_party/ft_engine
+    cd ${PROJECT_DIR}/third_party/ft_engine
+    git fetch https://gitee.com/openeuler/ft_engine.git pull/182/head:pr_182
+    git checkout pr_182
 fi
 
 if [ ! -d /usr/include/ft/render_service_client ]; then

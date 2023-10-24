@@ -75,7 +75,7 @@ declare_args() {
 
   is_ft_build = current_os == "linux"
 
-  sys_inc = "/usr/local/include"
+  sys_inc = "/usr/include"
 }
 
 if (use_musl_oh == true) {
