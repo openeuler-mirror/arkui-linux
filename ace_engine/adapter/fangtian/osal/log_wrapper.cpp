@@ -14,7 +14,7 @@
  */
 
 #include "base/log/log_wrapper.h"
-
+#include "hilog/log.h"
 #include <cstring>
 
 #ifdef ACE_INSTANCE_LOG
@@ -23,31 +23,35 @@
 
 
 extern "C" {
+OHOS::HiviewDFX::HiLogLabel label {LOG_CORE, 0xD001444, "ArkUI"};
+constexpr int MAX_LOG_LENGTH = 2048;
+bool HiLogPrintArgs(LogType type, LogLevel level, unsigned int domain, const char* tag, const char* fmt, va_list ap)
+{
+    char logStr[MAX_LOG_LENGTH] = {0};
+    if (vsprintf(logStr, fmt, ap) < 0) {
+        return false;
+    }
 
-typedef enum {
-    /** Third-party application logs */
-    LOG_TYPE_MIN = 0,
-    LOG_APP = 0,
-    LOG_INIT = 1,
-    // Used by core service, framework.
-    LOG_CORE = 3,
-    LOG_KMSG = 4,
-    LOG_TYPE_MAX
-} LogType;
-
-typedef enum {
-    LOG_LEVEL_MIN = 0,
-    LOG_DEBUG = 3,
-    LOG_INFO = 4,
-    LOG_WARN = 5,
-    LOG_ERROR = 6,
-    LOG_FATAL = 7,
-    LOG_LEVEL_MAX,
-} LogLevel;
-
-int HiLogPrintArgs(LogType type, LogLevel level, unsigned int domain, const char* tag, const char* fmt, va_list ap) {
-    vprintf(fmt, ap);
-    return 0;
+    switch (level) {
+        case LOG_ERROR:
+            OHOS::HiviewDFX::HiLog::Error(label, "%{public}s", logStr);
+            break;
+        case LOG_WARN:
+            OHOS::HiviewDFX::HiLog::Warn(label, "%{public}s", logStr);
+            break;
+        case LOG_INFO:
+            OHOS::HiviewDFX::HiLog::Info(label, "%{public}s", logStr);
+            break;
+        case LOG_DEBUG:
+            OHOS::HiviewDFX::HiLog::Debug(label, "%{public}s", logStr);
+            break;
+        case LOG_FATAL:
+            OHOS::HiviewDFX::HiLog::Fatal(label, "%{public}s", logStr);
+            break;
+        default:
+            break;
+    }
+    return true;
 }
 }
 
@@ -95,7 +99,7 @@ void LogWrapper::PrintLog(LogDomain domain, LogLevel level, const char* fmt, va_
     ReplaceFormatString("{private}", "", newFmt);
     ReplaceFormatString("{public}", "", newFmt);
     newFmt += "\n";
-    HiLogPrintArgs(LOG_TYPES[static_cast<uint32_t>(domain)], LOG_LEVELS[static_cast<uint32_t>(level)],
+    (void)HiLogPrintArgs(LOG_TYPES[static_cast<uint32_t>(domain)], LOG_LEVELS[static_cast<uint32_t>(level)],
         LOG_DOMAINS[static_cast<uint32_t>(domain)], LOG_TAGS[static_cast<uint32_t>(domain)], newFmt.c_str(), args);
 }
 
