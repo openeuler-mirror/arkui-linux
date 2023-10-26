@@ -17,7 +17,12 @@
 import sys
 import argparse
 import os
-from rich.console import Console
+
+RICH=True
+try:
+    from rich.console import Console
+except ImportError:
+    RICH=False
 
 from builder.commands.build import Builder
 from builder.commands.format import Formatter
@@ -156,7 +161,10 @@ class FtBuilder:
 
     def prepare(self):
         if self.args is None:
-            Console().print("FtBuiler Inner Error: args is None", style="bold red")
+            if RICH:
+                Console().print("FtBuiler Inner Error: args is None", style="bold red")
+            else:
+                print("FtBuiler Inner Error: args is None")
 
         self._setup_logger()
 
@@ -203,13 +211,17 @@ def main() -> int:
     builder = FtBuilder()
     builder.parse_args()
 
-    console = Console()
+    if RICH:
+        console = Console()
     try:
         builder.prepare()
 
         return 0 if builder.do_subcommand() else 1
-    except:
-        console.print_exception(show_locals=True)
+    except Exception as error:
+        if RICH:
+            console.print_exception(show_locals=True)
+        else:
+            print(error)
         return 1
 
 if __name__ == "__main__":
