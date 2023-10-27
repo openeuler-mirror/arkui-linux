@@ -41,7 +41,8 @@ int OpenArchive(ZipArchiveHandle &handle, const char *path)
 
 int OpenArchiveFile(ZipArchiveHandle &handle, FILE *fp)
 {
-    handle = unzOpenFile(fp);
+    // handle = unzOpenFile(fp);
+    handle = nullptr;
     if (handle == nullptr) {
         LOG(ERROR, ZIPARCHIVE) << "OpenArchive failed from FILE *fp";
         return ZIPARCHIVE_ERR;
@@ -69,7 +70,8 @@ int CloseArchiveFile(ZipArchiveHandle &handle)
         LOG(ERROR, ZIPARCHIVE) << "ZipArchiveHandle handle should not be nullptr";
         return ZIPARCHIVE_ERR;
     }
-    int err = unzCloseFile(handle);
+    // int err = unzCloseFile(handle);
+    int err = UNZ_ERRNO;
     if (err != UNZ_OK) {
         LOG(ERROR, ZIPARCHIVE) << "unzCloseFile with error: " << err;
         return ZIPARCHIVE_ERR;
@@ -99,7 +101,8 @@ int GoToNextFile(ZipArchiveHandle &handle)
 
 int LocateFile(ZipArchiveHandle &handle, const char *filename)
 {
-    int err = unzLocateFile2(handle, filename, 0);
+    // int err = unzLocateFile2(handle, filename, 0);
+    int err = UNZ_ERRNO;
     if (err != UNZ_OK) {
         LOG(ERROR, ZIPARCHIVE) << filename << " is not found in the zipfile";
         return ZIPARCHIVE_ERR;
