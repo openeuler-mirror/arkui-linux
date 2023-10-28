@@ -14,36 +14,39 @@
 config("c_utils_config") {
   visibility = [ ":*" ]
 
-  include_dirs = [ "${sys_inc}/c_utils" ]
-  libs = [ "utils", "sec_shared" ]
+  include_dirs = [ "/opt/distributed-middleware-build/openeuler/compiler_include" ]
+  include_dirs += [ "${sys_inc}/c_utils" ]
+  libs = [ "utils.z", "boundscheck" ]
 }
 
 config("ipc_core_config") {
   visibility = [ ":*" ]
 
-  include_dirs = [ "${sys_inc}/ipc_core" ]
-  libs = [ "ipc_core" ]
+  include_dirs = [ "${sys_inc}/ipc" ]
+  libs = [ "ipc_core.z" ]
 }
 
 config("hilog_config") {
   visibility = [ ":*" ]
 
   include_dirs = [ "${sys_inc}/hilog" ]
-  libs = [ "hilog" ]
+  libs = [ "hilog.z" ]
 }
 
 config("hitrace_meter_config") {
   visibility = [ ":*" ]
 
-  include_dirs = [ "${sys_inc}/hitrace_meter" ]
-  libs = [ "hitrace_meter" ]
+  # include_dirs = [ "${sys_inc}/hitrace_meter" ]
+  # libs = [ "hitrace_meter" ]
+  include_dirs = [ "//mock/hitrace_meter" ]
 }
 
 config("eventhandler_config") {
   visibility = [ ":*" ]
 
   include_dirs = [ "${sys_inc}/eventhandler" ]
-  libs = [ "eventhandler" ]
+  include_dirs += [ "//mock/eventhandler" ]
+  libs = [ "eventhandler.z" ]
 }
 
 config("skia_config") {
@@ -61,7 +64,7 @@ config("samgr_config") {
   visibility = [ ":*" ]
 
   include_dirs = [ "${sys_inc}/samgr" ]
-  libs = [ "samgr_proxy" ]
+  libs = [ "samgr_proxy.z" ]
 }
 
 config("image_config") {
@@ -81,22 +84,22 @@ config("mmi_config") {
 config("syspara_config") {
   visibility = [ ":*" ]
 
-  include_dirs = [ "${sys_inc}/syspara" ]
-  libs = [ "beget_proxy", "begetutil" ]
+  include_dirs = [ "${sys_inc}/init" ]
+  libs = [ "beget_proxy.z", "begetutil.z" ]
 }
 
 config("safwk_config") {
   visibility = [ ":*" ]
 
   include_dirs = [ "${sys_inc}/safwk" ]
-  libs = [ "system_ability_fwk" ]
+  libs = [ "system_ability_fwk.z" ]
 }
 
 config("libz_config") {
   visibility = [ ":*" ]
 
-  include_dirs = [ "${sys_inc}/libz" ]
-  libs = [ "shared_libz" ]
+  include_dirs = [ "${sys_inc}/minizip" ]
+  libs = [ "minizip", "z"]
 }
 
 config("uv_config") {
@@ -107,7 +110,7 @@ config("uv_config") {
 config("cjson_config") {
   visibility = [ ":*" ]
   libs = [ "cjson" ]
-  include_dirs = [ "${sys_inc}/cJSON" ]
+  include_dirs = [ "${sys_inc}/cjson"  ]
 }
 
 config("jsoncpp_config") {

@@ -50,8 +50,6 @@ fi
 SCRIPT_DIR=$(cd $(dirname $0);pwd)
 PROJECT_DIR=$(dirname ${SCRIPT_DIR})
 
-pip3 install -r ${SCRIPT_DIR}/configs/requirements.txt
-
 # =============================================================================
 # System Packages
 # =============================================================================
@@ -81,53 +79,5 @@ cd ${PREBUILD_DIR}
 FT_PREBUILD_DIR=$(pwd)
 
 ARCHNAME=`uname -m`
-
-# install prebuild include.
-if [ ! -d ${FT_PREBUILD_DIR}/inc_libz ]; then
-git clone https://gitee.com/all-seeing-eyes/ace_include.git ${FT_PREBUILD_DIR}/inc_libz
-fi
-
-cd ${FT_PREBUILD_DIR}/inc_libz
-sudo cp -fr libz /usr/local/include
-
-# install prebuild include.
-if [ ! -d ${FT_PREBUILD_DIR}/cjson ]; then
-git clone https://gitee.com/src-openeuler/cjson.git ${FT_PREBUILD_DIR}/cjson
-cd ${FT_PREBUILD_DIR}/cjson
-tar xf v1.7.15.tar.gz
-cd cJSON-1.7.15/
-mkdir cJSON
-cp *.h cJSON
-sudo cp -r cJSON /usr/local/include
-fi
-
-# =============================================================================
-# third_party
-# =============================================================================
-if [ ! -d ${PROJECT_DIR}/third_party/flutter ]; then
-    git clone -b 2203sp2_20231023 https://gitee.com/openeuler/ft_flutter.git ${PROJECT_DIR}/third_party/flutter
-fi
-
-if [ ! -d ${PROJECT_DIR}/third_party/ft_engine ]; then
-    git clone -b 2203sp2_20231023 https://gitee.com/openeuler/ft_engine.git ${PROJECT_DIR}/third_party/ft_engine
-fi
-
-if [ ! -d /usr/include/ft/render_service_client ]; then
-    echo "start build ft_engine"
-    cd ${PROJECT_DIR}/third_party/ft_engine
-    if [ ! -d ${PROJECT_DIR}/third_party/ft_engine/third_party ]; then
-        ./build/prebuild.sh  $*
-    fi
-    ./build.sh $*
-    cd ${PROJECT_DIR}
-fi
-
-if [ ! -e /usr/lib64/libace_skia_fangtian.so ]; then
-    echo "start build libace_skia_fangtian.so"
-    cd ${PROJECT_DIR}/third_party/flutter
-    ./project_build/prebuild.sh
-    ./build.sh $*
-    cd ${PROJECT_DIR}
-fi
 
 echo -e "\033[32m[*] Pre-build Done. You need exec 'build.sh'.\033[0m"
