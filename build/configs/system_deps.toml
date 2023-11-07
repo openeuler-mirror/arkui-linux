@@ -36,7 +36,5 @@ package_deps = [
     "nodejs-devel",
     "patch",
     "jsoncpp-devel",
-    "distributed-utils",
-    "distributed-build",
     "minizip-devel",
 ]

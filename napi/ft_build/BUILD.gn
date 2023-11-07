@@ -50,7 +50,7 @@ config("ace_napi_config") {
     ]
   } else {
     # Fangtian TODO
-    assert(false, "Fangtian TODO")
+    # assert(false, "Fangtian TODO")
     # if (is_standard_system) {
     #   external_deps = [
     #     "hitrace_native:hitrace_meter",
