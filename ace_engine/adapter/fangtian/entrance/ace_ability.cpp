@@ -506,7 +506,7 @@ void AceAbility::OnSizeChange(const OHOS::Rosen::Rect& rect, OHOS::Rosen::Window
         return;
     }
 
-    viewPtr->NotifySurfaceChanged(rect.width_, rect.height_);
+    viewPtr->NotifySurfaceChanged(rect.width_, rect.height_, static_cast<WindowSizeChangeReason>(reason));
     CHECK_NULL_VOID(controller_);
     controller_->UpdateOffset(rect.posX_, rect.posY_);
 
