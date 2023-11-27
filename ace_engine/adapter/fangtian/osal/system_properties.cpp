@@ -95,7 +95,7 @@ bool SystemProperties::rosenBackendEnabled_ = false;
 #else
 bool SystemProperties::rosenBackendEnabled_ = true;
 #endif
-bool SystemProperties::windowAnimationEnabled_ = false;
+bool SystemProperties::windowAnimationEnabled_ = true;
 bool SystemProperties::debugBoundaryEnabled_ = false;
 bool SystemProperties::gpuUploadEnabled_ = false;
 bool SystemProperties::isHookModeEnabled_ = false;
